@@ -12,8 +12,8 @@ para las pruebas.
 | Fase | Contenido | Estado |
 | --- | --- | --- |
 | 1 | Base, registro por invitación, inicio de sesión, Mi cuenta, Salir y menú del panel | Aprobada |
-| 2 | Datos y redes | Lista para revisión |
-| 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Pendiente |
+| 2 | Datos y redes | Aprobada |
+| 3 | Catálogos, Temporadas, Plantas y Fertilizantes | En curso: Catálogos, Temporadas y Plantas listos y probados; Fertilizantes programado, faltan sus pruebas |
 | 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Pendiente |
 | 5 | Sitio público | Pendiente |
 | 6 | Inicio del panel (pendientes, accesos rápidos, mensajes) | Pendiente |
