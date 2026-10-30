@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { ExternalLinkIcon } from "lucide-react";
-import { AvisoFase } from "@/components/panel/pagina-pendiente";
 import { EncabezadoPagina } from "@/components/panel/encabezado-pagina";
+import { EsqueletoContenido, EsqueletoEncabezado } from "@/components/panel/esqueleto";
+import { AvisoFase } from "@/components/panel/pagina-pendiente";
 import { Button } from "@/components/ui/button";
 import { requerirUsuario } from "@/lib/auth/sesion";
 
@@ -12,7 +14,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Inicio del panel. La tarjeta de temporada, accesos rápidos, pendientes y anuncios llegan en la fase 6.
-export default async function PaginaInicioPanel() {
+export default function PaginaInicioPanel() {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <EsqueletoEncabezado />
+          <EsqueletoContenido />
+        </>
+      }
+    >
+      <Bienvenida />
+    </Suspense>
+  );
+}
+
+async function Bienvenida() {
   const usuario = await requerirUsuario();
   const t = await getTranslations("panel");
 
