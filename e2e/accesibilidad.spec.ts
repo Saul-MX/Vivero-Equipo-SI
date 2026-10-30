@@ -41,6 +41,9 @@ test.describe("con sesión", () => {
     "/panel/plantas/nueva",
     "/panel/fertilizantes",
     "/panel/fertilizantes/nuevo",
+    "/panel/preguntas",
+    "/panel/testimonios",
+    "/panel/nosotros",
   ]) {
     test(`${ruta} cumple WCAG 2.1 AA`, async ({ page }) => {
       await page.goto(ruta);

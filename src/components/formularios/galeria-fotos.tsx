@@ -12,19 +12,26 @@ import { urlImagen } from "@/lib/archivos/claves";
 import { cn } from "@/lib/utils";
 import { MAXIMO_FOTOS, type FotoEnFormulario } from "@/lib/validacion/planta";
 
-/** Siempre hay exactamente una portada mientras haya fotos (si se quitó, pasa a la primera). */
+/** Con portada, siempre hay exactamente una mientras haya fotos (si se quitó, pasa a la primera). */
 function conPortada(fotos: FotoEnFormulario[]): FotoEnFormulario[] {
   if (fotos.length === 0 || fotos.some((foto) => foto.esPortada)) return fotos;
   return fotos.map((foto, indice) => ({ ...foto, esPortada: indice === 0 }));
 }
 
-/** Fotos de la planta: subir varias, elegir la portada (marcada en verde), ordenar y quitar. */
+/**
+ * Varias fotos: subir, ordenar y quitar. En plantas además se elige la portada (marcada en verde);
+ * en Nosotros (`conPortada={false}`) solo es una galería.
+ */
 export function GaleriaFotos({
   valor,
   alCambiar,
+  conPortada: usaPortada = true,
+  ayuda,
 }: {
   valor: FotoEnFormulario[];
   alCambiar: (fotos: FotoEnFormulario[]) => void;
+  conPortada?: boolean;
+  ayuda?: string;
 }) {
   const t = useTranslations("panel.plantas.galeria");
   const traducir = useTraductorErrores();
@@ -33,6 +40,7 @@ export function GaleriaFotos({
   const [errores, setErrores] = useState<string[]>([]);
   const [arrastrando, setArrastrando] = useState(false);
   const lleno = valor.length >= MAXIMO_FOTOS;
+  const ordenar = (fotos: FotoEnFormulario[]) => (usaPortada ? conPortada(fotos) : fotos);
 
   // Se suben una por una (cada envío lleva un solo archivo).
   const subir = async (archivos: File[]) => {
@@ -44,7 +52,7 @@ export function GaleriaFotos({
       setProgreso({ actual: indice + 1, total: porSubir.length });
       const resultado = await subirArchivo(archivo, "imagen");
       if (resultado.ok) {
-        fotos = conPortada([...fotos, { id: null, clave: resultado.clave, esPortada: false }]);
+        fotos = ordenar([...fotos, { id: null, clave: resultado.clave, esPortada: false }]);
         alCambiar(fotos);
       } else {
         nuevosErrores.push(t("errorArchivo", { archivo: archivo.name, error: traducir(resultado.error)! }));
@@ -61,7 +69,7 @@ export function GaleriaFotos({
     [fotos[indice], fotos[destino]] = [fotos[destino], fotos[indice]];
     alCambiar(fotos);
   };
-  const quitar = (indice: number) => alCambiar(conPortada(valor.filter((_, i) => i !== indice)));
+  const quitar = (indice: number) => alCambiar(ordenar(valor.filter((_, i) => i !== indice)));
 
   const soltar = (evento: DragEvent) => {
     evento.preventDefault();
@@ -121,7 +129,7 @@ export function GaleriaFotos({
                   </Button>
                 </div>
                 <div className="flex">
-                  {!foto.esPortada && (
+                  {usaPortada && !foto.esPortada && (
                     <Button type="button" variant="ghost" size="icon-sm" onClick={() => usarPortada(indice)}>
                       <StarIcon aria-hidden />
                       <span className="sr-only">{t("usarPortada", { n: indice + 1 })}</span>
@@ -181,7 +189,7 @@ export function GaleriaFotos({
         </div>
       )}
       <p id={`${id}-ayuda`} className="text-sm text-texto-suave">
-        {t("ayuda")}
+        {ayuda ?? t("ayuda")}
       </p>
       {errores.length > 0 && (
         <ul role="alert" className="flex flex-col gap-1 text-sm text-destructive">

@@ -36,7 +36,7 @@ import {
   type PlantaValidada,
 } from "@/lib/validacion/planta";
 import { eliminarPlantaAccion, guardarPlantaAccion } from "./acciones";
-import { GaleriaFotos } from "./galeria-fotos";
+import { GaleriaFotos } from "@/components/formularios/galeria-fotos";
 import { VistaPreviaRiego } from "./vista-previa-riego";
 
 const RUTA_LISTA = "/panel/plantas";

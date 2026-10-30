@@ -81,7 +81,7 @@
     "temporadaForzadaRequerida": "Elige qué temporada quieres mostrar.",
     "prioridadInvalida": "Escribe un número entero del 0 al 100.",
     "catalogoRequerido": "Elige un catálogo.",
-    "demasiadasFotos": "Puedes subir hasta 20 fotos por planta.",
+    "demasiadasFotos": "Puedes subir hasta 20 fotos aquí.",
     "tipoRequerido": "Elige el tipo.",
     "paraQueSirveRequerido": "Escribe para qué sirve.",
     "dosisRequerida": "Escribe la dosis.",
@@ -94,7 +94,9 @@
     "preguntaRequerida": "Escribe la pregunta.",
     "respuestaRequerida": "Escribe la respuesta.",
     "nombreClienteRequerido": "Escribe el nombre del cliente.",
-    "testimonioRequerido": "Escribe lo que dijo el cliente."
+    "testimonioRequerido": "Escribe lo que dijo el cliente.",
+    "momentoTituloRequerido": "Escribe el título del momento (un año o una palabra).",
+    "valorTituloRequerido": "Escribe el nombre del valor."
   },
   "acceso": {
     "ingresar": {
@@ -612,6 +614,42 @@
       "eliminarTitulo": "¿Eliminar el testimonio de {nombre}?",
       "eliminarTexto": "Se borrará también su foto. Si solo quieres que no se vea, apaga «Visible en el sitio».",
       "eliminado": "Se eliminó el testimonio de {nombre}."
+    },
+    "nosotros": {
+      "historia": "Historia",
+      "historiaTexto": "Cómo empezó el vivero",
+      "textoAyuda": "Deja un renglón vacío entre párrafos.",
+      "fotoSuperior": "Foto de arriba (opcional)",
+      "fotoSuperiorAyuda": "Mejor horizontal. JPG, PNG o WebP de hasta 15 MB; se convierte a WebP y se reduce automáticamente.",
+      "galeria": "Galería",
+      "galeriaHistoriaAyuda": "Mosaico al final de la página: vivero, invernadero, familia, plantas. JPG, PNG o WebP de hasta 15 MB cada una.",
+      "galeriaAyuda": "Fotos al final de la página. JPG, PNG o WebP de hasta 15 MB cada una.",
+      "momentos": "Momentos importantes",
+      "momentosAyuda": "La línea del tiempo de la página Historia, en este orden.",
+      "sinMomentos": "Todavía no hay momentos.",
+      "momento": "Momento {n}",
+      "momentoTitulo": "Título",
+      "momentoTituloAyuda": "Un año como «1998» o una palabra como «Hoy».",
+      "momentoTexto": "Texto (opcional)",
+      "momentoFoto": "Foto (opcional)",
+      "agregarMomento": "Agregar momento",
+      "subirMomento": "Subir el momento {n}",
+      "bajarMomento": "Bajar el momento {n}",
+      "quitarMomento": "Quitar el momento {n}",
+      "mision": "Misión",
+      "misionTexto": "Texto de la misión",
+      "vision": "Visión",
+      "visionTexto": "Texto de la visión",
+      "valores": "Valores",
+      "sinValores": "Todavía no hay valores.",
+      "valor": "Valor {n}",
+      "valorTitulo": "Nombre del valor",
+      "valorTituloAyuda": "Ejemplo: Honestidad",
+      "valorDescripcion": "Descripción (opcional)",
+      "agregarValor": "Agregar valor",
+      "subirValor": "Subir el valor {n}",
+      "bajarValor": "Bajar el valor {n}",
+      "quitarValor": "Quitar el valor {n}"
     }
   }
 }
