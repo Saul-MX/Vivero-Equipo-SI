@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useId } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
 import { Controller, useForm } from "react-hook-form";
@@ -29,7 +30,8 @@ export function TarjetaTemporada({ temporada, activa }: { temporada: TemporadaCo
   const textoTemporada = useTextoTemporada();
   const idioma = useLocale();
   const { catalogo } = temporada;
-  const id = (campo: string) => `temporada-${temporada.id}-${campo}`;
+  const base = useId();
+  const id = (campo: string) => `${base}-${campo}`;
 
   const inicial: EntradaTemporada = {
     mesInicio: String(temporada.mesInicio),

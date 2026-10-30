@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from "react";
+import { useId, type ComponentProps, type ReactNode } from "react";
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Selector } from "@/components/ui/selector";
@@ -24,16 +24,19 @@ function Campo({
   claseCampo,
   control,
 }: PropsComunes & { control: (accesibilidad: ComponentProps<"input">) => ReactNode }) {
-  const idAyuda = ayuda ? `${id}-ayuda` : undefined;
-  const idError = error ? `${id}-error` : undefined;
+  // Next conserva ocultas algunas pantallas ya visitadas (para volver al instante): con un id
+  // único, la etiqueta nunca queda ligada a un campo de otra pantalla que tenga el mismo nombre.
+  const idUnico = `${id}-${useId()}`;
+  const idAyuda = ayuda ? `${idUnico}-ayuda` : undefined;
+  const idError = error ? `${idUnico}-error` : undefined;
   const descritoPor = [idAyuda, idError].filter(Boolean).join(" ") || undefined;
 
   return (
     <Field data-invalid={error ? true : undefined} className={claseCampo}>
-      <FieldLabel htmlFor={id} className="text-sm font-medium text-foreground">
+      <FieldLabel htmlFor={idUnico} className="text-sm font-medium text-foreground">
         {etiqueta}
       </FieldLabel>
-      {control({ id, "aria-invalid": error ? true : undefined, "aria-describedby": descritoPor })}
+      {control({ id: idUnico, "aria-invalid": error ? true : undefined, "aria-describedby": descritoPor })}
       {ayuda && <FieldDescription id={idAyuda}>{ayuda}</FieldDescription>}
       {error && <FieldError id={idError}>{error}</FieldError>}
     </Field>

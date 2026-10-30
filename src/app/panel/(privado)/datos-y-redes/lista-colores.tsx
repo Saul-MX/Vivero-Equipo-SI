@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -38,6 +38,7 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
   const [nuevoTono, setNuevoTono] = useState(TONO_NUEVO);
   const [errorNuevo, setErrorNuevo] = useState<string>();
   const [porEliminar, setPorEliminar] = useState<PorEliminar | null>(null);
+  const idLista = useId();
 
   const {
     control,
@@ -126,7 +127,7 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
               {fields.map((campo, indice) => {
                 const fila = filas[indice] ?? campo;
                 const errorNombre = traducir(errors.colores?.[indice]?.nombre?.message);
-                const idError = `color-${indice}-error`;
+                const idError = `${idLista}-${indice}-error`;
                 return (
                   <li key={campo.id} className="flex items-start gap-3 py-3">
                     {/* Controlado a propósito: un selector de color nunca está vacío (el navegador le pone
@@ -205,7 +206,7 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
                   placeholder={t("colores.nuevoNombre")}
                   value={nuevoNombre}
                   aria-invalid={errorNuevo ? true : undefined}
-                  aria-describedby={errorNuevo ? "color-nuevo-error" : undefined}
+                  aria-describedby={errorNuevo ? `${idLista}-nuevo-error` : undefined}
                   onChange={(evento) => setNuevoNombre(evento.target.value)}
                   onKeyDown={(evento) => {
                     if (evento.key === "Enter") {
@@ -215,7 +216,7 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
                   }}
                 />
                 {errorNuevo && (
-                  <p id="color-nuevo-error" role="alert" className="mt-1 text-sm text-destructive">
+                  <p id={`${idLista}-nuevo-error`} role="alert" className="mt-1 text-sm text-destructive">
                     {errorNuevo}
                   </p>
                 )}

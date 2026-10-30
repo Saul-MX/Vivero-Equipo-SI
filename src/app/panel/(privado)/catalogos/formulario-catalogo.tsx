@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,6 +54,7 @@ export function FormularioCatalogo({ catalogo }: { catalogo: CatalogoEnFormulari
   const idioma = useLocale();
   const router = useRouter();
   const [porEliminar, setPorEliminar] = useState<CatalogoPorEliminar | null>(null);
+  const idColor = useId();
   const inicial = catalogo?.valores ?? VALORES_NUEVO;
 
   const {
@@ -139,7 +140,7 @@ export function FormularioCatalogo({ catalogo }: { catalogo: CatalogoEnFormulari
             {...registrar("nombre")}
           />
           <div className="flex flex-col gap-2">
-            <label htmlFor="color" className="text-sm font-medium text-foreground">
+            <label htmlFor={idColor} className="text-sm font-medium text-foreground">
               {t("color")}
             </label>
             {/* Controlado: un selector de color nunca está vacío y no debe leerse del navegador. */}
@@ -148,9 +149,9 @@ export function FormularioCatalogo({ catalogo }: { catalogo: CatalogoEnFormulari
               name="color"
               render={({ field }) => (
                 <input
-                  id="color"
+                  id={idColor}
                   type="color"
-                  aria-describedby="color-ayuda"
+                  aria-describedby={`${idColor}-ayuda`}
                   className="h-11 w-20 cursor-pointer rounded-xl border border-input bg-card p-1"
                   name={field.name}
                   ref={field.ref}
@@ -161,7 +162,7 @@ export function FormularioCatalogo({ catalogo }: { catalogo: CatalogoEnFormulari
               )}
             />
           </div>
-          <p id="color-ayuda" className="text-sm text-texto-suave md:col-span-2">
+          <p id={`${idColor}-ayuda`} className="text-sm text-texto-suave md:col-span-2">
             {t("colorAyuda")}
           </p>
           <div className="text-sm md:col-span-2">

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -34,6 +34,7 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [errorNuevo, setErrorNuevo] = useState<string>();
   const [porEliminar, setPorEliminar] = useState<PorEliminar | null>(null);
+  const idLista = useId();
 
   const {
     control,
@@ -120,7 +121,7 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
               {fields.map((campo, indice) => {
                 const fila = filas[indice] ?? campo;
                 const errorNombre = traducir(errors.macetas?.[indice]?.nombre?.message);
-                const idError = `maceta-${indice}-error`;
+                const idError = `${idLista}-${indice}-error`;
                 return (
                   <li key={campo.id} className="flex items-start gap-2 py-3 sm:gap-3">
                     <div className="flex h-11 shrink-0 items-center">
@@ -196,7 +197,7 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
                   placeholder={t("macetas.nuevoNombre")}
                   value={nuevoNombre}
                   aria-invalid={errorNuevo ? true : undefined}
-                  aria-describedby={errorNuevo ? "maceta-nueva-error" : undefined}
+                  aria-describedby={errorNuevo ? `${idLista}-nuevo-error` : undefined}
                   onChange={(evento) => setNuevoNombre(evento.target.value)}
                   onKeyDown={(evento) => {
                     if (evento.key === "Enter") {
@@ -206,7 +207,7 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
                   }}
                 />
                 {errorNuevo && (
-                  <p id="maceta-nueva-error" role="alert" className="mt-1 text-sm text-destructive">
+                  <p id={`${idLista}-nuevo-error`} role="alert" className="mt-1 text-sm text-destructive">
                     {errorNuevo}
                   </p>
                 )}
