@@ -40,7 +40,28 @@
     "codigoInvalido": "El código no es válido, ya se usó o ya venció.",
     "credencialesInvalidas": "Usuario o contraseña incorrectos.",
     "demasiadosIntentos": "Demasiados intentos. Espera {minutos, plural, one {# minuto} other {# minutos}} e intenta de nuevo.",
-    "inesperado": "Algo salió mal. Intenta de nuevo en un momento."
+    "inesperado": "Algo salió mal. Intenta de nuevo en un momento.",
+    "revisaCampos": "Revisa los campos marcados en rojo.",
+    "textoLargo": "Este texto es demasiado largo.",
+    "whatsappRequerido": "Escribe el número de WhatsApp.",
+    "whatsappInvalido": "Escribe el número a 10 dígitos, sin lada internacional. Ejemplo: 2441234567",
+    "telefonosRequeridos": "Escribe al menos un teléfono.",
+    "telefonosInvalidos": "Separa los teléfonos con coma. Cada uno debe tener entre 7 y 15 números.",
+    "correoInvalido": "Escribe un correo válido. Ejemplo: contacto@ejemplo.com",
+    "horarioRequerido": "Escribe el horario.",
+    "direccionRequerida": "Escribe la dirección.",
+    "enlaceMapsRequerido": "Pega el enlace de Google Maps.",
+    "enlaceMapsInvalido": "Pega el enlace que da Google Maps al tocar «Compartir» (empieza con https://maps.app.goo.gl/ o https://www.google.com/maps/).",
+    "mapaInvalido": "Ese código no es un mapa de Google Maps. En Google Maps usa «Compartir» → «Insertar un mapa» → «Copiar HTML».",
+    "facebookInvalido": "Pega el enlace de tu página de Facebook. Ejemplo: https://www.facebook.com/tu-pagina",
+    "instagramInvalido": "Pega el enlace de tu Instagram o tu usuario con arroba. Ejemplo: @tu_usuario",
+    "colorNombreRequerido": "Escribe el nombre del color.",
+    "colorTonoInvalido": "Elige un tono válido.",
+    "macetaNombreRequerido": "Escribe el nombre del tamaño.",
+    "nombreRepetido": "Ya existe uno con ese nombre.",
+    "listaLarga": "La lista es demasiado larga.",
+    "listaDesactualizada": "La lista cambió en otra ventana. Recarga la página e intenta de nuevo.",
+    "noEncontrado": "Ya no existe; puede que lo hayan borrado en otra ventana. Recarga la página."
   },
   "acceso": {
     "ingresar": {
@@ -141,6 +162,76 @@
       "datos": {
         "titulo": "Datos y redes",
         "subtitulo": "Lo que aparece en el pie, en Contacto, en el mapa y en los botones de WhatsApp."
+      }
+    },
+    "datos": {
+      "guardar": "Guardar datos",
+      "guardando": "Guardando…",
+      "guardado": "Listo, los datos se guardaron.",
+      "opcional": "{campo} (opcional)",
+      "contacto": {
+        "titulo": "Contacto",
+        "whatsapp": "WhatsApp",
+        "whatsappAyuda": "10 dígitos, sin espacios. Ejemplo: 2441234567. Es el número de los botones de WhatsApp.",
+        "telefonos": "Teléfonos",
+        "telefonosAyuda": "Sepáralos con coma. Ejemplo: 244 761 52 53, 244 122 83 37",
+        "correo": "Correo",
+        "horario": "Horario",
+        "horarioAyuda": "Ejemplo: Lunes a domingo de 8:00 a 18:00",
+        "horarioEspecial": "Horario especial",
+        "horarioEspecialAyuda": "Para días festivos. Ejemplo: 24 y 31 de diciembre cerramos a las 14:00"
+      },
+      "ubicacion": {
+        "titulo": "Ubicación y mapa",
+        "direccion": "Dirección",
+        "enlaceMaps": "Enlace de Google Maps",
+        "enlaceMapsAyuda": "Para el botón «Cómo llegar». En Google Maps busca el vivero, toca «Compartir» y copia el enlace.",
+        "mapa": "Mapa para insertar",
+        "mapaAyuda": "En Google Maps: «Compartir» → «Insertar un mapa» → «Copiar HTML», y pégalo aquí completo. Por seguridad solo se guarda la dirección del mapa."
+      },
+      "redes": {
+        "titulo": "Redes sociales",
+        "facebook": "Facebook",
+        "facebookAyuda": "Enlace de tu página. Ejemplo: https://www.facebook.com/tu-pagina",
+        "instagram": "Instagram",
+        "instagramAyuda": "Enlace de tu perfil o tu usuario con arroba. Ejemplo: @tu_usuario"
+      },
+      "colores": {
+        "titulo": "Colores",
+        "descripcion": "Los colores que se pueden elegir en cada planta.",
+        "tono": "Tono del color {n}",
+        "nombre": "Nombre del color {n}",
+        "nuevoNombre": "Nombre del color nuevo",
+        "nuevoTono": "Tono del color nuevo",
+        "guardar": "Guardar colores",
+        "guardado": "Listo, los colores se guardaron.",
+        "vacio": "Todavía no hay colores. Agrega el primero."
+      },
+      "macetas": {
+        "titulo": "Tamaños de maceta",
+        "descripcion": "Los tamaños que se pueden elegir en cada planta. El orden de esta lista es el que se ve en el sitio.",
+        "nombre": "Nombre del tamaño {n}",
+        "nuevoNombre": "Nombre del tamaño nuevo",
+        "subir": "Subir {nombre}",
+        "bajar": "Bajar {nombre}",
+        "guardar": "Guardar macetas",
+        "guardado": "Listo, los tamaños de maceta se guardaron.",
+        "vacio": "Todavía no hay tamaños. Agrega el primero."
+      },
+      "lista": {
+        "plantas": "{n, plural, =0 {Sin plantas} one {# planta} other {# plantas}}",
+        "sinGuardar": "Sin guardar",
+        "agregar": "Agregar",
+        "eliminar": "Eliminar {nombre}",
+        "pendientes": "Los cambios de esta lista se guardan al presionar el botón."
+      },
+      "eliminar": {
+        "titulo": "¿Eliminar «{nombre}»?",
+        "enUso": "{n, plural, one {Lo usa # planta} other {Lo usan # plantas}}. Si lo eliminas, se quitará de {n, plural, one {esa planta} other {esas plantas}}; las plantas no se borran.",
+        "sinUso": "Ninguna planta lo usa.",
+        "confirmar": "Sí, eliminar",
+        "eliminado": "Se eliminó «{nombre}».",
+        "eliminadoEnUso": "Se eliminó «{nombre}» y se quitó de {n, plural, one {# planta} other {# plantas}}."
       }
     },
     "cuenta": {
