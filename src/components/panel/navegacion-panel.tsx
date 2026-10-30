@@ -29,15 +29,22 @@ function Icono({ icono: Componente }: { icono: LucideIcon }) {
 }
 
 /**
- * Menú lateral del panel. Se usa igual en computadora (barra fija) y en celular (panel deslizable).
- * `alNavegar` permite cerrar el panel del celular al elegir una opción.
+ * Menú lateral del panel que resalta la pantalla actual. Se usa igual en computadora (barra fija)
+ * y en celular (panel deslizable). `alNavegar` permite cerrar el panel del celular al elegir una opción.
+ *
+ * Leer la dirección actual (usePathname) en páginas con partes variables (/panel/catalogos/7) solo
+ * es posible al visitar la página; por eso el layout lo envuelve en <Suspense> y, mientras tanto,
+ * muestra <MenuPanel rutaActual={null} /> (el mismo menú sin resaltar).
  */
 export function NavegacionPanel({ alNavegar }: { alNavegar?: () => void }) {
+  return <MenuPanel rutaActual={usePathname()} alNavegar={alNavegar} />;
+}
+
+export function MenuPanel({ rutaActual, alNavegar }: { rutaActual: string | null; alNavegar?: () => void }) {
   const t = useTranslations("panel.menu");
-  const rutaActual = usePathname();
 
   const enlace = (ruta: string, icono: LucideIcon, texto: string) => {
-    const activo = esRutaActiva(ruta, rutaActual);
+    const activo = rutaActual !== null && esRutaActiva(ruta, rutaActual);
     return (
       <Link
         href={ruta}

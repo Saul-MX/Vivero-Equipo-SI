@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { Logo } from "@/components/marca/logo";
 import { BarraMovil } from "@/components/panel/barra-movil";
-import { NavegacionPanel } from "@/components/panel/navegacion-panel";
+import { MenuPanel, NavegacionPanel } from "@/components/panel/navegacion-panel";
 
 // Las pantallas del panel no deben aparecer en buscadores.
 export const metadata: Metadata = {
@@ -23,7 +24,9 @@ export default function LayoutPanel({ children }: { children: React.ReactNode })
             <Logo tono="claro" tamano="sm" />
             <p className="mt-2 text-xs text-sidebar-titulo">{t("subtituloMarca")}</p>
           </div>
-          <NavegacionPanel />
+          <Suspense fallback={<MenuPanel rutaActual={null} />}>
+            <NavegacionPanel />
+          </Suspense>
         </div>
       </aside>
       <div className="flex min-w-0 flex-col">
