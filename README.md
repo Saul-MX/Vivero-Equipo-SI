@@ -13,7 +13,7 @@ para las pruebas.
 | --- | --- | --- |
 | 1 | Base, registro por invitación, inicio de sesión, Mi cuenta, Salir y menú del panel | Aprobada |
 | 2 | Datos y redes | Aprobada |
-| 3 | Catálogos, Temporadas, Plantas y Fertilizantes | En curso: Catálogos, Temporadas y Plantas listos y probados; Fertilizantes programado, faltan sus pruebas |
+| 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Terminada, en revisión (rama `fase-3-catalogo`) |
 | 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Pendiente |
 | 5 | Sitio público | Pendiente |
 | 6 | Inicio del panel (pendientes, accesos rápidos, mensajes) | Pendiente |
@@ -130,6 +130,7 @@ Hostinger arma las apps de Next.js en modo servidor («standalone») y las arran
 5. **Dominio y HTTPS:** conecta el dominio y activa el certificado SSL en hPanel.
 6. Entra a `https://tu-dominio/panel/registro` y crea la primera cuenta.
 
-> **Importante para las fotos (fase 3):** en cada despliegue Hostinger crea una carpeta nueva y descarta los archivos
-> guardados dentro de la anterior. Por eso las fotos subidas desde el panel se guardarán en una carpeta **fuera** del
-> proyecto, indicada con una variable de entorno, y se servirán desde ahí.
+> **Importante para las fotos:** en cada despliegue Hostinger crea una carpeta nueva y descarta los archivos
+> guardados dentro de la anterior. Por eso las fotos y folletos subidos desde el panel se guardan en una carpeta
+> **fuera** del proyecto. Agrega la variable `UPLOADS_DIR` con la ruta completa de esa carpeta (por ejemplo
+> `/home/TU_USUARIO/archivos-vivero`) y créala una sola vez desde el administrador de archivos de hPanel.
