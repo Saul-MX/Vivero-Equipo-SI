@@ -66,7 +66,7 @@ test.describe("en celular", () => {
       expect(anchoContenido, ruta).toBeLessThanOrEqual(390);
     };
 
-    for (const ruta of ["/panel", "/panel/plantas", "/panel/mi-cuenta", "/panel/datos-y-redes"]) {
+    for (const ruta of ["/panel", "/panel/plantas", "/panel/plantas/nueva", "/panel/mi-cuenta", "/panel/datos-y-redes"]) {
       await medirAncho(page, ruta);
     }
 

@@ -38,6 +38,7 @@ test.describe("con sesión", () => {
     "/panel/catalogos",
     "/panel/catalogos/nuevo",
     "/panel/temporadas",
+    "/panel/plantas/nueva",
   ]) {
     test(`${ruta} cumple WCAG 2.1 AA`, async ({ page }) => {
       await page.goto(ruta);
