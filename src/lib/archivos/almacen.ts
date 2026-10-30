@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { type Carpeta, esClaveTemporal, sufijosDe, type TipoArchivo } from "./claves";
+import { type Carpeta, esClaveTemporal, PATRON_ARCHIVO_PUBLICO, sufijosDe, type TipoArchivo } from "./claves";
 
 // Archivos subidos desde el panel (fotos y folletos PDF).
 //
@@ -14,7 +14,9 @@ import { type Carpeta, esClaveTemporal, sufijosDe, type TipoArchivo } from "./cl
 // mueve a su carpeta final («plantas/», «catalogos/», …). Lo temporal de más de 24 horas se borra solo.
 
 export const MAXIMO_BYTES = 15 * 1024 * 1024;
+export const MAXIMO_BYTES_VIDEO = 40 * 1024 * 1024;
 const LADO_GRANDE = 1600; // fichas y portadas
+const LADO_ANUNCIO = 2400; // anuncios del carrusel (ocupan toda la pantalla)
 const LADO_TARJETA = 640; // tarjetas y listas (versión ligera)
 const VIDA_TEMPORAL_MS = 24 * 60 * 60 * 1000;
 
@@ -39,26 +41,39 @@ async function nuevaClaveTemporal(): Promise<string> {
 
 export type ImagenGuardada = { clave: string; ancho: number; alto: number };
 
+/** «normal»: fotos de fichas y páginas (1600 px). «anuncio»: carrusel (2400 px y también GIF). */
+export type PerfilImagen = "normal" | "anuncio";
+
 /**
- * Revisa que sea una imagen JPG, PNG o WebP de verdad (leyendo el archivo, no su nombre),
- * la endereza según la foto del celular y la guarda en dos tamaños WebP.
- * sharp descarta los metadatos de la foto (incluida la ubicación GPS).
+ * Revisa que sea una imagen JPG, PNG o WebP (o GIF en anuncios) de verdad, leyendo el archivo
+ * y no su nombre; la endereza según la foto del celular y la guarda en dos tamaños WebP.
+ * Un GIF animado sigue animado. sharp descarta los metadatos de la foto (incluida la ubicación GPS).
  */
-export async function guardarImagenTemporal(datos: Buffer): Promise<ImagenGuardada | null> {
+export async function guardarImagenTemporal(
+  datos: Buffer,
+  perfil: PerfilImagen = "normal",
+): Promise<ImagenGuardada | null> {
+  const formatos = perfil === "anuncio" ? ["jpeg", "png", "webp", "gif"] : ["jpeg", "png", "webp"];
   let formato: string | undefined;
+  let paginas = 1;
   try {
-    formato = (await sharp(datos).metadata()).format;
+    const metadatos = await sharp(datos, { animated: true }).metadata();
+    formato = metadatos.format;
+    paginas = metadatos.pages ?? 1;
   } catch {
     return null;
   }
-  if (!formato || !["jpeg", "png", "webp"].includes(formato)) return null;
+  if (!formato || !formatos.includes(formato)) return null;
 
+  const animada = paginas > 1;
+  const lado = perfil === "anuncio" ? LADO_ANUNCIO : LADO_GRANDE;
   const clave = await nuevaClaveTemporal();
-  const original = sharp(datos, { failOn: "error" }).rotate();
+  const lectura = sharp(datos, { failOn: "error", animated: animada });
+  const original = animada ? lectura : lectura.rotate();
   const [grande, tarjeta] = await Promise.all([
     original
       .clone()
-      .resize({ width: LADO_GRANDE, height: LADO_GRANDE, fit: "inside", withoutEnlargement: true })
+      .resize({ width: lado, height: lado, fit: "inside", withoutEnlargement: true })
       .webp({ quality: 82 })
       .toBuffer({ resolveWithObject: true }),
     original
@@ -69,7 +84,21 @@ export async function guardarImagenTemporal(datos: Buffer): Promise<ImagenGuarda
   ]);
   await writeFile(rutaEnDisco(`${clave}-g.webp`), grande.data);
   await writeFile(rutaEnDisco(`${clave}-t.webp`), tarjeta);
-  return { clave, ancho: grande.info.width, alto: grande.info.height };
+  // En una imagen animada, sharp informa la altura de todos los cuadros juntos.
+  return { clave, ancho: grande.info.width, alto: Math.round(grande.info.height / paginas) };
+}
+
+/**
+ * Revisa que sea un video MP4 o WebM de verdad (por los primeros bytes del archivo) y lo guarda
+ * tal cual. En el sitio siempre se reproduce sin sonido.
+ */
+export async function guardarVideoTemporal(datos: Buffer): Promise<string | null> {
+  const esWebm = datos.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3]));
+  const esMp4 = datos.subarray(4, 8).toString("latin1") === "ftyp";
+  if (!esWebm && !esMp4) return null;
+  const clave = `${await nuevaClaveTemporal()}${esWebm ? ".webm" : ".mp4"}`;
+  await writeFile(rutaEnDisco(clave), datos);
+  return clave;
 }
 
 /** Revisa que sea un PDF de verdad (empieza con «%PDF-») y lo guarda tal cual. */
@@ -145,6 +174,35 @@ export async function borrarArchivo(clave: string | null | undefined, tipo: Tipo
       }
     }),
   );
+}
+
+export type ArchivoEnCarpeta = { clave: string; tipo: "imagen" | "video"; bytes: number; modificado: Date };
+
+/** Fotos y videos guardados en una carpeta (por ejemplo, «anuncios»), del más nuevo al más viejo. */
+export async function listarArchivosDeCarpeta(carpeta: Carpeta): Promise<ArchivoEnCarpeta[]> {
+  let nombres: string[];
+  try {
+    nombres = await readdir(rutaEnDisco(carpeta));
+  } catch {
+    return []; // la carpeta aún no existe
+  }
+  const archivos = new Map<string, ArchivoEnCarpeta>();
+  for (const nombre of nombres) {
+    const partes = `${carpeta}/${nombre}`.match(PATRON_ARCHIVO_PUBLICO);
+    if (!partes || partes[3] === ".pdf") continue;
+    const [, , uuid, variante] = partes;
+    const esVideo = variante === ".mp4" || variante === ".webm";
+    const clave = `${carpeta}/${uuid}${esVideo ? variante : ""}`;
+    const datos = await stat(rutaEnDisco(`${carpeta}/${nombre}`));
+    const previo = archivos.get(clave);
+    archivos.set(clave, {
+      clave,
+      tipo: esVideo ? "video" : "imagen",
+      bytes: (previo?.bytes ?? 0) + datos.size,
+      modificado: previo && previo.modificado > datos.mtime ? previo.modificado : datos.mtime,
+    });
+  }
+  return [...archivos.values()].sort((a, b) => b.modificado.getTime() - a.modificado.getTime());
 }
 
 /** Borra lo que lleva más de 24 horas en «temporal/» (subidas de formularios que nunca se guardaron). */

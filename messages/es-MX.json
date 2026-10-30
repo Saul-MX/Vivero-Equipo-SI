@@ -87,7 +87,10 @@
     "dosisRequerida": "Escribe la dosis.",
     "frecuenciaRequerida": "Escribe cada cuánto se aplica.",
     "pasosRequeridos": "Escribe cómo se aplica (un paso por renglón).",
-    "presentacionRequerida": "Escribe la presentación."
+    "presentacionRequerida": "Escribe la presentación.",
+    "imagenAnuncioInvalida": "Ese archivo no es una foto JPG, PNG, WebP o GIF.",
+    "videoInvalido": "Ese archivo no es un video MP4 o WebM.",
+    "videoGrande": "El video pesa más de 40 MB. Elige uno más ligero o más corto."
   },
   "acceso": {
     "ingresar": {
@@ -315,10 +318,17 @@
         "eligeCatalogo": "Elige un catálogo",
         "etiqueta": "Etiqueta en la tarjeta",
         "sinEtiqueta": "Sin etiqueta",
-        "etiquetas": { "NUEVO": "Nuevo", "OFERTA": "Oferta" },
+        "etiquetas": {
+          "NUEVO": "Nuevo",
+          "OFERTA": "Oferta"
+        },
         "caracteristicas": "Características",
         "luz": "Luz",
-        "luces": { "SOL": "Sol", "MEDIA_SOMBRA": "Media sombra", "SOMBRA": "Sombra" },
+        "luces": {
+          "SOL": "Sol",
+          "MEDIA_SOMBRA": "Media sombra",
+          "SOMBRA": "Sombra"
+        },
         "colores": "Colores",
         "sinColores": "No hay colores. Agrégalos en «Datos y redes».",
         "macetas": "Tamaños de maceta",
@@ -329,7 +339,11 @@
         "diario": "Diario",
         "vecesPorSemana": "{n, plural, one {# vez por semana} other {# veces por semana}}",
         "cantidadAgua": "Cantidad de agua",
-        "cantidades": { "POCA": "Poca", "MODERADA": "Moderada", "ABUNDANTE": "Abundante" },
+        "cantidades": {
+          "POCA": "Poca",
+          "MODERADA": "Moderada",
+          "ABUNDANTE": "Abundante"
+        },
         "fertilizante": "Fertilizante recomendado",
         "ninguno": "Ninguno",
         "sinFertilizantes": "Todavía no hay fertilizantes; agrégalos en «Fertilizantes».",

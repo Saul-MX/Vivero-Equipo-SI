@@ -8,10 +8,10 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   experimental: {
-    // Las fotos pueden pesar hasta 15 MB y se suben una por envío; 16 MB deja margen
-    // para los datos del formulario. Aplica a las acciones del servidor y al proxy del panel.
-    serverActions: { bodySizeLimit: "16mb" },
-    proxyClientMaxBodySize: "16mb",
+    // Las fotos (hasta 15 MB) y los videos del carrusel (hasta 40 MB) se suben uno por envío; 41 MB deja
+    // margen para los datos del formulario. Aplica a las acciones del servidor y al proxy del panel.
+    serverActions: { bodySizeLimit: "41mb" },
+    proxyClientMaxBodySize: "41mb",
   },
   turbopack: {
     // La raíz es esta carpeta (evita que Next confunda archivos de carpetas superiores).
