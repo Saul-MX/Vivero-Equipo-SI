@@ -3,6 +3,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { prisma } from "@/lib/db";
 import { COOKIE_SESION, DIA_MS, DIAS_SESION, RUTA_INGRESO } from "./constantes";
 
@@ -39,6 +40,11 @@ export const obtenerSesion = cache(
   async (): Promise<{ sesionId: string; usuario: UsuarioActual } | null> => {
     const token = (await cookies()).get(COOKIE_SESION)?.value;
     if (!token) return null;
+
+    // Desde aquí todo depende de la visita (la base de datos y la hora actual), así que Next
+    // no debe intentar prepararlo por adelantado. Las páginas que llaman a requerirUsuario()
+    // quedan cubiertas también para sus consultas posteriores.
+    await connection();
 
     const sesion = await prisma.sesion.findUnique({
       where: { id: hashToken(token) },
