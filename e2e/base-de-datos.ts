@@ -19,14 +19,17 @@ async function conBase<T>(trabajo: (conexion: mariadb.Connection) => Promise<T>)
   }
 }
 
-/** Crea una planta (en «Todo el año») que usa los colores y tamaños indicados por nombre. */
-export function crearPlanta(nombre: string, opciones: { colores?: string[]; macetas?: string[] }) {
+/** Crea una planta (por defecto en «Todo el año») que usa los colores y tamaños indicados por nombre. */
+export function crearPlanta(
+  nombre: string,
+  opciones: { colores?: string[]; macetas?: string[]; catalogo?: string },
+) {
   return conBase(async (conexion) => {
     const slug = `${nombre.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`;
     const resultado = await conexion.query(
       `INSERT INTO plantas (nombre, slug, catalogoId, actualizadoEn)
-       SELECT ?, ?, id, NOW(3) FROM catalogos WHERE slug = 'todo-el-anio'`,
-      [nombre, slug],
+       SELECT ?, ?, id, NOW(3) FROM catalogos WHERE slug = ?`,
+      [nombre, slug, opciones.catalogo ?? "todo-el-anio"],
     );
     const plantaId = Number(resultado.insertId);
     for (const color of opciones.colores ?? []) {
@@ -93,6 +96,11 @@ export function contarHuerfanos() {
     );
     return Number(fila.huerfanos);
   });
+}
+
+/** Ejecuta una consulta de solo lectura en la base de pruebas. */
+export function consultar<T = Record<string, unknown>>(sql: string, valores: unknown[] = []) {
+  return conBase(async (conexion) => (await conexion.query(sql, valores)) as T[]);
 }
 
 export function leerDatosNegocio() {

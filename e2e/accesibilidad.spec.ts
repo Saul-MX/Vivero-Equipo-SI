@@ -30,7 +30,14 @@ test.describe("sin sesión", () => {
 });
 
 test.describe("con sesión", () => {
-  for (const ruta of ["/panel", "/panel/plantas", "/panel/mi-cuenta", "/panel/datos-y-redes"]) {
+  for (const ruta of [
+    "/panel",
+    "/panel/plantas",
+    "/panel/mi-cuenta",
+    "/panel/datos-y-redes",
+    "/panel/catalogos",
+    "/panel/catalogos/nuevo",
+  ]) {
     test(`${ruta} cumple WCAG 2.1 AA`, async ({ page }) => {
       await page.goto(ruta);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

@@ -2,6 +2,8 @@
 // la borra, la vuelve a crear vacía y le aplica las migraciones y los datos iniciales.
 import "dotenv/config";
 import { execSync } from "node:child_process";
+import { rm } from "node:fs/promises";
+import path from "node:path";
 import * as mariadb from "mariadb";
 
 async function main() {
@@ -33,6 +35,12 @@ async function main() {
     );
   } finally {
     await conexion.end();
+  }
+
+  // Carpeta de archivos de las pruebas: se vacía en cada corrida (también tiene su candado).
+  const carpetaArchivos = process.env.UPLOADS_DIR;
+  if (carpetaArchivos && path.basename(carpetaArchivos) === ".archivos-prueba") {
+    await rm(carpetaArchivos, { recursive: true, force: true });
   }
 
   const entorno = { ...process.env, DATABASE_URL: url };

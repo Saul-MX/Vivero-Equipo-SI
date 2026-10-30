@@ -1,4 +1,5 @@
 import "dotenv/config";
+import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 import { ARCHIVO_SESION_ADMIN, CODIGO_INICIAL_PRUEBA, PUERTO_PRUEBAS } from "./e2e/datos";
 
@@ -37,6 +38,7 @@ export default defineConfig({
     env: {
       DATABASE_URL: process.env.DATABASE_URL_PRUEBA ?? "",
       CODIGO_INVITACION_INICIAL: CODIGO_INICIAL_PRUEBA,
+      UPLOADS_DIR: path.resolve(".archivos-prueba"),
     },
   },
 });
