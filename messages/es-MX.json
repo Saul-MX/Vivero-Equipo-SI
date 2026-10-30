@@ -16,6 +16,11 @@
     "copiado": "Copiado",
     "notificaciones": "Avisos"
   },
+  "noEncontrado": {
+    "titulo": "No encontramos esta página",
+    "texto": "Puede que la dirección esté mal escrita o que la página ya no exista.",
+    "volver": "Ir al inicio"
+  },
   "sitio": {
     "construccion": {
       "titulo": "Nuestro sitio está creciendo",
@@ -61,7 +66,18 @@
     "nombreRepetido": "Ya existe uno con ese nombre.",
     "listaLarga": "La lista es demasiado larga.",
     "listaDesactualizada": "La lista cambió en otra ventana. Recarga la página e intenta de nuevo.",
-    "noEncontrado": "Ya no existe; puede que lo hayan borrado en otra ventana. Recarga la página."
+    "noEncontrado": "Ya no existe; puede que lo hayan borrado en otra ventana. Recarga la página.",
+    "nombreRequerido": "Escribe el nombre.",
+    "mesInvalido": "Elige un mes.",
+    "archivoRequerido": "Elige un archivo.",
+    "archivoGrande": "El archivo pesa más de 15 MB. Elige uno más ligero.",
+    "imagenInvalida": "Ese archivo no es una foto JPG, PNG o WebP.",
+    "pdfInvalido": "Ese archivo no es un PDF.",
+    "subidaFallida": "No se pudo subir el archivo. Revisa tu conexión e intenta de nuevo.",
+    "archivoNoEncontrado": "Un archivo ya no está disponible (pasó mucho tiempo desde que lo subiste). Vuelve a subirlo.",
+    "catalogoConPlantas": "No se puede eliminar: {plantas, plural, one {tiene # planta} other {tiene # plantas}}. Muévelas a otro catálogo o elimínalas primero.",
+    "catalogoBase": "No se puede eliminar: es el catálogo de la temporada base («Todo el año»), que el sitio usa cuando ninguna otra temporada aplica.",
+    "temporadaEnUso": "No se puede quitar la temporada: hay anuncios del carrusel que la usan."
   },
   "acceso": {
     "ingresar": {
@@ -162,6 +178,81 @@
       "datos": {
         "titulo": "Datos y redes",
         "subtitulo": "Lo que aparece en el pie, en Contacto, en el mapa y en los botones de WhatsApp."
+      }
+    },
+    "formulario": {
+      "guardar": "Guardar",
+      "guardarYSeguir": "Guardar y seguir editando",
+      "guardando": "Guardando…",
+      "cancelar": "Cancelar",
+      "guardado": "Listo, se guardó.",
+      "eliminar": "Eliminar",
+      "eliminando": "Eliminando…",
+      "visible": "Visible en el sitio",
+      "visibleAyuda": "Apagado, no aparece en el sitio, pero no se borra.",
+      "opcional": "{campo} (opcional)",
+      "editar": "Editar {nombre}",
+      "noSePuedeDeshacer": "Esta acción no se puede deshacer."
+    },
+    "archivos": {
+      "arrastra": "Arrastra la foto aquí o elígela de tu equipo.",
+      "elegirFoto": "Elegir foto",
+      "cambiarFoto": "Cambiar foto",
+      "quitarFoto": "Quitar foto",
+      "subiendo": "Subiendo…",
+      "vistaPrevia": "Vista previa de la foto",
+      "ayudaImagen": "JPG, PNG o WebP de hasta 15 MB. Se convierte a WebP y se reduce automáticamente.",
+      "elegirPdf": "Elegir PDF",
+      "cambiarPdf": "Cambiar PDF",
+      "quitarPdf": "Quitar PDF",
+      "verFolleto": "Ver el folleto",
+      "sinFolleto": "Sin folleto",
+      "ayudaPdf": "Archivo PDF de hasta 15 MB."
+    },
+    "catalogos": {
+      "nuevo": "Nuevo catálogo",
+      "vacio": "Todavía no hay catálogos. Crea el primero.",
+      "subir": "Subir {nombre}",
+      "bajar": "Bajar {nombre}",
+      "visibleDe": "Mostrar {nombre} en el sitio",
+      "eliminarDe": "Eliminar {nombre}",
+      "plantas": "{n, plural, =0 {Sin plantas} one {# planta} other {# plantas}}",
+      "sinTemporada": "Sin temporada",
+      "todoElAnio": "Todo el año",
+      "rango": "{inicio} a {fin}",
+      "oculta": "(oculta)",
+      "seVeHoy": "Se ve hoy",
+      "enMenu": "En el menú",
+      "visibleCambiado": "{visible, select, true {«{nombre}» ya se ve en el sitio.} other {«{nombre}» quedó oculto; no se borró.}}",
+      "eliminado": "Se eliminó el catálogo «{nombre}».",
+      "eliminarTitulo": "¿Eliminar el catálogo «{nombre}»?",
+      "eliminarTexto": "Se eliminará junto con su temporada, su portada y su folleto.",
+      "ficha": {
+        "tituloNuevo": "Nuevo catálogo",
+        "datos": "Datos del catálogo",
+        "nombre": "Nombre",
+        "nombreAyuda": "Ejemplo: Nochebuena",
+        "color": "Color",
+        "colorAyuda": "Es el punto de color del catálogo y el acento del sitio cuando su temporada se ve.",
+        "direccion": "Dirección de su página",
+        "direccionNueva": "Se crea al guardar a partir del nombre y no cambia después.",
+        "permanente": "Aparece en el menú «Catálogos»",
+        "permanenteAyuda": "Para catálogos de todo el año (como Árboles). Los de temporada se ven en «Temporada».",
+        "portadaYTextos": "Portada y textos",
+        "portada": "Foto de portada",
+        "portadaAyuda": "Mejor horizontal. JPG, PNG o WebP de hasta 15 MB.",
+        "presentacion": "Texto de presentación",
+        "presentacionAyuda": "Unas líneas que se leen al entrar al catálogo.",
+        "destacados": "Puntos destacados",
+        "destacadosAyuda": "Uno por renglón. Ejemplo: Entrega a domicilio en Atlixco",
+        "folleto": "Folleto PDF (opcional)",
+        "temporada": "Temporada",
+        "tieneTemporada": "Este catálogo tiene temporada",
+        "tieneTemporadaAyuda": "En sus meses, el sitio destaca este catálogo y usa su color. El aviso, la prioridad y el modo se ajustan en «Temporadas».",
+        "empieza": "Empieza",
+        "termina": "Termina",
+        "base": "Es la temporada base: el sitio la muestra cuando ninguna otra temporada aplica. Se ajusta en «Temporadas».",
+        "eliminarCatalogo": "Eliminar catálogo"
       }
     },
     "datos": {

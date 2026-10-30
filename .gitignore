@@ -17,6 +17,10 @@
 /blob-report/
 /e2e/.auth/
 
+# fotos y folletos subidos desde el panel (y los de las pruebas)
+/archivos/
+/.archivos-prueba/
+
 # prisma (el cliente se genera con `npx prisma generate`)
 /src/generated/
 

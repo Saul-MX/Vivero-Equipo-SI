@@ -11,13 +11,11 @@ import {
   sonTelefonosValidos,
 } from "@/lib/datos-negocio/normalizar";
 import type { ClaveError } from "@/lib/resultado";
+import { esquemaTono, requerido, texto } from "./comunes";
 
 // Reglas de «Datos y redes». Se usan en el navegador y otra vez en el servidor (el que manda).
 // Además de validar, dejan los datos limpios: el WhatsApp sin espacios, el mapa solo con su dirección, etc.
 // Los mensajes son claves de traducción de la sección «errores» de messages/es-MX.json.
-
-const texto = (maximo: number) => z.string().trim().max(maximo, "textoLargo");
-const requerido = (clave: ClaveError, maximo: number) => texto(maximo).min(1, clave);
 
 /** Campo opcional que, si trae algo, se limpia con `normalizar` (que devuelve null si no es válido). */
 const enlaceOpcional = (maximo: number, normalizar: (v: string) => string | null, clave: ClaveError) =>
@@ -75,11 +73,6 @@ function sinRepetidos(lista: "colores" | "macetas") {
 
 export const esquemaNombreColor = requerido("colorNombreRequerido", 40);
 export const esquemaNombreMaceta = requerido("macetaNombreRequerido", 40);
-export const esquemaTono = z
-  .string()
-  .trim()
-  .regex(/^#[0-9a-fA-F]{6}$/, "colorTonoInvalido")
-  .transform((valor) => valor.toUpperCase());
 
 export const esquemaColores = z
   .object({

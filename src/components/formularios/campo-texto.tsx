@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Selector } from "@/components/ui/selector";
 import { Textarea } from "@/components/ui/textarea";
 
 type PropsComunes = {
@@ -51,6 +52,29 @@ export function CampoTexto({
     <Campo
       {...{ id, etiqueta, ayuda, error, claseCampo }}
       control={(accesibilidad) => <Input {...accesibilidad} {...propsInput} />}
+    />
+  );
+}
+
+export function CampoSelector({
+  id,
+  etiqueta,
+  ayuda,
+  error,
+  claseCampo,
+  ...propsSelector
+}: PropsComunes & ComponentProps<typeof Selector>) {
+  return (
+    <Campo
+      {...{ id, etiqueta, ayuda, error, claseCampo }}
+      control={(accesibilidad) => (
+        <Selector
+          id={accesibilidad.id}
+          aria-invalid={accesibilidad["aria-invalid"]}
+          aria-describedby={accesibilidad["aria-describedby"]}
+          {...propsSelector}
+        />
+      )}
     />
   );
 }
