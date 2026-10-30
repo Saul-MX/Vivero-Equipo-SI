@@ -68,6 +68,13 @@ test("después de 5 intentos fallidos se bloquea un rato", async ({ page }) => {
   await expect(page.getByText(/Demasiados intentos\. Espera 1[45] minutos/)).toBeVisible();
 });
 
+test("con la sesión iniciada, «Entrar» lleva directo al panel", async ({ page }) => {
+  await iniciarSesion(page, ADMIN.usuario, ADMIN.contrasena);
+  await expect(page).toHaveURL("/panel");
+  await page.goto("/panel/ingresar");
+  await expect(page).toHaveURL("/panel");
+});
+
 test("entrar y salir del panel", async ({ page }) => {
   await iniciarSesion(page, ADMIN.usuario, ADMIN.contrasena);
   await expect(page).toHaveURL("/panel");

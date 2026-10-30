@@ -1,5 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { ADMIN } from "./datos";
+import { nuevaVentanaSinSesion } from "./utilidades";
 
 const PANTALLAS = [
   { menu: "Plantas", titulo: "Plantas", ruta: "/panel/plantas" },
@@ -56,12 +57,25 @@ test.describe("en celular", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Plantas" })).toBeVisible();
   });
 
-  test("las pantallas no se salen de lo ancho de la pantalla", async ({ page }) => {
-    for (const ruta of ["/panel", "/panel/mi-cuenta", "/panel/ingresar", "/panel/registro"]) {
-      await page.goto(ruta);
-      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-      const anchoContenido = await page.evaluate(() => document.documentElement.scrollWidth);
+  test("las pantallas no se salen de lo ancho de la pantalla", async ({ page, browser }) => {
+    const medirAncho = async (pagina: Page, ruta: string) => {
+      await pagina.goto(ruta);
+      await expect(pagina).toHaveURL(ruta);
+      await expect(pagina.getByRole("heading", { level: 1 })).toBeVisible();
+      const anchoContenido = await pagina.evaluate(() => document.documentElement.scrollWidth);
       expect(anchoContenido, ruta).toBeLessThanOrEqual(390);
+    };
+
+    for (const ruta of ["/panel", "/panel/plantas", "/panel/mi-cuenta"]) {
+      await medirAncho(page, ruta);
     }
+
+    // «Entrar» y «Crear cuenta» se revisan sin sesión (con sesión, el sitio manda directo al panel).
+    const sinSesion = await nuevaVentanaSinSesion(browser);
+    await sinSesion.pagina.setViewportSize({ width: 390, height: 844 });
+    for (const ruta of ["/panel/ingresar", "/panel/registro"]) {
+      await medirAncho(sinSesion.pagina, ruta);
+    }
+    await sinSesion.contexto.close();
   });
 });
