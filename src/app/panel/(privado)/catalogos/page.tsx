@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { listarCatalogosPanel } from "@/lib/catalogo/catalogos";
+import { leerEstadoTemporadas } from "@/lib/temporadas/temporadas";
 import { ListaCatalogos } from "./lista-catalogos";
 
 export const generateMetadata = metadatosDeSeccion("catalogos");
@@ -39,12 +40,12 @@ export default function PaginaCatalogos() {
 
 async function ContenidoCatalogos() {
   await requerirUsuario();
-  const catalogos = await listarCatalogosPanel();
+  const [catalogos, { vigente }] = await Promise.all([listarCatalogosPanel(), leerEstadoTemporadas()]);
 
   return (
     <Card>
       <CardContent>
-        <ListaCatalogos catalogos={catalogos} />
+        <ListaCatalogos catalogos={catalogos} idCatalogoVigente={vigente?.catalogo.id ?? null} />
       </CardContent>
     </Card>
   );

@@ -77,7 +77,9 @@
     "archivoNoEncontrado": "Un archivo ya no está disponible (pasó mucho tiempo desde que lo subiste). Vuelve a subirlo.",
     "catalogoConPlantas": "No se puede eliminar: {plantas, plural, one {tiene # planta} other {tiene # plantas}}. Muévelas a otro catálogo o elimínalas primero.",
     "catalogoBase": "No se puede eliminar: es el catálogo de la temporada base («Todo el año»), que el sitio usa cuando ninguna otra temporada aplica.",
-    "temporadaEnUso": "No se puede quitar la temporada: hay anuncios del carrusel que la usan."
+    "temporadaEnUso": "No se puede quitar la temporada: hay anuncios del carrusel que la usan.",
+    "temporadaForzadaRequerida": "Elige qué temporada quieres mostrar.",
+    "prioridadInvalida": "Escribe un número entero del 0 al 100."
   },
   "acceso": {
     "ingresar": {
@@ -253,6 +255,40 @@
         "termina": "Termina",
         "base": "Es la temporada base: el sitio la muestra cuando ninguna otra temporada aplica. Se ajusta en «Temporadas».",
         "eliminarCatalogo": "Eliminar catálogo"
+      }
+    },
+    "temporadas": {
+      "modo": {
+        "titulo": "¿Qué temporada se muestra?",
+        "automatica": "Automática por fechas",
+        "automaticaAyuda": "El sitio cambia solo según los meses de cada temporada y se repite cada año.",
+        "forzada": "Forzar una temporada",
+        "forzadaAyuda": "Muestra siempre la temporada elegida, sin importar la fecha.",
+        "fija": "Fijo en Todo el año",
+        "fijaAyuda": "No se muestra ninguna temporada; usa los colores de Todo el año.",
+        "cual": "Temporada que se muestra",
+        "elige": "Elige una temporada",
+        "guardado": "Listo. El sitio ya usa este modo."
+      },
+      "ahoraSeVe": "Ahora se ve: {temporada} ({detalle})",
+      "ningunaSeVe": "Ahora no se ve ninguna temporada.",
+      "detalle": {
+        "forzada": "forzada",
+        "fija": "fijo"
+      },
+      "regla": "Si dos temporadas caen en el mismo mes, gana la de prioridad más alta; si empatan, la que va primero en Catálogos. Las temporadas ocultas no se usan en el modo automático.",
+      "vacio": "Todavía no hay temporadas. Se crean desde la ficha de cada catálogo («Este catálogo tiene temporada»).",
+      "tarjeta": {
+        "aviso": "Texto del aviso",
+        "avisoAyuda": "Ejemplo: Ya llegó la Nochebuena",
+        "color": "Color",
+        "prioridad": "Prioridad",
+        "prioridadAyuda": "Número del 0 al 100. Gana el más alto.",
+        "visible": "Usar en el modo automático",
+        "visibleAyuda": "Apagada, la temporada no se activa sola por fecha.",
+        "base": "Se muestra cuando ninguna otra temporada aplica y en el modo «Fijo en Todo el año».",
+        "portadaYTextos": "Portada y textos",
+        "guardado": "Listo, la temporada «{nombre}» se guardó."
       }
     },
     "datos": {
