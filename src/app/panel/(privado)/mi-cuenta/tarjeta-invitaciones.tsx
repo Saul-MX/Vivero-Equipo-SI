@@ -110,9 +110,10 @@ export function TarjetaInvitaciones({
           ) : (
             <ul className="mt-2 divide-y divide-border rounded-xl border">
               {vigentes.map((invitacion) => (
-                <li key={invitacion.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-                  <span className="text-sm">
-                    {t("fila", { terminacion: invitacion.terminacion, fecha: invitacion.vence })}
+                <li key={invitacion.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                  <span className="flex flex-col text-sm">
+                    <span className="font-medium">{t("terminaEn", { terminacion: invitacion.terminacion })}</span>
+                    <span className="text-texto-suave">{t("vence", { fecha: invitacion.vence })}</span>
                   </span>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
