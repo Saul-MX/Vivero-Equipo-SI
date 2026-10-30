@@ -1,7 +1,37 @@
-import { metadatosDeSeccion, PaginaPendiente } from "@/components/panel/pagina-pendiente";
+import { Suspense } from "react";
+import { useTranslations } from "next-intl";
+import { EncabezadoPagina } from "@/components/panel/encabezado-pagina";
+import { EsqueletoContenido } from "@/components/panel/esqueleto";
+import { metadatosDeSeccion } from "@/components/panel/pagina-pendiente";
+import { Card, CardContent } from "@/components/ui/card";
+import { listarTestimonios } from "@/lib/apartados/testimonios";
+import { requerirUsuario } from "@/lib/auth/sesion";
+import { ListaTestimonios } from "./lista-testimonios";
 
 export const generateMetadata = metadatosDeSeccion("testimonios");
 
 export default function PaginaTestimonios() {
-  return <PaginaPendiente seccion="testimonios" fase={4} />;
+  const t = useTranslations("panel.secciones.testimonios");
+
+  return (
+    <>
+      <EncabezadoPagina titulo={t("titulo")} subtitulo={t("subtitulo")} />
+      <Suspense fallback={<EsqueletoContenido />}>
+        <ContenidoTestimonios />
+      </Suspense>
+    </>
+  );
+}
+
+async function ContenidoTestimonios() {
+  await requerirUsuario();
+  const testimonios = await listarTestimonios();
+
+  return (
+    <Card>
+      <CardContent>
+        <ListaTestimonios testimonios={testimonios} />
+      </CardContent>
+    </Card>
+  );
 }

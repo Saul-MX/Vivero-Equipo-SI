@@ -92,7 +92,9 @@
     "videoInvalido": "Ese archivo no es un video MP4 o WebM.",
     "videoGrande": "El video pesa más de 40 MB. Elige uno más ligero o más corto.",
     "preguntaRequerida": "Escribe la pregunta.",
-    "respuestaRequerida": "Escribe la respuesta."
+    "respuestaRequerida": "Escribe la respuesta.",
+    "nombreClienteRequerido": "Escribe el nombre del cliente.",
+    "testimonioRequerido": "Escribe lo que dijo el cliente."
   },
   "acceso": {
     "ingresar": {
@@ -222,7 +224,8 @@
       "quitarPdf": "Quitar PDF",
       "verFolleto": "Ver el folleto",
       "sinFolleto": "Sin folleto",
-      "ayudaPdf": "Archivo PDF de hasta 15 MB."
+      "ayudaPdf": "Archivo PDF de hasta 15 MB.",
+      "ayudaImagenAnuncio": "JPG, PNG, WebP o GIF de hasta 15 MB. Se convierte a WebP y se reduce a 2400 px."
     },
     "catalogos": {
       "nuevo": "Nuevo catálogo",
@@ -586,6 +589,29 @@
       "eliminarTitulo": "¿Eliminar esta pregunta?",
       "eliminarTexto": "«{pregunta}» dejará de aparecer en la página Contacto.",
       "eliminada": "Se eliminó la pregunta."
+    },
+    "testimonios": {
+      "agregar": "Agregar testimonio",
+      "vacio": "Todavía no hay testimonios.",
+      "total": "{n, plural, =0 {Sin testimonios} one {# testimonio} other {# testimonios}}. En Inicio se muestran los visibles, en este orden.",
+      "tituloNuevo": "Nuevo testimonio",
+      "tituloEditar": "Editar testimonio",
+      "avatar": "Foto del cliente (opcional)",
+      "avatarAyuda": "Si no subes una, se usa un círculo verde con la inicial de su nombre.",
+      "nombre": "Nombre del cliente",
+      "nombreAyuda": "Ejemplo: María G., de Atlixco",
+      "texto": "Testimonio",
+      "agregarBoton": "Agregar",
+      "agregado": "Se agregó el testimonio.",
+      "subir": "Subir el testimonio de {nombre}",
+      "bajar": "Bajar el testimonio de {nombre}",
+      "visibleDe": "Mostrar el testimonio de {nombre} en el sitio",
+      "visibleCambiado": "{visible, select, true {El testimonio de {nombre} ya se ve en el sitio.} other {El testimonio de {nombre} quedó oculto; no se borró.}}",
+      "editarDe": "Editar el testimonio de {nombre}",
+      "eliminarDe": "Eliminar el testimonio de {nombre}",
+      "eliminarTitulo": "¿Eliminar el testimonio de {nombre}?",
+      "eliminarTexto": "Se borrará también su foto. Si solo quieres que no se vea, apaga «Visible en el sitio».",
+      "eliminado": "Se eliminó el testimonio de {nombre}."
     }
   }
 }

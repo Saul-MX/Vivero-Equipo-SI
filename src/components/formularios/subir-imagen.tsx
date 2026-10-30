@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { urlImagen } from "@/lib/archivos/claves";
 import { cn } from "@/lib/utils";
 import { useTraductorErrores } from "./use-traductor-errores";
-import { ACEPTA_IMAGEN, subirArchivo } from "./subir-archivo";
+import { ACEPTA_IMAGEN, ACEPTA_IMAGEN_ANUNCIO, subirArchivo } from "./subir-archivo";
 
 type Props = {
   etiqueta: string;
@@ -16,10 +16,15 @@ type Props = {
   /** Clave del archivo (guardado o recién subido), o null si no hay foto. */
   valor: string | null;
   alCambiar: (clave: string | null) => void;
+  /** Foto de perfil (testimonios): vista previa redonda. */
+  redonda?: boolean;
+  /** «imagenAnuncio» acepta también GIF y la reduce a 2400 px (carrusel). */
+  tipo?: "imagen" | "imagenAnuncio";
 };
 
 /** Una sola foto (portada de catálogo, foto de fertilizante): elegir o arrastrar, ver, cambiar y quitar. */
-export function SubirImagen({ etiqueta, ayuda, valor, alCambiar }: Props) {
+export function SubirImagen({ etiqueta, ayuda, valor, alCambiar, redonda = false, tipo = "imagen" }: Props) {
+  const marco = redonda ? "size-28 rounded-full" : "h-28 w-40 rounded-xl";
   const t = useTranslations("panel.archivos");
   const traducir = useTraductorErrores();
   const id = useId();
@@ -31,7 +36,7 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar }: Props) {
     if (!archivo) return;
     setError(undefined);
     setSubiendo(true);
-    const resultado = await subirArchivo(archivo, "imagen");
+    const resultado = await subirArchivo(archivo, tipo);
     setSubiendo(false);
     if (resultado.ok) alCambiar(resultado.clave);
     else setError(traducir(resultado.error));
@@ -67,10 +72,10 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar }: Props) {
             width={160}
             height={120}
             unoptimized
-            className="h-28 w-40 shrink-0 rounded-xl bg-card object-cover"
+            className={cn("shrink-0 bg-card object-cover", marco)}
           />
         ) : (
-          <span aria-hidden className="flex h-28 w-40 shrink-0 items-center justify-center rounded-xl bg-card text-salvia">
+          <span aria-hidden className={cn("flex shrink-0 items-center justify-center bg-card text-salvia", marco)}>
             <ImageUpIcon className="size-8" />
           </span>
         )}
@@ -93,7 +98,7 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar }: Props) {
           <input
             id={id}
             type="file"
-            accept={ACEPTA_IMAGEN}
+            accept={tipo === "imagenAnuncio" ? ACEPTA_IMAGEN_ANUNCIO : ACEPTA_IMAGEN}
             className="sr-only"
             disabled={subiendo}
             aria-describedby={`${id}-ayuda${error ? ` ${id}-error` : ""}`}
@@ -105,7 +110,7 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar }: Props) {
         </div>
       </div>
       <p id={`${id}-ayuda`} className="text-sm text-texto-suave">
-        {ayuda ?? t("ayudaImagen")}
+        {ayuda ?? t(tipo === "imagenAnuncio" ? "ayudaImagenAnuncio" : "ayudaImagen")}
       </p>
       {error && (
         <p id={`${id}-error`} role="alert" className="text-sm text-destructive">
