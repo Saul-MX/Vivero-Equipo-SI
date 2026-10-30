@@ -81,7 +81,13 @@
     "temporadaForzadaRequerida": "Elige qué temporada quieres mostrar.",
     "prioridadInvalida": "Escribe un número entero del 0 al 100.",
     "catalogoRequerido": "Elige un catálogo.",
-    "demasiadasFotos": "Puedes subir hasta 20 fotos por planta."
+    "demasiadasFotos": "Puedes subir hasta 20 fotos por planta.",
+    "tipoRequerido": "Elige el tipo.",
+    "paraQueSirveRequerido": "Escribe para qué sirve.",
+    "dosisRequerida": "Escribe la dosis.",
+    "frecuenciaRequerida": "Escribe cada cuánto se aplica.",
+    "pasosRequeridos": "Escribe cómo se aplica (un paso por renglón).",
+    "presentacionRequerida": "Escribe la presentación."
   },
   "acceso": {
     "ingresar": {
@@ -359,6 +365,56 @@
         "derecha": "Mover la foto {n} después",
         "quitar": "Quitar la foto {n}",
         "errorArchivo": "{archivo}: {error}"
+      }
+    },
+    "fertilizantes": {
+      "agregar": "Agregar fertilizante",
+      "vacio": "Todavía no hay fertilizantes.",
+      "columnas": {
+        "fertilizante": "Fertilizante",
+        "recomendado": "Recomendado para",
+        "presentacion": "Presentación",
+        "visible": "Visible",
+        "acciones": "Acciones"
+      },
+      "ninguno": "—",
+      "visibleDe": "Mostrar {nombre} en el sitio",
+      "visibleCambiado": "{visible, select, true {«{nombre}» ya se ve en el sitio.} other {«{nombre}» quedó oculto; no se borró.}}",
+      "tipos": {
+        "GRANULADO": "Granulado",
+        "LIQUIDO": "Líquido",
+        "POLVO": "Polvo soluble",
+        "ORGANICO": "Orgánico",
+        "OTRO": "Otro"
+      },
+      "eliminarTitulo": "¿Eliminar «{nombre}»?",
+      "eliminarEnUso": "{n, plural, one {Lo recomienda # planta; quedará} other {Lo recomiendan # plantas; quedarán}} con «Ninguno» como fertilizante recomendado (las plantas no se borran).",
+      "eliminarTexto": "Se borrará también su foto. Si solo quieres que no se vea, apaga «Visible en el sitio».",
+      "eliminado": "Se eliminó «{nombre}».",
+      "formulario": {
+        "tituloNuevo": "Nuevo fertilizante",
+        "datos": "Datos del fertilizante",
+        "nombre": "Nombre",
+        "nombreAyuda": "Ejemplo: Triple 17",
+        "tipo": "Tipo",
+        "eligeTipo": "Elige el tipo",
+        "paraQueSirve": "Para qué sirve",
+        "paraQueSirveAyuda": "Ejemplo: Nutrición completa para floración y follaje.",
+        "recomendado": "Recomendado para",
+        "sinCatalogos": "No hay catálogos.",
+        "uso": "Cómo usarlo",
+        "dosis": "Dosis",
+        "dosisAyuda": "Ejemplo: 5 ml por litro de agua",
+        "frecuencia": "Cada cuánto",
+        "frecuenciaAyuda": "Ejemplo: cada 15 días",
+        "pasos": "Cómo se aplica",
+        "pasosAyuda": "Un paso por renglón.",
+        "precauciones": "Precauciones",
+        "presentacion": "Presentación",
+        "presentacionAyuda": "Ejemplo: Bolsa de 1 kg",
+        "foto": "Foto del producto (opcional)",
+        "enElSitio": "En el sitio",
+        "eliminar": "Eliminar fertilizante"
       }
     },
     "temporadas": {
