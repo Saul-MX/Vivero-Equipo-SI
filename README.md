@@ -11,8 +11,8 @@ para las pruebas.
 
 | Fase | Contenido | Estado |
 | --- | --- | --- |
-| 1 | Base, registro por invitación, inicio de sesión, Mi cuenta, Salir y menú del panel | Lista para revisión |
-| 2 | Datos y redes | Pendiente |
+| 1 | Base, registro por invitación, inicio de sesión, Mi cuenta, Salir y menú del panel | Aprobada |
+| 2 | Datos y redes | Lista para revisión |
 | 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Pendiente |
 | 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Pendiente |
 | 5 | Sitio público | Pendiente |
@@ -96,6 +96,11 @@ e2e/                 pruebas automáticas (Playwright)
 El logotipo vive en [src/components/marca/logo.tsx](src/components/marca/logo.tsx): cuando exista la imagen,
 solo se cambia ese archivo.
 
+**Datos del negocio:** todo el sitio los lee con `obtenerDatosNegocio()` de
+[src/lib/datos-negocio/datos.ts](src/lib/datos-negocio/datos.ts) (contacto, teléfonos ya separados, enlace de
+WhatsApp listo, dirección, mapa y redes). Se guardan en caché y se renuevan al momento cuando se presiona
+«Guardar datos» en el panel.
+
 ## Seguridad (resumen)
 
 - Contraseñas guardadas con **argon2id**; nunca en texto.
@@ -104,6 +109,8 @@ solo se cambia ese archivo.
 - Registro solo con código de invitación de un solo uso que vence en 7 días.
 - Bloqueo temporal tras 5 contraseñas equivocadas (15 minutos) y tras 10 códigos equivocados por hora.
 - Al cambiar la contraseña se cierran las sesiones de otros aparatos.
+- Del código del mapa de Google solo se guarda la dirección (`src`), y solo si es un mapa de Google con https;
+  los enlaces de Maps, Facebook e Instagram se validan contra sus dominios.
 - Secretos solo en variables de entorno (`.env` nunca se sube a Git).
 
 ## Despliegue en Hostinger (resumen)
