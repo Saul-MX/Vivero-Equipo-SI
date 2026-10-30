@@ -30,13 +30,25 @@ test.describe("sin sesión", () => {
 });
 
 test.describe("con sesión", () => {
-  for (const ruta of ["/panel", "/panel/plantas", "/panel/mi-cuenta"]) {
+  for (const ruta of ["/panel", "/panel/plantas", "/panel/mi-cuenta", "/panel/datos-y-redes"]) {
     test(`${ruta} cumple WCAG 2.1 AA`, async ({ page }) => {
       await page.goto(ruta);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       await revisar(page);
     });
   }
+
+  test("los errores y el diálogo de eliminar de «Datos y redes» cumplen", async ({ page }) => {
+    await page.goto("/panel/datos-y-redes");
+    await page.getByLabel("WhatsApp", { exact: true }).fill("123");
+    await page.getByRole("button", { name: "Guardar datos" }).first().click();
+    await expect(page.getByText(/Escribe el número a 10 dígitos/)).toBeVisible();
+    await revisar(page);
+
+    await page.getByRole("button", { name: /^Eliminar / }).first().click();
+    await expect(page.getByRole("alertdialog")).toBeVisible();
+    await revisar(page);
+  });
 
   test("el menú abierto en celular cumple", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
