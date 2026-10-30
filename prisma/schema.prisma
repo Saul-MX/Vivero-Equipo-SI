@@ -1,0 +1,450 @@
+// Modelo de datos de Vivero El Encanto (sección 7 de ESPECIFICACION.md).
+// Convención: modelos y campos en español; tablas en minúsculas con guion bajo.
+// La conexión (DATABASE_URL) se configura en prisma.config.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ───────────────────────── Acceso al panel ─────────────────────────
+
+model Usuario {
+  id             Int      @id @default(autoincrement())
+  usuario        String   @unique @db.VarChar(30) // siempre en minúsculas
+  hashContrasena String   @db.VarChar(255) // argon2id: la contraseña nunca se guarda
+  creadoEn       DateTime @default(now())
+
+  sesiones            Sesion[]
+  invitacionesCreadas Invitacion[] @relation("InvitacionCreadaPor")
+  invitacionUsada     Invitacion?  @relation("InvitacionUsadaPor")
+
+  @@map("usuarios")
+}
+
+/// Sesión abierta. El id es el hash SHA-256 del token; el token real solo vive en la cookie.
+model Sesion {
+  id        String   @id @db.Char(64)
+  usuarioId Int
+  expiraEn  DateTime
+  creadaEn  DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@index([expiraEn])
+  @@map("sesiones")
+}
+
+/// Código de invitación de un solo uso y con vencimiento. Solo se guarda su hash.
+model Invitacion {
+  id          Int       @id @default(autoincrement())
+  hashCodigo  String    @unique @db.Char(64)
+  terminacion String    @db.VarChar(4) // últimos 4 caracteres, para reconocerla en la lista
+  creadaEn    DateTime  @default(now())
+  expiraEn    DateTime
+  usadaEn     DateTime?
+  creadaPorId Int?
+  usadaPorId  Int?      @unique
+
+  creadaPor Usuario? @relation("InvitacionCreadaPor", fields: [creadaPorId], references: [id], onDelete: SetNull)
+  usadaPor  Usuario? @relation("InvitacionUsadaPor", fields: [usadaPorId], references: [id], onDelete: SetNull)
+
+  @@map("invitaciones")
+}
+
+/// Intentos fallidos por clave (usuario o IP) para frenar ataques de fuerza bruta.
+model LimiteIntentos {
+  clave      String   @id @db.VarChar(191)
+  intentos   Int
+  reiniciaEn DateTime
+
+  @@index([reiniciaEn])
+  @@map("limite_intentos")
+}
+
+// ───────────────────────── Catálogos y temporadas ─────────────────────────
+
+model Catalogo {
+  id            Int      @id @default(autoincrement())
+  nombre        String   @db.VarChar(80)
+  slug          String   @unique @db.VarChar(80)
+  icono         String?  @db.VarChar(40)
+  color         String   @db.Char(7) // #RRGGBB. También es el color de su temporada.
+  orden         Int      @default(0)
+  visible       Boolean  @default(true)
+  permanente    Boolean  @default(false) // aparece en el menú «Catálogos» del sitio (regla 5)
+  fotoPortada   String?  @db.VarChar(255)
+  presentacion  String?  @db.Text
+  destacados    String?  @db.Text // un punto destacado por renglón
+  folletoPdf    String?  @db.VarChar(255)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  temporada                 Temporada?
+  plantas                   Planta[]
+  fertilizantesRecomendados FertilizanteCatalogo[]
+
+  @@index([orden])
+  @@map("catalogos")
+}
+
+/// Temporada de un catálogo (fechas y aviso). Su color es el del catálogo.
+model Temporada {
+  id            Int      @id @default(autoincrement())
+  catalogoId    Int      @unique
+  mesInicio     Int      @db.TinyInt // 1 = enero … 12 = diciembre
+  mesFin        Int      @db.TinyInt // si es menor que mesInicio, cruza el año (ej. 11 → 1)
+  todoElAnio    Boolean  @default(false) // temporada base: se usa si ninguna aplica y en el modo «Fijo»
+  textoAviso    String?  @db.VarChar(160)
+  prioridad     Int      @default(0) // si dos temporadas coinciden en el mes, gana la mayor
+  visible       Boolean  @default(true) // las ocultas no se usan en el modo automático
+  actualizadoEn DateTime @updatedAt
+
+  catalogo  Catalogo             @relation(fields: [catalogoId], references: [id], onDelete: Cascade)
+  anuncios  Anuncio[]
+  forzadaEn ConfiguracionSitio[]
+
+  @@map("temporadas")
+}
+
+enum ModoTemporada {
+  AUTOMATICA
+  FORZADA
+  FIJA_TODO_EL_ANIO
+}
+
+/// Ajustes generales del sitio. Tiene una sola fila (id = 1).
+model ConfiguracionSitio {
+  id                    Int           @id @default(1)
+  modoTemporada         ModoTemporada @default(AUTOMATICA)
+  temporadaForzadaId    Int?
+  mostrarDisponibilidad Boolean       @default(false)
+  actualizadoEn         DateTime      @updatedAt
+
+  temporadaForzada Temporada? @relation(fields: [temporadaForzadaId], references: [id], onDelete: SetNull)
+
+  @@map("configuracion_sitio")
+}
+
+// ───────────────────────── Datos y redes ─────────────────────────
+
+/// Contacto, ubicación y redes. Tiene una sola fila (id = 1).
+model DatosNegocio {
+  id              Int      @id @default(1)
+  whatsapp        String?  @db.VarChar(10) // 10 dígitos, sin espacios
+  telefonos       String?  @db.VarChar(255) // separados con coma, tal como se capturan
+  correo          String?  @db.VarChar(191)
+  horario         String?  @db.VarChar(191)
+  horarioEspecial String?  @db.VarChar(255)
+  direccion       String?  @db.VarChar(255)
+  enlaceMaps      String?  @db.VarChar(500)
+  mapaSrc         String?  @db.VarChar(1000) // solo la dirección (src) del iframe, ya validada
+  facebook        String?  @db.VarChar(255)
+  instagram       String?  @db.VarChar(255)
+  actualizadoEn   DateTime @updatedAt
+
+  @@map("datos_negocio")
+}
+
+model Color {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique @db.VarChar(40)
+  hex    String @db.Char(7)
+  orden  Int    @default(0)
+
+  plantas PlantaColor[]
+
+  @@map("colores")
+}
+
+model Maceta {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique @db.VarChar(40) // ej. «Maceta 6»
+  orden  Int    @default(0)
+
+  plantas PlantaMaceta[]
+
+  @@map("macetas")
+}
+
+// ───────────────────────── Plantas ─────────────────────────
+
+enum Luz {
+  SOL
+  MEDIA_SOMBRA
+  SOMBRA
+}
+
+enum CantidadAgua {
+  POCA
+  MODERADA
+  ABUNDANTE
+}
+
+enum EtiquetaPlanta {
+  NUEVO
+  OFERTA
+}
+
+model Planta {
+  id               Int             @id @default(autoincrement())
+  nombre           String          @db.VarChar(120)
+  slug             String          @unique @db.VarChar(140) // URL y QR: no cambia al renombrar
+  variedad         String?         @db.VarChar(120)
+  catalogoId       Int
+  riegoDiasSemana  Int?            @db.TinyInt // null = sin dato; 1 a 6; 7 = diario
+  cantidadAgua     CantidadAgua?
+  fertilizanteId   Int?
+  notaRiego        String?         @db.VarChar(255)
+  descripcionCorta String?         @db.VarChar(500)
+  cuidados         String?         @db.Text
+  etiqueta         EtiquetaPlanta?
+  disponible       Boolean         @default(true)
+  visible          Boolean         @default(true)
+  creadoEn         DateTime        @default(now())
+  actualizadoEn    DateTime        @updatedAt
+
+  catalogo     Catalogo       @relation(fields: [catalogoId], references: [id], onDelete: Restrict)
+  fertilizante Fertilizante?  @relation(fields: [fertilizanteId], references: [id], onDelete: SetNull)
+  luces        PlantaLuz[]
+  colores      PlantaColor[]
+  macetas      PlantaMaceta[]
+  fotos        FotoPlanta[]
+
+  @@index([catalogoId])
+  @@index([visible])
+  @@map("plantas")
+}
+
+model PlantaLuz {
+  plantaId Int
+  luz      Luz
+
+  planta Planta @relation(fields: [plantaId], references: [id], onDelete: Cascade)
+
+  @@id([plantaId, luz])
+  @@map("planta_luces")
+}
+
+/// Un color en uso no se puede borrar (onDelete: Restrict); el panel avisa cuántas plantas lo usan.
+model PlantaColor {
+  plantaId Int
+  colorId  Int
+
+  planta Planta @relation(fields: [plantaId], references: [id], onDelete: Cascade)
+  color  Color  @relation(fields: [colorId], references: [id], onDelete: Restrict)
+
+  @@id([plantaId, colorId])
+  @@index([colorId])
+  @@map("planta_colores")
+}
+
+model PlantaMaceta {
+  plantaId Int
+  macetaId Int
+
+  planta Planta @relation(fields: [plantaId], references: [id], onDelete: Cascade)
+  maceta Maceta @relation(fields: [macetaId], references: [id], onDelete: Restrict)
+
+  @@id([plantaId, macetaId])
+  @@index([macetaId])
+  @@map("planta_macetas")
+}
+
+model FotoPlanta {
+  id        Int      @id @default(autoincrement())
+  plantaId  Int
+  archivo   String   @db.VarChar(255) // ruta del WebP dentro de la carpeta de archivos subidos
+  ancho     Int
+  alto      Int
+  orden     Int      @default(0)
+  esPortada Boolean  @default(false) // la foto que sale en la tarjeta
+  creadaEn  DateTime @default(now())
+
+  planta Planta @relation(fields: [plantaId], references: [id], onDelete: Cascade)
+
+  @@index([plantaId, orden])
+  @@map("fotos_planta")
+}
+
+// ───────────────────────── Fertilizantes ─────────────────────────
+
+model Fertilizante {
+  id              Int      @id @default(autoincrement())
+  nombre          String   @db.VarChar(120)
+  tipo            String?  @db.VarChar(60) // ej. Granulado
+  paraQueSirve    String?  @db.Text
+  dosis           String?  @db.VarChar(191)
+  frecuencia      String?  @db.VarChar(191)
+  pasosAplicacion String?  @db.Text // un paso por renglón
+  precauciones    String?  @db.Text
+  presentacion    String?  @db.VarChar(191)
+  foto            String?  @db.VarChar(255)
+  visible         Boolean  @default(true)
+  creadoEn        DateTime @default(now())
+  actualizadoEn   DateTime @updatedAt
+
+  catalogosRecomendados FertilizanteCatalogo[]
+  plantas               Planta[]
+
+  @@map("fertilizantes")
+}
+
+model FertilizanteCatalogo {
+  fertilizanteId Int
+  catalogoId     Int
+
+  fertilizante Fertilizante @relation(fields: [fertilizanteId], references: [id], onDelete: Cascade)
+  catalogo     Catalogo     @relation(fields: [catalogoId], references: [id], onDelete: Cascade)
+
+  @@id([fertilizanteId, catalogoId])
+  @@index([catalogoId])
+  @@map("fertilizante_catalogos")
+}
+
+// ───────────────────────── Apartados de página ─────────────────────────
+
+enum TipoMedio {
+  IMAGEN
+  VIDEO
+}
+
+enum PosicionTexto {
+  IZQUIERDA
+  CENTRO
+  DERECHA
+}
+
+/// Anuncio del carrusel de portada.
+model Anuncio {
+  id             Int           @id @default(autoincrement())
+  tipoMedio      TipoMedio     @default(IMAGEN)
+  archivo        String?       @db.VarChar(255) // imagen o video principal
+  archivoMovil   String?       @db.VarChar(255) // foto para celular (opcional)
+  imagenEspera   String?       @db.VarChar(255) // imagen mientras carga el video
+  imagenConTexto Boolean       @default(false) // «La imagen ya trae su texto»
+  textoPequeno   String?       @db.VarChar(120)
+  titulo         String?       @db.VarChar(160)
+  texto          String?       @db.VarChar(300)
+  boton1Texto    String?       @db.VarChar(60)
+  boton1Destino  String?       @db.VarChar(500) // /pagina, «whatsapp» o https://…
+  boton2Texto    String?       @db.VarChar(60)
+  boton2Destino  String?       @db.VarChar(500)
+  posicionTexto  PosicionTexto @default(IZQUIERDA)
+  oscurecido     Int           @default(50) @db.TinyInt // 0 a 100 %
+  temporadaId    Int? // vacío = «Siempre»
+  desde          DateTime?     @db.Date
+  hasta          DateTime?     @db.Date
+  visible        Boolean       @default(true)
+  orden          Int           @default(0)
+  creadoEn       DateTime      @default(now())
+  actualizadoEn  DateTime      @updatedAt
+
+  temporada Temporada? @relation(fields: [temporadaId], references: [id], onDelete: Restrict)
+
+  @@index([visible, orden])
+  @@map("anuncios")
+}
+
+enum SeccionNosotros {
+  HISTORIA
+  MISION
+  VISION
+  VALORES
+}
+
+/// Texto y foto de arriba de cada sección de «Nosotros».
+model ContenidoNosotros {
+  id            Int             @id @default(autoincrement())
+  seccion       SeccionNosotros @unique
+  texto         String?         @db.Text // párrafos separados por un renglón vacío
+  fotoSuperior  String?         @db.VarChar(255)
+  actualizadoEn DateTime        @updatedAt
+
+  @@map("nosotros_contenido")
+}
+
+model FotoGaleriaNosotros {
+  id      Int             @id @default(autoincrement())
+  seccion SeccionNosotros
+  archivo String          @db.VarChar(255)
+  ancho   Int
+  alto    Int
+  orden   Int             @default(0)
+
+  @@index([seccion, orden])
+  @@map("nosotros_galeria")
+}
+
+model ValorNosotros {
+  id          Int     @id @default(autoincrement())
+  titulo      String  @db.VarChar(120)
+  descripcion String? @db.Text
+  orden       Int     @default(0)
+
+  @@map("nosotros_valores")
+}
+
+/// Línea del tiempo: «1998», «Hoy», etc.
+model MomentoNosotros {
+  id     Int     @id @default(autoincrement())
+  titulo String  @db.VarChar(60)
+  texto  String? @db.Text
+  foto   String? @db.VarChar(255)
+  orden  Int     @default(0)
+
+  @@map("nosotros_momentos")
+}
+
+model PreguntaFrecuente {
+  id        Int      @id @default(autoincrement())
+  pregunta  String   @db.VarChar(255)
+  respuesta String   @db.Text
+  orden     Int      @default(0)
+  creadaEn  DateTime @default(now())
+
+  @@map("preguntas_frecuentes")
+}
+
+model Testimonio {
+  id       Int      @id @default(autoincrement())
+  nombre   String   @db.VarChar(120)
+  texto    String   @db.Text
+  avatar   String?  @db.VarChar(255) // vacío = avatar por defecto
+  visible  Boolean  @default(true)
+  orden    Int      @default(0)
+  creadoEn DateTime @default(now())
+
+  @@map("testimonios")
+}
+
+// ───────────────────────── Mensajes y novedades ─────────────────────────
+
+model Mensaje {
+  id       Int      @id @default(autoincrement())
+  nombre   String   @db.VarChar(120)
+  contacto String   @db.VarChar(191) // teléfono o correo que dejó la persona
+  texto    String   @db.Text
+  leido    Boolean  @default(false)
+  creadoEn DateTime @default(now())
+
+  @@index([leido])
+  @@map("mensajes")
+}
+
+model Novedad {
+  id            Int      @id @default(autoincrement())
+  titulo        String   @db.VarChar(160)
+  texto         String   @db.Text
+  imagen        String?  @db.VarChar(255)
+  visible       Boolean  @default(true)
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@map("novedades")
+}
