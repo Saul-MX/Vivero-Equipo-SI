@@ -42,7 +42,11 @@ export const esquemaDatosNegocio = z.object({
     .refine((valor) => valor === "" || normalizarEnlaceMaps(valor) !== null, "enlaceMapsInvalido")
     .transform((valor) => normalizarEnlaceMaps(valor)!),
   // Se puede pegar el <iframe> completo; solo se guarda la dirección (src) del mapa.
-  mapa: texto(5000)
+  // (No usa `texto`, que quita el HTML: aquí el iframe se lee y extraerSrcMapa lo descarta.)
+  mapa: z
+    .string()
+    .trim()
+    .max(5000, "textoLargo")
     .refine((valor) => {
       if (valor === "") return true;
       const src = extraerSrcMapa(valor);

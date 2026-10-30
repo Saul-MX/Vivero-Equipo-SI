@@ -1,10 +1,12 @@
 import { z } from "zod";
 import { esClaveValida } from "@/lib/archivos/claves";
 import type { ClaveError } from "@/lib/resultado";
+import { limpiarTexto } from "./limpiar-texto";
 
 // Piezas de validación que comparten varios formularios del panel.
 
-export const texto = (maximo: number) => z.string().trim().max(maximo, "textoLargo");
+/** Texto libre: se limpia (sin HTML ni caracteres invisibles) y se recortan los espacios. */
+export const texto = (maximo: number) => z.string().overwrite(limpiarTexto).trim().max(maximo, "textoLargo");
 export const requerido = (clave: ClaveError, maximo: number) => texto(maximo).min(1, clave);
 
 export const esquemaTono = z
