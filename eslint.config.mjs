@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Código generado por Prisma y reportes de pruebas
+    "src/generated/**",
+    "playwright-report/**",
+    "test-results/**",
   ]),
 ]);
 

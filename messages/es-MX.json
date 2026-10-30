@@ -1,0 +1,177 @@
+{
+  "marca": {
+    "nombre": "Vivero El Encanto",
+    "lugar": "Atlixco, Puebla"
+  },
+  "metadatos": {
+    "titulo": "Vivero El Encanto · Plantas en Atlixco, Puebla",
+    "descripcion": "Plantas de temporada, plantas de todo el año, árboles y fertilizantes en Atlixco, Puebla.",
+    "plantillaTitulo": "%s · Vivero El Encanto"
+  },
+  "comun": {
+    "cerrar": "Cerrar",
+    "cargando": "Cargando…",
+    "cancelar": "Cancelar",
+    "copiar": "Copiar",
+    "copiado": "Copiado",
+    "notificaciones": "Avisos"
+  },
+  "sitio": {
+    "construccion": {
+      "titulo": "Nuestro sitio está creciendo",
+      "texto": "Muy pronto vas a poder ver aquí nuestras plantas de temporada, plantas de todo el año, árboles y fertilizantes."
+    }
+  },
+  "errores": {
+    "usuarioRequerido": "Escribe tu usuario.",
+    "usuarioCorto": "El usuario debe tener al menos 3 caracteres.",
+    "usuarioLargo": "El usuario puede tener máximo 30 caracteres.",
+    "usuarioFormato": "Usa solo letras minúsculas sin acentos, números, punto, guion o guion bajo.",
+    "usuarioOcupado": "Ese usuario ya existe. Elige otro.",
+    "contrasenaRequerida": "Escribe tu contraseña.",
+    "contrasenaCorta": "La contraseña debe tener al menos 8 caracteres.",
+    "contrasenaLarga": "La contraseña puede tener máximo 128 caracteres.",
+    "contrasenaActualRequerida": "Escribe tu contraseña actual.",
+    "contrasenaActualIncorrecta": "La contraseña actual no es correcta.",
+    "contrasenaIgualActual": "La contraseña nueva debe ser distinta a la actual.",
+    "repetirRequerida": "Vuelve a escribir la contraseña.",
+    "contrasenasNoCoinciden": "Las contraseñas no coinciden.",
+    "codigoRequerido": "Escribe tu código de invitación.",
+    "codigoInvalido": "El código no es válido, ya se usó o ya venció.",
+    "credencialesInvalidas": "Usuario o contraseña incorrectos.",
+    "demasiadosIntentos": "Demasiados intentos. Espera {minutos, plural, one {# minuto} other {# minutos}} e intenta de nuevo.",
+    "inesperado": "Algo salió mal. Intenta de nuevo en un momento."
+  },
+  "acceso": {
+    "ingresar": {
+      "tituloPagina": "Entrar",
+      "titulo": "Entra al panel",
+      "subtitulo": "Aquí actualizas todo lo que se ve en el sitio del vivero.",
+      "usuario": "Usuario",
+      "contrasena": "Contraseña",
+      "boton": "Entrar",
+      "enviando": "Entrando…",
+      "pregunta": "¿Te invitaron a administrar el sitio?",
+      "enlace": "Crea tu cuenta"
+    },
+    "registro": {
+      "tituloPagina": "Crear cuenta",
+      "titulo": "Crea tu cuenta",
+      "subtitulo": "Para registrarte necesitas un código de invitación.",
+      "codigo": "Código de invitación",
+      "codigoAyuda": "Te lo da quien ya administra el sitio. Sirve una sola vez.",
+      "usuario": "Usuario",
+      "usuarioAyuda": "Con este nombre vas a entrar. Ejemplo: saul",
+      "contrasena": "Contraseña",
+      "contrasenaAyuda": "Mínimo 8 caracteres.",
+      "repetir": "Repite la contraseña",
+      "boton": "Crear cuenta",
+      "enviando": "Creando tu cuenta…",
+      "pregunta": "¿Ya tienes cuenta?",
+      "enlace": "Entra aquí"
+    }
+  },
+  "panel": {
+    "tituloPagina": "Panel",
+    "subtituloMarca": "Panel del sitio",
+    "menu": {
+      "etiqueta": "Menú del panel",
+      "abrir": "Abrir menú",
+      "cerrar": "Cerrar menú",
+      "inicio": "Inicio",
+      "grupoCatalogo": "Catálogo",
+      "plantas": "Plantas",
+      "catalogos": "Catálogos",
+      "temporadas": "Temporadas",
+      "fertilizantes": "Fertilizantes",
+      "grupoApartados": "Apartados de página",
+      "carrusel": "Carrusel de portada",
+      "nosotros": "Nosotros",
+      "preguntas": "Preguntas frecuentes",
+      "testimonios": "Testimonios",
+      "datos": "Datos y redes",
+      "grupoOtros": "Otros",
+      "verSitio": "Ver el sitio",
+      "miCuenta": "Mi cuenta",
+      "salir": "Salir",
+      "pestanaNueva": "(se abre en otra pestaña)"
+    },
+    "inicio": {
+      "saludo": "Hola, {usuario}",
+      "subtitulo": "Esto es lo que se ve hoy en el sitio",
+      "verSitio": "Ver el sitio"
+    },
+    "pendiente": {
+      "titulo": "Esta sección se arma en la fase {fase}",
+      "texto": "La estructura del panel ya está lista. El contenido de esta pantalla llega en una siguiente entrega."
+    },
+    "secciones": {
+      "plantas": {
+        "titulo": "Plantas",
+        "subtitulo": "Agrega, edita u oculta las plantas que se ven en el sitio."
+      },
+      "catalogos": {
+        "titulo": "Catálogos",
+        "subtitulo": "El orden de esta lista es el orden del menú y de la portada."
+      },
+      "temporadas": {
+        "titulo": "Temporadas",
+        "subtitulo": "Elige qué temporada se muestra y cuándo empieza cada una."
+      },
+      "fertilizantes": {
+        "titulo": "Fertilizantes",
+        "subtitulo": "Los que vende el vivero, con sus indicaciones. Salen en la página Fertilizantes y en la ficha de cada planta."
+      },
+      "carrusel": {
+        "titulo": "Carrusel de portada",
+        "subtitulo": "Los anuncios grandes de la portada, con foto o video y texto encima."
+      },
+      "nosotros": {
+        "titulo": "Nosotros",
+        "subtitulo": "Textos y fotos de las páginas del menú Nosotros."
+      },
+      "preguntas": {
+        "titulo": "Preguntas frecuentes",
+        "subtitulo": "Aparecen al final de la página Contacto."
+      },
+      "testimonios": {
+        "titulo": "Testimonios",
+        "subtitulo": "Lo que dicen tus clientes. Aparecen en la página de Inicio."
+      },
+      "datos": {
+        "titulo": "Datos y redes",
+        "subtitulo": "Lo que aparece en el pie, en Contacto, en el mapa y en los botones de WhatsApp."
+      }
+    },
+    "cuenta": {
+      "titulo": "Mi cuenta",
+      "subtitulo": "Cambia tu contraseña cuando quieras.",
+      "tarjeta": "Contraseña",
+      "usuario": "Usuario",
+      "usuarioAyuda": "Tu nombre de usuario no se puede cambiar.",
+      "actual": "Contraseña actual",
+      "nueva": "Contraseña nueva",
+      "nuevaAyuda": "Mínimo 8 caracteres.",
+      "repetir": "Repítela",
+      "boton": "Cambiar contraseña",
+      "enviando": "Cambiando…",
+      "exito": "Listo, tu contraseña se cambió. Si tenías la sesión abierta en otro aparato, ahí tendrás que volver a entrar."
+    },
+    "invitaciones": {
+      "titulo": "Invitar a otra persona",
+      "descripcion": "Crea un código para que alguien más pueda registrarse en el panel. Cada código sirve una sola vez y vence en {dias} días.",
+      "crear": "Crear código de invitación",
+      "creando": "Creando…",
+      "nuevoTitulo": "Este es el código. Cópialo ahora:",
+      "nuevoAviso": "Por seguridad no se vuelve a mostrar. Compártelo solo con la persona que invitas; lo usará en la página «Crea tu cuenta».",
+      "vigentes": "Códigos sin usar",
+      "ninguno": "No hay códigos pendientes.",
+      "fila": "Termina en {terminacion} · vence el {fecha}",
+      "cancelar": "Cancelar código",
+      "cancelarTitulo": "¿Cancelar este código?",
+      "cancelarTexto": "Quien lo tenga ya no podrá usarlo para registrarse.",
+      "cancelarConfirmar": "Sí, cancelarlo",
+      "cancelado": "El código se canceló."
+    }
+  }
+}
