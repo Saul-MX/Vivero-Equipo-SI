@@ -19,6 +19,7 @@
     "db:semilla:completar": "prisma db seed -- --forzar",
     "db:ver": "prisma studio",
     "pruebas": "playwright test",
+    "pruebas:unidad": "playwright test -c playwright.unidad.config.ts",
     "pruebas:reporte": "playwright show-report"
   },
   "dependencies": {
