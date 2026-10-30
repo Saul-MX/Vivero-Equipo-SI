@@ -1,6 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { mkdir, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import { type Carpeta, esClaveTemporal, sufijosDe, type TipoArchivo } from "./claves";
@@ -120,9 +120,30 @@ export async function resolverArchivo(
   return { clave: await confirmarArchivo(nuevo, carpeta, tipo), borrar: actual };
 }
 
+/** Ancho y alto de la versión grande de una imagen ya guardada. */
+export async function medidasImagen(clave: string): Promise<{ ancho: number; alto: number }> {
+  // Se lee a memoria primero: si sharp abre el archivo por su ruta, lo deja abierto en su caché
+  // y en Windows después no se puede borrar (error EBUSY).
+  const { width, height } = await sharp(await readFile(rutaEnDisco(`${clave}-g.webp`))).metadata();
+  return { ancho: width ?? 0, alto: height ?? 0 };
+}
+
+/**
+ * Borra un archivo que ya no se usa. Se llama DESPUÉS de guardar en la base, así que si falla
+ * (por ejemplo, Windows lo tiene ocupado un momento) se reintenta y, si aun así no se puede,
+ * solo se anota en el registro: el guardado ya se hizo y no debe reportarse como error.
+ */
 export async function borrarArchivo(clave: string | null | undefined, tipo: TipoArchivo): Promise<void> {
   if (!clave) return;
-  await Promise.all(sufijosDe(tipo).map((sufijo) => rm(rutaEnDisco(clave + sufijo), { force: true })));
+  await Promise.all(
+    sufijosDe(tipo).map(async (sufijo) => {
+      try {
+        await rm(rutaEnDisco(clave + sufijo), { force: true, maxRetries: 5, retryDelay: 100 });
+      } catch (error) {
+        console.error(`No se pudo borrar el archivo ${clave + sufijo}:`, error);
+      }
+    }),
+  );
 }
 
 /** Borra lo que lleva más de 24 horas en «temporal/» (subidas de formularios que nunca se guardaron). */
