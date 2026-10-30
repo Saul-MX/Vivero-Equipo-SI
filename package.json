@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
+    "build:hostinger": "prisma generate && prisma migrate deploy && prisma db seed && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
@@ -15,6 +16,7 @@
     "db:migrar": "prisma migrate dev",
     "db:aplicar": "prisma migrate deploy",
     "db:semilla": "prisma db seed",
+    "db:semilla:completar": "prisma db seed -- --forzar",
     "db:ver": "prisma studio",
     "pruebas": "playwright test",
     "pruebas:reporte": "playwright show-report"

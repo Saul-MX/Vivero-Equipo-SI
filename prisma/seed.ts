@@ -1,6 +1,8 @@
 // Datos iniciales: catálogos con sus temporadas, colores, tamaños de maceta y ajustes del sitio.
-// Se puede correr varias veces: solo crea lo que falta y nunca sobrescribe lo que ya se editó.
+// Solo actúa la PRIMERA vez (base recién creada). Como en Hostinger corre en cada despliegue,
+// así no reaparece algo que el dueño haya borrado desde el panel.
 // Uso: npm run db:semilla
+// Para volver a crear solo lo que falte (sin sobrescribir lo editado): npm run db:semilla:completar
 import "dotenv/config";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../src/generated/prisma/client";
@@ -94,6 +96,12 @@ const COLORES: [nombre: string, hex: string][] = [
 const MACETAS = ["Maceta 4", "Maceta 6", "Maceta 8", "Maceta 10", "Maceta 12", "Maceta 15"];
 
 async function main() {
+  const yaInicializada = await prisma.configuracionSitio.findUnique({ where: { id: 1 } });
+  if (yaInicializada && !process.argv.includes("--forzar")) {
+    console.log("La base ya tiene sus datos iniciales; no se cambió nada.");
+    return;
+  }
+
   for (const [indice, { temporada, ...catalogo }] of CATALOGOS.entries()) {
     const creado = await prisma.catalogo.upsert({
       where: { slug: catalogo.slug },
