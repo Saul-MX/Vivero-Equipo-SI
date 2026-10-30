@@ -90,7 +90,9 @@
     "presentacionRequerida": "Escribe la presentación.",
     "imagenAnuncioInvalida": "Ese archivo no es una foto JPG, PNG, WebP o GIF.",
     "videoInvalido": "Ese archivo no es un video MP4 o WebM.",
-    "videoGrande": "El video pesa más de 40 MB. Elige uno más ligero o más corto."
+    "videoGrande": "El video pesa más de 40 MB. Elige uno más ligero o más corto.",
+    "preguntaRequerida": "Escribe la pregunta.",
+    "respuestaRequerida": "Escribe la respuesta."
   },
   "acceso": {
     "ingresar": {
@@ -565,6 +567,25 @@
       "cancelarTexto": "Quien lo tenga ya no podrá usarlo para registrarse.",
       "cancelarConfirmar": "Sí, cancelarlo",
       "cancelado": "El código se canceló."
+    },
+    "preguntas": {
+      "agregar": "Agregar pregunta",
+      "vacio": "Todavía no hay preguntas.",
+      "total": "{n, plural, =0 {Sin preguntas} one {# pregunta} other {# preguntas}}. En el sitio se muestran en este orden y se abren al tocarlas.",
+      "tituloNueva": "Nueva pregunta",
+      "tituloEditar": "Editar pregunta",
+      "pregunta": "Pregunta",
+      "preguntaAyuda": "Ejemplo: ¿Hacen envíos?",
+      "respuesta": "Respuesta",
+      "agregarBoton": "Agregar",
+      "agregada": "Se agregó la pregunta.",
+      "subir": "Subir «{pregunta}»",
+      "bajar": "Bajar «{pregunta}»",
+      "editarDe": "Editar «{pregunta}»",
+      "eliminarDe": "Eliminar «{pregunta}»",
+      "eliminarTitulo": "¿Eliminar esta pregunta?",
+      "eliminarTexto": "«{pregunta}» dejará de aparecer en la página Contacto.",
+      "eliminada": "Se eliminó la pregunta."
     }
   }
 }
