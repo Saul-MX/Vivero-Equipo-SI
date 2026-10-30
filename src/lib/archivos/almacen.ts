@@ -19,7 +19,8 @@ const LADO_TARJETA = 640; // tarjetas y listas (versión ligera)
 const VIDA_TEMPORAL_MS = 24 * 60 * 60 * 1000;
 
 export function carpetaRaiz(): string {
-  return path.resolve(process.env.UPLOADS_DIR || "archivos");
+  // La carpeta la decide el servidor (fuera del proyecto en Hostinger); no se empaqueta con la app.
+  return path.resolve(/*turbopackIgnore: true*/ process.env.UPLOADS_DIR || "archivos");
 }
 
 /** Ruta en disco de un archivo, sin permitir salirse de la carpeta raíz. */
