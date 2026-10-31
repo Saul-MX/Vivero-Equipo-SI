@@ -15,8 +15,8 @@ para las pruebas.
 | 2 | Datos y redes | Aprobada |
 | 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Aprobada |
 | 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Aprobada |
-| 5 | Sitio público | Terminada, en revisión (rama `fase-5-sitio`) |
-| 6 | Inicio del panel (pendientes, accesos rápidos, mensajes) | Pendiente |
+| 5 | Sitio público | Aprobada |
+| 6 | Inicio del panel (pendientes, accesos rápidos, mensajes y novedades) | Terminada, en revisión (rama `fase-6-inicio`) |
 | 7 | Pulido | Pendiente |
 
 ## Requisitos
