@@ -3,21 +3,30 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
 import { ChevronDownIcon, MenuIcon, XIcon } from "lucide-react";
-import { Logo } from "@/components/marca/logo";
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 // Barra de navegación del sitio: exactamente 6 apartados (sección 3 de la especificación).
+// Para que el celular cargue rápido, no usa librerías: los textos llegan ya traducidos desde el
+// servidor y el menú del celular es el panel nativo del navegador («popover»), que ya se cierra
+// con Escape o tocando afuera.
 
 export type ItemCatalogo = { nombre: string; slug: string };
 
-type Props = {
-  catalogos: ItemCatalogo[];
-  /** null mientras no se sabe la ruta (primer instante): ningún apartado se marca. */
-  rutaActual: string | null;
+export type TextosMenu = {
+  nombre: string;
+  abrir: string;
+  cerrar: string;
+  inicio: string;
+  catalogos: string;
+  temporada: string;
+  fertilizantes: string;
+  nosotros: string;
+  contacto: string;
+  todasLasPlantas: string;
 };
+
+type Props = { catalogos: ItemCatalogo[]; textos: TextosMenu; rutaActual: string | null };
 
 const APARTADOS = ["inicio", "catalogos", "temporada", "fertilizantes", "nosotros", "contacto"] as const;
 type Apartado = (typeof APARTADOS)[number];
@@ -33,21 +42,29 @@ function apartadoActual(ruta: string | null): Apartado | null {
   if (ruta === null) return null;
   if (ruta === "/") return "inicio";
   if (ruta.startsWith("/catalogos") || ruta.startsWith("/plantas")) return "catalogos";
-  return (APARTADOS.find((apartado) => apartado !== "inicio" && apartado !== "catalogos" && ruta.startsWith(RUTAS[apartado])) ??
-    null) as Apartado | null;
+  for (const apartado of ["temporada", "fertilizantes", "nosotros", "contacto"] as const) {
+    if (ruta.startsWith(RUTAS[apartado])) return apartado;
+  }
+  return null;
 }
 
 /** Enlaces del desplegable «Catálogos» (regla 5): permanentes, Fertilizantes y, al final, todas las plantas. */
-function enlacesCatalogos(catalogos: ItemCatalogo[], t: (clave: "fertilizantes" | "todasLasPlantas") => string) {
+function enlacesCatalogos(catalogos: ItemCatalogo[], textos: TextosMenu) {
   return [
     ...catalogos.map((catalogo) => ({ href: `/catalogos/${catalogo.slug}`, texto: catalogo.nombre })),
-    { href: "/fertilizantes", texto: t("fertilizantes") },
-    { href: "/plantas", texto: t("todasLasPlantas") },
+    { href: "/fertilizantes", texto: textos.fertilizantes },
+    { href: "/plantas", texto: textos.todasLasPlantas },
   ];
 }
 
-function DesplegableCatalogos({ catalogos, activo }: { catalogos: ItemCatalogo[]; activo: boolean }) {
-  const t = useTranslations("sitio.menu");
+function estiloEnlace(activo: boolean) {
+  return cn(
+    "rounded-full px-3 py-2 text-[0.95rem] font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
+    activo ? "bg-acento-fondo text-acento-texto" : "text-foreground hover:bg-muted",
+  );
+}
+
+function DesplegableCatalogos({ catalogos, textos, activo }: { catalogos: ItemCatalogo[]; textos: TextosMenu; activo: boolean }) {
   const [abierto, setAbierto] = useState(false);
   const contenedor = useRef<HTMLDivElement>(null);
   const boton = useRef<HTMLButtonElement>(null);
@@ -89,7 +106,7 @@ function DesplegableCatalogos({ catalogos, activo }: { catalogos: ItemCatalogo[]
         onClick={() => setAbierto((valor) => !valor)}
         className={cn(estiloEnlace(activo), "inline-flex items-center gap-1")}
       >
-        {t("catalogos")}
+        {textos.catalogos}
         <ChevronDownIcon aria-hidden className={cn("size-4 transition-transform", abierto && "rotate-180")} />
       </button>
       <ul
@@ -97,7 +114,7 @@ function DesplegableCatalogos({ catalogos, activo }: { catalogos: ItemCatalogo[]
         hidden={!abierto}
         className="absolute top-full left-0 z-50 mt-2 min-w-60 rounded-2xl border border-border bg-white p-2 shadow-xl shadow-black/10"
       >
-        {enlacesCatalogos(catalogos, t).map((enlace, indice, lista) => (
+        {enlacesCatalogos(catalogos, textos).map((enlace, indice, lista) => (
           <li key={enlace.href} className={cn(indice === lista.length - 1 && "mt-1 border-t border-border pt-1")}>
             <Link
               href={enlace.href}
@@ -113,33 +130,27 @@ function DesplegableCatalogos({ catalogos, activo }: { catalogos: ItemCatalogo[]
   );
 }
 
-function estiloEnlace(activo: boolean) {
-  return cn(
-    "rounded-full px-3 py-2 text-[0.95rem] font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
-    activo ? "bg-acento-fondo text-acento-texto" : "text-foreground hover:bg-muted",
-  );
-}
-
-export function MenuSitio({ catalogos, rutaActual }: Props) {
-  const t = useTranslations("sitio.menu");
-  const [abierto, setAbierto] = useState(false);
+export function MenuSitio({ catalogos, textos, rutaActual }: Props) {
   const actual = apartadoActual(rutaActual);
+  const idPanel = useId();
+  const panel = useRef<HTMLDivElement>(null);
+  const cerrarPanel = () => panel.current?.hidePopover();
 
   return (
     <>
-      <nav aria-label={t("nombre")} className="hidden lg:block">
+      <nav aria-label={textos.nombre} className="hidden lg:block">
         <ul className="flex items-center gap-1">
           {APARTADOS.map((apartado) => (
             <li key={apartado}>
               {apartado === "catalogos" ? (
-                <DesplegableCatalogos catalogos={catalogos} activo={actual === "catalogos"} />
+                <DesplegableCatalogos catalogos={catalogos} textos={textos} activo={actual === "catalogos"} />
               ) : (
                 <Link
                   href={RUTAS[apartado]}
                   aria-current={actual === apartado ? "page" : undefined}
                   className={estiloEnlace(actual === apartado)}
                 >
-                  {t(apartado)}
+                  {textos[apartado]}
                 </Link>
               )}
             </li>
@@ -147,71 +158,79 @@ export function MenuSitio({ catalogos, rutaActual }: Props) {
         </ul>
       </nav>
 
-      <Sheet open={abierto} onOpenChange={setAbierto}>
-        <SheetTrigger className="inline-flex size-11 items-center justify-center rounded-full text-pino outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 lg:hidden">
-          <MenuIcon aria-hidden className="size-6" />
-          <span className="sr-only">{t("abrir")}</span>
-        </SheetTrigger>
-        <SheetContent
-          side="right"
-          showCloseButton={false}
-          aria-describedby={undefined}
-          className="w-[85%] max-w-xs gap-0 overflow-y-auto bg-white px-4 pt-4 pb-8"
-        >
-          <div className="mb-6 flex items-center justify-between">
-            <SheetTitle>
-              <Logo tamano="sm" />
-            </SheetTitle>
-            <SheetClose className="inline-flex size-11 items-center justify-center rounded-full text-pino outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50">
-              <XIcon aria-hidden className="size-6" />
-              <span className="sr-only">{t("cerrar")}</span>
-            </SheetClose>
-          </div>
-          <nav aria-label={t("nombre")}>
-            <ul className="flex flex-col gap-1">
-              {APARTADOS.map((apartado) =>
-                apartado === "catalogos" ? (
-                  <li key={apartado} className="py-1">
-                    <p className="px-3 py-2 text-xs font-semibold tracking-[0.15em] text-texto-suave uppercase">
-                      {t("catalogos")}
-                    </p>
-                    <ul className="flex flex-col gap-1 border-l-2 border-acento pl-2">
-                      {enlacesCatalogos(catalogos, t).map((enlace) => (
-                        <li key={enlace.href}>
-                          <Link
-                            href={enlace.href}
-                            onClick={() => setAbierto(false)}
-                            aria-current={rutaActual === enlace.href ? "page" : undefined}
-                            className={cn(estiloEnlace(rutaActual === enlace.href), "block")}
-                          >
-                            {enlace.texto}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ) : (
-                  <li key={apartado}>
-                    <Link
-                      href={RUTAS[apartado]}
-                      onClick={() => setAbierto(false)}
-                      aria-current={actual === apartado ? "page" : undefined}
-                      className={cn(estiloEnlace(actual === apartado), "block")}
-                    >
-                      {t(apartado)}
-                    </Link>
-                  </li>
-                ),
-              )}
-            </ul>
-          </nav>
-        </SheetContent>
-      </Sheet>
+      <button
+        type="button"
+        popoverTarget={idPanel}
+        className="inline-flex size-11 items-center justify-center rounded-full text-pino outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 lg:hidden"
+      >
+        <MenuIcon aria-hidden className="size-6" />
+        <span className="sr-only">{textos.abrir}</span>
+      </button>
+      {/* Panel lateral del celular: el navegador lo abre, lo cierra con Escape o tocando afuera. */}
+      <div
+        ref={panel}
+        id={idPanel}
+        popover="auto"
+        role="dialog"
+        aria-label={textos.nombre}
+        className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-[85%] max-w-xs overflow-y-auto border-0 bg-white px-4 pt-4 pb-8 shadow-2xl backdrop:bg-black/40"
+      >
+        <div className="mb-6 flex items-center justify-between">
+          <span className="font-serif text-lg font-semibold text-pino">Vivero El Encanto</span>
+          <button
+            type="button"
+            popoverTarget={idPanel}
+            popoverTargetAction="hide"
+            className="inline-flex size-11 items-center justify-center rounded-full text-pino outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <XIcon aria-hidden className="size-6" />
+            <span className="sr-only">{textos.cerrar}</span>
+          </button>
+        </div>
+        <nav aria-label={textos.nombre}>
+          <ul className="flex flex-col gap-1">
+            {APARTADOS.map((apartado) =>
+              apartado === "catalogos" ? (
+                <li key={apartado} className="py-1">
+                  <p className="px-3 py-2 text-xs font-semibold tracking-[0.15em] text-texto-suave uppercase">
+                    {textos.catalogos}
+                  </p>
+                  <ul className="flex flex-col gap-1 border-l-2 border-acento pl-2">
+                    {enlacesCatalogos(catalogos, textos).map((enlace) => (
+                      <li key={enlace.href}>
+                        <Link
+                          href={enlace.href}
+                          onClick={cerrarPanel}
+                          aria-current={rutaActual === enlace.href ? "page" : undefined}
+                          className={cn(estiloEnlace(rutaActual === enlace.href), "block")}
+                        >
+                          {enlace.texto}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li key={apartado}>
+                  <Link
+                    href={RUTAS[apartado]}
+                    onClick={cerrarPanel}
+                    aria-current={actual === apartado ? "page" : undefined}
+                    className={cn(estiloEnlace(actual === apartado), "block")}
+                  >
+                    {textos[apartado]}
+                  </Link>
+                </li>
+              ),
+            )}
+          </ul>
+        </nav>
+      </div>
     </>
   );
 }
 
 /** Igual que MenuSitio, marcando el apartado de la página actual. */
-export function NavegacionSitio({ catalogos }: { catalogos: ItemCatalogo[] }) {
-  return <MenuSitio catalogos={catalogos} rutaActual={usePathname()} />;
+export function NavegacionSitio(props: Omit<Props, "rutaActual">) {
+  return <MenuSitio {...props} rutaActual={usePathname()} />;
 }

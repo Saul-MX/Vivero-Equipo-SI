@@ -2,14 +2,27 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { Logo } from "@/components/marca/logo";
-import { MenuSitio, NavegacionSitio, type ItemCatalogo } from "./menu-sitio";
+import { MenuSitio, NavegacionSitio, type ItemCatalogo, type TextosMenu } from "./menu-sitio";
 
 /** Ancho y márgenes comunes del contenido del sitio (16 px a los lados en celular). */
 export const CONTENEDOR = "mx-auto w-full max-w-6xl px-4 sm:px-6";
 
 /** Encabezado fijo: franja del color de la temporada, nombre del vivero y los 6 apartados. */
 export function EncabezadoSitio({ catalogos }: { catalogos: ItemCatalogo[] }) {
-  const t = useTranslations("sitio");
+  const t = useTranslations("sitio.menu");
+  // Los textos del menú se traducen aquí (en el servidor) y llegan listos al navegador.
+  const textos: TextosMenu = {
+    nombre: t("nombre"),
+    abrir: t("abrir"),
+    cerrar: t("cerrar"),
+    inicio: t("inicio"),
+    catalogos: t("catalogos"),
+    temporada: t("temporada"),
+    fertilizantes: t("fertilizantes"),
+    nosotros: t("nosotros"),
+    contacto: t("contacto"),
+    todasLasPlantas: t("todasLasPlantas"),
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
@@ -17,11 +30,11 @@ export function EncabezadoSitio({ catalogos }: { catalogos: ItemCatalogo[] }) {
       <div className={`${CONTENEDOR} flex h-16 items-center justify-between gap-4`}>
         <Link href="/" className="rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
           <Logo tamano="sm" />
-          <span className="sr-only">{t("menu.irInicio")}</span>
+          <span className="sr-only">{t("irInicio")}</span>
         </Link>
         {/* La ruta actual solo se conoce en el navegador: mientras tanto se ve el menú sin marcar. */}
-        <Suspense fallback={<MenuSitio catalogos={catalogos} rutaActual={null} />}>
-          <NavegacionSitio catalogos={catalogos} />
+        <Suspense fallback={<MenuSitio catalogos={catalogos} textos={textos} rutaActual={null} />}>
+          <NavegacionSitio catalogos={catalogos} textos={textos} />
         </Suspense>
       </div>
     </header>
