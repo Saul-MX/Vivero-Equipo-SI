@@ -51,3 +51,12 @@ export async function guardarNovedad(datos: NovedadValidada, id: number | null):
 export async function cambiarVisibleNovedad(id: number, visible: boolean): Promise<void> {
   await prisma.novedad.updateMany({ where: { id }, data: { visible } });
 }
+
+/** Elimina la novedad y su imagen. Devuelve su título, o null si ya no existía. */
+export async function eliminarNovedad(id: number): Promise<string | null> {
+  const novedad = await prisma.novedad.findUnique({ where: { id }, select: { titulo: true, imagen: true } });
+  if (!novedad) return null;
+  await prisma.novedad.delete({ where: { id } });
+  await borrarArchivo(novedad.imagen, "imagen");
+  return novedad.titulo;
+}

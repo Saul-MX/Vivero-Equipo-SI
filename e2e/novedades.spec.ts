@@ -60,4 +60,24 @@ test.describe("Novedades", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: "Ya llegaron las nochebuenas rojas" })).toBeVisible();
   });
+
+  test("eliminar pide confirmación y borra también la imagen", async ({ page }) => {
+    const [{ imagen }] = await consultar<{ imagen: string }>(
+      "SELECT imagen FROM novedades WHERE titulo = 'Ya llegaron las nochebuenas rojas'",
+    );
+    expect((await page.request.get(`/archivos/${imagen}-t.webp`)).status()).toBe(200);
+
+    await page.goto("/panel/novedades");
+    await page.getByRole("link", { name: "Ya llegaron las nochebuenas rojas", exact: true }).click();
+    await page.getByRole("button", { name: "Eliminar novedad" }).click();
+    const dialogo = page.getByRole("alertdialog");
+    await expect(dialogo).toContainText("¿Eliminar «Ya llegaron las nochebuenas rojas»?");
+    await dialogo.getByRole("button", { name: "Eliminar" }).click();
+    await expect(page.getByText("Se eliminó «Ya llegaron las nochebuenas rojas».")).toBeVisible();
+    await expect(page).toHaveURL("/panel/novedades");
+    await expect(page.getByText("Todavía no hay novedades.")).toBeVisible();
+    expect((await page.request.get(`/archivos/${imagen}-t.webp`)).status()).toBe(404);
+    await page.goto("/");
+    await expect(page.getByRole("region", { name: "Novedades" })).toHaveCount(0);
+  });
 });

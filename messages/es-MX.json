@@ -304,6 +304,7 @@
       "abrir": "Abrir menú",
       "cerrar": "Cerrar menú",
       "inicio": "Inicio",
+      "mensajes": "Mensajes",
       "grupoCatalogo": "Catálogo",
       "plantas": "Plantas",
       "catalogos": "Catálogos",
@@ -314,6 +315,7 @@
       "nosotros": "Nosotros",
       "preguntas": "Preguntas frecuentes",
       "testimonios": "Testimonios",
+      "novedades": "Novedades",
       "datos": "Datos y redes",
       "grupoOtros": "Otros",
       "verSitio": "Ver el sitio",
@@ -1002,7 +1004,11 @@
         "textoAyuda": "Corto y claro. Deja un renglón vacío entre párrafos.",
         "imagen": "Imagen (opcional)",
         "publicar": "Publicar",
-        "publicada": "Se publicó la novedad."
+        "publicada": "Se publicó la novedad.",
+        "eliminar": "Eliminar novedad",
+        "eliminarTitulo": "¿Eliminar «{titulo}»?",
+        "eliminarTexto": "Se borrará también su imagen. Si solo quieres que no se vea, apaga «Visible en el sitio».",
+        "eliminada": "Se eliminó «{titulo}»."
       }
     }
   }

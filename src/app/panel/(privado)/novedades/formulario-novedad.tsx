@@ -2,19 +2,22 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { Trash2Icon } from "lucide-react";
 import { CampoInterruptor } from "@/components/formularios/campo-interruptor";
 import { CampoAreaTexto, CampoTexto } from "@/components/formularios/campo-texto";
 import { SubirImagen } from "@/components/formularios/subir-imagen";
 import { useTraductorErrores } from "@/components/formularios/use-traductor-errores";
+import { ConfirmarEliminar } from "@/components/panel/confirmar-eliminar";
 import { EncabezadoPagina } from "@/components/panel/encabezado-pagina";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { esquemaNovedad, type EntradaNovedad, type NovedadValidada } from "@/lib/validacion/novedad";
-import { guardarNovedadAccion } from "./acciones";
+import { eliminarNovedadAccion, guardarNovedadAccion } from "./acciones";
 
 const RUTA_LISTA = "/panel/novedades";
 const VALORES_NUEVA: EntradaNovedad = { titulo: "", texto: "", imagen: null, visible: true };
@@ -25,6 +28,7 @@ export function FormularioNovedad({ novedad }: { novedad: { id: number; valores:
   const tFormulario = useTranslations("panel.formulario");
   const traducir = useTraductorErrores();
   const router = useRouter();
+  const [confirmarEliminar, setConfirmarEliminar] = useState(false);
   const inicial = novedad?.valores ?? VALORES_NUEVA;
 
   const {
@@ -62,6 +66,18 @@ export function FormularioNovedad({ novedad }: { novedad: { id: number; valores:
       },
       () => toast.error(traducir("revisaCampos")),
     );
+
+  const eliminar = async () => {
+    if (!novedad) return;
+    try {
+      const resultado = await eliminarNovedadAccion(novedad.id);
+      if (!resultado.ok) return void toast.error(traducir("noEncontrado"));
+      toast.success(t("eliminada", { titulo: resultado.titulo }));
+      router.push(RUTA_LISTA);
+    } catch {
+      toast.error(traducir("inesperado"));
+    }
+  };
 
   const botonGuardar = (
     <Button type="submit" disabled={isSubmitting}>
@@ -130,7 +146,25 @@ export function FormularioNovedad({ novedad }: { novedad: { id: number; valores:
           {tFormulario("guardarYSeguir")}
         </Button>
         {botonCancelar}
+        {novedad && (
+          <Button
+            type="button"
+            variant="ghost"
+            className="text-destructive hover:text-destructive sm:ml-auto"
+            onClick={() => setConfirmarEliminar(true)}
+          >
+            <Trash2Icon aria-hidden />
+            {t("eliminar")}
+          </Button>
+        )}
       </div>
+      <ConfirmarEliminar
+        abierto={confirmarEliminar}
+        titulo={t("eliminarTitulo", { titulo: inicial.titulo })}
+        texto={t("eliminarTexto")}
+        alCerrar={() => setConfirmarEliminar(false)}
+        alConfirmar={eliminar}
+      />
     </form>
   );
 }

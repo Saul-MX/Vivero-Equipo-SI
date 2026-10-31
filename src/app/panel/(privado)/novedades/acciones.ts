@@ -3,7 +3,7 @@
 import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
 import { ETIQUETA_NOVEDADES } from "@/lib/apartados/etiquetas";
-import { cambiarVisibleNovedad, guardarNovedad } from "@/lib/apartados/novedades";
+import { cambiarVisibleNovedad, eliminarNovedad, guardarNovedad } from "@/lib/apartados/novedades";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { erroresDeCampos, type ResultadoAccion } from "@/lib/resultado";
 import { esquemaNovedad, type EntradaNovedad } from "@/lib/validacion/novedad";
@@ -31,4 +31,12 @@ export async function cambiarVisibleNovedadAccion(id: number, visible: boolean):
   await cambiarVisibleNovedad(esquemaId.parse(id), z.boolean().parse(visible));
   updateTag(ETIQUETA_NOVEDADES);
   refresh();
+}
+
+export async function eliminarNovedadAccion(id: number): Promise<{ ok: true; titulo: string } | { ok: false }> {
+  await requerirUsuario();
+  const titulo = await eliminarNovedad(esquemaId.parse(id));
+  if (titulo === null) return { ok: false };
+  updateTag(ETIQUETA_NOVEDADES);
+  return { ok: true, titulo };
 }
