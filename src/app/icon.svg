@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ícono provisional de la pestaña del navegador: una hoja en verde pino.
+       Cuando exista el logotipo del vivero, se reemplaza este archivo. -->
+  <rect width="32" height="32" rx="8" fill="#1e3a2e"/>
+  <path d="M24 7c-9 0-15 5-15 13 0 1.6.3 3 .9 4.2C11.5 20 14.8 16.6 19 14.6c-3.6 2.6-6.3 6.1-7.7 10.2 1 .5 2.2.7 3.5.7C22 25.5 25 18 24 7Z" fill="#c7cbb8"/>
+</svg>

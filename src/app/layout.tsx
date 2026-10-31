@@ -4,10 +4,11 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { OPEN_GRAPH_COMUN, urlDelSitio } from "@/lib/sitio/metadatos";
 import "./globals.css";
 
-// Solo el grosor variable (sin los ejes «SOFT» y «opsz», que no se usan): el archivo de la
-// fuente pesa mucho menos y los títulos aparecen antes en el celular.
+// Los títulos solo usan el grosor «semibold» (600): se carga ese único archivo, no la fuente
+// variable completa, y los títulos aparecen antes en el celular.
 const fraunces = Fraunces({
   subsets: ["latin"],
+  weight: "600",
   variable: "--font-fraunces",
   display: "swap",
 });
