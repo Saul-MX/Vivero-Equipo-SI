@@ -31,3 +31,31 @@ export async function medidasDe(datos: Buffer) {
   const { width, height, format } = await sharp(datos).metadata();
   return { ancho: width ?? 0, alto: height ?? 0, formato: format };
 }
+
+/** GIF animado de dos cuadros (el carrusel lo acepta y lo convierte a WebP animado). */
+export async function gifDePrueba(nombre = "animado.gif"): Promise<ArchivoPrueba> {
+  const cuadro = (color: string) =>
+    sharp({ create: { width: 600, height: 900, channels: 3, background: color } }).png().toBuffer();
+  const buffer = await sharp([await cuadro("#c62828"), await cuadro("#2e7d32")], { join: { animated: true } })
+    .gif({ delay: [300, 300] })
+    .toBuffer();
+  return { name: nombre, mimeType: "image/gif", buffer };
+}
+
+/** Basta con la cabecera de un MP4 («ftyp») para que el servidor lo reconozca como video. */
+export const VIDEO_PRUEBA: ArchivoPrueba = {
+  name: "invernadero.mp4",
+  mimeType: "video/mp4",
+  buffer: Buffer.concat([
+    Buffer.from([0x00, 0x00, 0x00, 0x18]),
+    Buffer.from("ftypisom", "latin1"),
+    Buffer.alloc(4096, 1),
+  ]),
+};
+
+/** Se hace pasar por MP4, pero es texto. */
+export const VIDEO_FALSO: ArchivoPrueba = {
+  name: "no-es-video.mp4",
+  mimeType: "video/mp4",
+  buffer: Buffer.from("esto no es un video, aunque diga .mp4"),
+};

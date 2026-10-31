@@ -96,7 +96,17 @@
     "nombreClienteRequerido": "Escribe el nombre del cliente.",
     "testimonioRequerido": "Escribe lo que dijo el cliente.",
     "momentoTituloRequerido": "Escribe el título del momento (un año o una palabra).",
-    "valorTituloRequerido": "Escribe el nombre del valor."
+    "valorTituloRequerido": "Escribe el nombre del valor.",
+    "archivoAnuncioRequerido": "Sube la foto o el video del anuncio.",
+    "tituloAnuncioRequerido": "Escribe el título del anuncio.",
+    "botonTextoRequerido": "Escribe el texto del botón.",
+    "destinoRequerido": "Escribe a dónde lleva el botón.",
+    "destinoInvalido": "Escribe una página del sitio que empiece con / (como /contacto), la palabra whatsapp o una dirección que empiece con https://",
+    "fechaInvalida": "Esa fecha no es válida.",
+    "fechasInvertidas": "La fecha «Hasta» debe ser igual o posterior a «Desde».",
+    "oscurecidoInvalido": "Elige un valor entre 0 y 100 %.",
+    "temporadaNoExiste": "Esa temporada ya no existe. Elige otra.",
+    "archivoEnUso": "Ese archivo lo usa un anuncio; no se puede borrar."
   },
   "acceso": {
     "ingresar": {
@@ -227,7 +237,13 @@
       "verFolleto": "Ver el folleto",
       "sinFolleto": "Sin folleto",
       "ayudaPdf": "Archivo PDF de hasta 15 MB.",
-      "ayudaImagenAnuncio": "JPG, PNG, WebP o GIF de hasta 15 MB. Se convierte a WebP y se reduce a 2400 px."
+      "ayudaImagenAnuncio": "JPG, PNG, WebP o GIF de hasta 15 MB. Se convierte a WebP y se reduce a 2400 px.",
+      "arrastraVideo": "Arrastra el video aquí o elígelo de tu equipo.",
+      "elegirVideo": "Elegir video",
+      "cambiarVideo": "Cambiar video",
+      "quitarVideo": "Quitar video",
+      "vistaPreviaVideo": "Vista previa del video",
+      "ayudaVideo": "MP4 o WebM de hasta 40 MB. En el sitio se reproduce siempre sin sonido y en bucle."
     },
     "catalogos": {
       "nuevo": "Nuevo catálogo",
@@ -576,7 +592,7 @@
     "preguntas": {
       "agregar": "Agregar pregunta",
       "vacio": "Todavía no hay preguntas.",
-      "total": "{n, plural, =0 {Sin preguntas} one {# pregunta} other {# preguntas}}. En el sitio se muestran en este orden y se abren al tocarlas.",
+      "total": "{n, plural, one {# pregunta} other {# preguntas}}. En el sitio se muestran en este orden y se abren al tocarlas.",
       "tituloNueva": "Nueva pregunta",
       "tituloEditar": "Editar pregunta",
       "pregunta": "Pregunta",
@@ -595,7 +611,7 @@
     "testimonios": {
       "agregar": "Agregar testimonio",
       "vacio": "Todavía no hay testimonios.",
-      "total": "{n, plural, =0 {Sin testimonios} one {# testimonio} other {# testimonios}}. En Inicio se muestran los visibles, en este orden.",
+      "total": "{n, plural, one {# testimonio} other {# testimonios}}. En Inicio se muestran los visibles, en este orden.",
       "tituloNuevo": "Nuevo testimonio",
       "tituloEditar": "Editar testimonio",
       "avatar": "Foto del cliente (opcional)",
@@ -650,6 +666,112 @@
       "subirValor": "Subir el valor {n}",
       "bajarValor": "Bajar el valor {n}",
       "quitarValor": "Quitar el valor {n}"
+    },
+    "carrusel": {
+      "nuevo": "Nuevo anuncio",
+      "vacio": "Todavía no hay anuncios.",
+      "regla": "Un anuncio sale en la portada si está visible, si es de «Siempre» o de la temporada que se ve hoy, y si hoy está dentro de sus fechas.",
+      "pestanas": {
+        "nombre": "Secciones del carrusel",
+        "anuncios": "Anuncios del carrusel",
+        "archivos": "Otros archivos"
+      },
+      "columnas": {
+        "orden": "Orden",
+        "anuncio": "Anuncio",
+        "temporada": "Temporada",
+        "fechas": "Fechas",
+        "visible": "Visible",
+        "acciones": "Acciones"
+      },
+      "siempre": "Siempre",
+      "sinFechas": "Sin fechas",
+      "fechasEntre": "{desde} – {hasta}",
+      "fechasDesde": "Desde el {desde}",
+      "fechasHasta": "Hasta el {hasta}",
+      "video": "Video",
+      "saleHoy": "Sale hoy",
+      "subir": "Subir «{titulo}»",
+      "bajar": "Bajar «{titulo}»",
+      "visibleDe": "Mostrar «{titulo}» en el sitio",
+      "visibleCambiado": "{visible, select, true {«{titulo}» ya se ve en el sitio.} other {«{titulo}» quedó oculto; no se borró.}}",
+      "eliminarTitulo": "¿Eliminar «{titulo}»?",
+      "eliminarTexto": "Se borrarán también su foto o video. Si solo quieres que no se vea, apaga «Visible en el sitio».",
+      "eliminado": "Se eliminó «{titulo}».",
+      "vistaPrevia": {
+        "titulo": "Vista previa",
+        "dispositivo": "Ver como",
+        "computadora": "Computadora",
+        "celular": "Celular",
+        "ayuda": "Así se verá en la portada. Cambia mientras escribes; los botones aquí no llevan a ningún lado."
+      },
+      "formulario": {
+        "tituloNuevo": "Nuevo anuncio",
+        "tituloEditar": "Editar anuncio",
+        "tituloEjemplo": "Aquí va el título del anuncio",
+        "medio": "Foto o video",
+        "tipoMedio": "¿Qué vas a subir?",
+        "tipoImagen": "Foto",
+        "tipoVideo": "Video",
+        "foto": "Foto del anuncio",
+        "video": "Video del anuncio",
+        "masOpciones": "Más opciones de imagen",
+        "fotoCelular": "Foto para celular (opcional)",
+        "fotoCelularAyuda": "Mejor vertical. Si no subes una, en celular se usa la misma foto, recortada.",
+        "imagenEspera": "Imagen de espera del video (opcional)",
+        "imagenEsperaAyuda": "Se ve mientras carga el video y en teléfonos que no lo reproducen solos.",
+        "texto": "Texto",
+        "imagenConTexto": "La imagen ya trae su texto",
+        "imagenConTextoAyuda": "Muestra la imagen completa, sin oscurecer ni texto encima. Toda la imagen lleva al botón principal.",
+        "textoPequeno": "Texto pequeño de arriba (opcional)",
+        "textoPequenoAyuda": "Ejemplo: TEMPORADA NAVIDEÑA",
+        "titulo": "Título",
+        "tituloAyuda": "Ejemplo: Nochebuenas para llenar tu casa de color",
+        "tituloAyudaImagen": "No se muestra encima, pero describe la imagen para quien usa un lector de pantalla.",
+        "textoCorto": "Texto corto (opcional)",
+        "botones": "Botones",
+        "boton1Texto": "Botón principal",
+        "boton1TextoAyuda": "Ejemplo: Ver catálogo",
+        "llevaA": "Lleva a",
+        "boton2Texto": "Segundo botón (opcional)",
+        "llevaA2": "Lleva a (segundo botón)",
+        "llevaAAyuda": "Una página del sitio (/catalogos, /contacto), la palabra whatsapp (abre el chat) o una dirección que empiece con https://",
+        "comoYCuando": "Cómo y cuándo se ve",
+        "posicion": "Posición del texto",
+        "posiciones": {
+          "IZQUIERDA": "Izquierda",
+          "CENTRO": "Centro",
+          "DERECHA": "Derecha"
+        },
+        "oscurecer": "Oscurecer la foto para leer mejor",
+        "temporada": "Temporada",
+        "temporadaAyuda": "«Siempre» sale todo el año; si eliges una temporada, solo sale mientras esa temporada se ve en el sitio.",
+        "siempre": "Siempre",
+        "temporadaOculta": "{nombre} (oculta)",
+        "desde": "Desde (opcional)",
+        "hasta": "Hasta (opcional)",
+        "fechaAyuda": "Déjalo vacío para que no tenga límite. Cuenta el día completo.",
+        "eliminar": "Eliminar anuncio",
+        "sinWhatsapp": "Todavía no hay número de WhatsApp en «Datos y redes». Hasta que lo agregues, el botón que lleva a whatsapp no se mostrará en el sitio."
+      },
+      "archivos": {
+        "vacio": "Todavía no hay fotos ni videos del carrusel.",
+        "resumen": "{n, plural, one {# archivo} other {# archivos}} · {total} en total · {sinUso, plural, =0 {todos se usan} one {# sin usar} other {# sin usar}}.",
+        "nombreFoto": "Foto del {fecha}",
+        "nombreVideo": "Video del {fecha}",
+        "uso": {
+          "archivo": "Lo usa",
+          "archivoMovil": "Foto para celular de",
+          "imagenEspera": "Imagen de espera de"
+        },
+        "sinUsar": "Sin usar",
+        "borrar": "Borrar",
+        "borrarTitulo": "¿Borrar la {nombre}?",
+        "borrarTexto": "Ningún anuncio la usa. Se borrará del servidor para ahorrar espacio.",
+        "borrado": "Se borró el archivo.",
+        "pesoMb": "{n} MB",
+        "pesoKb": "{n} KB"
+      }
     }
   }
 }

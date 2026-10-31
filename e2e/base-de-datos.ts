@@ -109,3 +109,10 @@ export function leerDatosNegocio() {
     return fila as Record<string, string | null>;
   });
 }
+
+/** Cambia datos de la base de pruebas para preparar un caso (por ejemplo, forzar una temporada). */
+export function ejecutar(sql: string, valores: unknown[] = []) {
+  return conBase(async (conexion) => {
+    await conexion.query(sql, valores);
+  });
+}

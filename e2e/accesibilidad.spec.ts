@@ -44,6 +44,9 @@ test.describe("con sesión", () => {
     "/panel/preguntas",
     "/panel/testimonios",
     "/panel/nosotros",
+    "/panel/carrusel",
+    "/panel/carrusel?pestana=archivos",
+    "/panel/carrusel/nuevo",
   ]) {
     test(`${ruta} cumple WCAG 2.1 AA`, async ({ page }) => {
       await page.goto(ruta);
