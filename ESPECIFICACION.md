@@ -53,7 +53,7 @@ El sitio público tiene **6 apartados en la barra de navegación**. Todo su cont
 
 ## 4. Dashboard: Inicio y Catálogo
 
-El dashboard tiene un menú lateral con estos grupos: **Inicio**, **Catálogo** (Plantas, Catálogos, Temporadas, Fertilizantes), **Apartados de página** (Carrusel de portada, Nosotros, Preguntas frecuentes, Testimonios, Datos y redes) y **Otros** (Ver el sitio, Mi cuenta, Salir). Estilo: fondo gris verdoso claro, tarjetas blancas redondeadas, verde oscuro como color de marca, botones en forma de píldora, títulos con tipografía serif de carácter y textos en sans-serif.
+El dashboard tiene un menú lateral con estos grupos: **Inicio** (Inicio y Mensajes), **Catálogo** (Plantas, Catálogos, Temporadas, Fertilizantes), **Apartados de página** (Carrusel de portada, Nosotros, Preguntas frecuentes, Testimonios, Novedades, Datos y redes) y **Otros** (Ver el sitio, Mi cuenta, Salir). *Mensajes y Novedades se agregaron al menú a pedido del dueño (fase 6).* Estilo: fondo gris verdoso claro, tarjetas blancas redondeadas, verde oscuro como color de marca, botones en forma de píldora, títulos con tipografía serif de carácter y textos en sans-serif.
 
 ### 4.1 Inicio
 
@@ -128,17 +128,23 @@ Nota visible: si dos temporadas caen en el mismo mes gana la de prioridad más a
 
 **Formulario «Nuevo fertilizante»:** Nombre (ej. Triple 17), Tipo (selector, ej. Granulado), Para qué sirve, Recomendado para (chips de catálogos), Dosis (ej. 5 ml por litro de agua), Cada cuánto (ej. cada 15 días), Cómo se aplica (un paso por renglón), Precauciones (opcional), Presentación (ej. Bolsa de 1 kg), Visible en el sitio (interruptor) y Foto del producto (JPG, PNG o WebP).
 
+### 4.6 Mensajes (agregado en la fase 6)
+
+Los mensajes que llegan desde el formulario de Contacto del sitio. Pestañas **Todos** y **Sin leer** (con contador). Cada mensaje muestra nombre, teléfono o correo, fecha y el texto. Al abrirlo se marca como leído; se puede volver a marcar como no leído y eliminar (con confirmación). Según lo que dejó la persona, ofrece **Responder por WhatsApp** y **Llamar** (celular) o **Responder por correo**.
+
+El formulario de Contacto tiene protección básica contra spam: un campo trampa que las personas no ven, un tiempo mínimo de llenado (3 segundos) y un máximo de 5 mensajes por hora desde una misma conexión.
+
 ## 5. Dashboard: Apartados de página
 
 ### 5.1 Carrusel de portada
 
-«Los anuncios grandes de la portada, con foto o video y texto encima.» Dos pestañas: **Anuncios del carrusel** (tabla con Anuncio, Temporada, Fechas, Visible; botón **Nuevo anuncio**) y **Otros archivos**.
+«Los anuncios grandes de la portada, con foto o video y texto encima.» Dos pestañas: **Anuncios del carrusel** (tabla con Anuncio, Temporada, Fechas, Visible; botón **Nuevo anuncio**; flechas para ordenar e insignia «Sale hoy») y **Otros archivos** (decidido con el dueño en la fase 4: las fotos y videos guardados del carrusel, con su peso y qué anuncio usa cada uno; los que ya no usa ningún anuncio se pueden borrar para ahorrar espacio).
 
 Regla visible en el panel: un anuncio sale en la portada si está visible, si es de «Siempre» o de la temporada que se ve hoy, y si hoy está dentro de sus fechas.
 
 **Formulario «Nuevo anuncio»** con **vista previa en vivo** (Computadora / Celular) que se actualiza mientras se escribe:
 
-- **Foto o video:** JPG, PNG, WebP o GIF (se achica a 2400 px); video MP4 o WebM de hasta 40 MB, sin sonido. Opción «Más opciones de imagen»: foto para celular e imagen de espera del video.
+- **Foto o video:** JPG, PNG, WebP o GIF (se achica a 2400 px); video MP4 o WebM de hasta 40 MB, sin sonido (en el sitio se reproduce siempre silenciado y en bucle; el archivo conserva su pista de audio, porque quitarla requiere un programa (ffmpeg) que normalmente no está disponible en el hosting). Opción «Más opciones de imagen»: foto para celular e imagen de espera del video.
 - **Texto:** interruptor «La imagen ya trae su texto» (muestra la imagen completa, sin oscurecer ni texto encima; toda la imagen lleva al botón principal), texto pequeño de arriba (opcional), título, texto corto (opcional).
 - **Botones:** botón principal con su destino y segundo botón opcional con su destino. En «Lleva a» se acepta una página del sitio (`/catalogos`, `/contacto`), la palabra `whatsapp` (abre el chat) o una dirección completa que empiece con `https://`.
 - **Cómo y cuándo se ve:** posición del texto (Izquierda, Centro, Derecha), control deslizante «Oscurecer la foto para leer mejor» (0 a 100 %, por defecto 50 %), Temporada (Siempre o una temporada específica), fechas Desde y Hasta (opcionales) y el interruptor Visible en el sitio.
@@ -183,6 +189,10 @@ Botón **Guardar datos** arriba y abajo de los dos primeros bloques. Lo que apar
 | Tamaños de maceta | Lista ordenable (subir/bajar) con contador de plantas. Valores iniciales: Maceta 4, 6, 8, 10, 12 y 15. Fila para agregar tamaño nuevo y botón Guardar macetas. |
 
 Eliminar un color o tamaño en uso debe advertir cuántas plantas lo usan.
+
+### 5.6 Novedades (agregado en la fase 6)
+
+«Publicar novedad» del Inicio. Listado de la más nueva a la más vieja, con botón **Publicar novedad**, interruptor Visible en el sitio y lápiz para editar. Formulario: título, texto, imagen (opcional) y Visible en el sitio; en la edición, botón **Eliminar novedad** (con confirmación; borra también la imagen; agregado a pedido del dueño). En el sitio, las 6 novedades visibles más recientes salen en una sección «Novedades» de Inicio.
 
 ## 6. Dashboard: Mi cuenta, Ver el sitio y Salir
 
@@ -305,3 +315,14 @@ La IA debe verificar el contraste de texto (WCAG AA) al combinar estos colores. 
 
 - **Código QR por planta o tipo de planta:** cada planta tiene una URL estable y permanente (por ejemplo `/plantas/<slug>`). Después, el dashboard generará un QR descargable (PNG o SVG, para imprimir en etiquetas) que, al escanearse, abre la ficha de esa planta con su información, riego y cuidados. Por eso el campo slug debe ser único y no cambiar al renombrar la planta sin dejar una redirección.
 - **Versión del sitio en inglés** con selector de idioma.
+
+## 11. Cambios y decisiones acordados durante el desarrollo
+
+- **Prioridades de temporada** (fase 3): noviembre → Nochebuena; febrero y marzo → Tulipán.
+- **Carrusel, pestaña «Otros archivos»** (fase 4): archivos del carrusel con quién los usa; se pueden borrar los que no se usan (ver 5.1).
+- **Video «sin sonido»** (fase 4): se reproduce silenciado; la pista de audio no se elimina del archivo.
+- **Contacto** (fase 5): los mensajes se guardan en la base con protección básica contra spam (ver 4.6).
+- **Color de temporada legible** (fase 5): si el color elegido es un tono medio con el que ningún texto alcanza el contraste AA (por ejemplo, el rosa de Tulipán), los botones e insignias usan una versión un poco más oscura; franjas, puntos y bordes usan el color exacto.
+- **Mensajes y Novedades** (fase 6): tienen pantalla propia y entrada en el menú; las novedades se pueden eliminar (ver 4.6 y 5.6).
+- **Disponibilidad en el sitio** (fase 7): la etiqueta dice «Disponible» o «Agotado»; en las listas de plantas hay un botón «Solo disponibles» cuando el interruptor general está encendido.
+- **Despliegue** (fases 3 y 5): variables de entorno `UPLOADS_DIR` (carpeta de fotos fuera del proyecto, para que no se pierdan al desplegar) y `SITIO_URL` (dominio, para Open Graph y el mapa del sitio).
