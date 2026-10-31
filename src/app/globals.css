@@ -20,6 +20,7 @@
   --fondo-panel: #f1f3ee;
 
   --acento: var(--pino);
+  --acento-fondo: var(--pino); /* versión del acento para poner texto encima (siempre legible) */
   --acento-texto: #ffffff;
 
   --background: var(--fondo-panel);
@@ -69,6 +70,7 @@
   --color-musgo: var(--musgo);
   --color-texto-suave: var(--texto-suave);
   --color-acento: var(--acento);
+  --color-acento-fondo: var(--acento-fondo);
   --color-acento-texto: var(--acento-texto);
 
   --color-background: var(--background);
