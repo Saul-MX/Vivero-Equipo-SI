@@ -129,8 +129,12 @@ test.describe("Carrusel de portada", () => {
   test("anuncio con video: solo MP4 o WebM y se sirve por partes", async ({ page }) => {
     await page.goto("/panel/carrusel/nuevo");
     // Al cambiar a video, la foto elegida se quita (una foto no sirve como video).
-    await page.getByLabel("Foto del anuncio").setInputFiles(await fotoDePrueba());
-    await expect(page.getByRole("img", { name: "Vista previa de la foto" })).toBeVisible();
+    // (Se reintenta: recién abierta la página, el archivo puede elegirse antes de que esté lista.)
+    const foto = await fotoDePrueba();
+    await expect(async () => {
+      await page.getByLabel("Foto del anuncio").setInputFiles(foto);
+      await expect(page.getByRole("img", { name: "Vista previa de la foto" })).toBeVisible({ timeout: 5000 });
+    }).toPass();
     await page.getByRole("radio", { name: "Video" }).check();
     await expect(page.getByRole("img", { name: "Vista previa de la foto" })).toHaveCount(0);
 
