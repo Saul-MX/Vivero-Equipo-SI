@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { useTranslations } from "next-intl";
 import { CheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -9,8 +8,7 @@ import { cn } from "@/lib/utils";
  * «Solo disponibles» (sección 4.2): oculta las plantas agotadas de la rejilla. Solo cambia un
  * atributo; el CSS (globals.css) esconde las tarjetas marcadas como agotadas, así casi no usa JavaScript.
  */
-export function FiltroDisponibles({ disponibles, children }: { disponibles: number; children: ReactNode }) {
-  const t = useTranslations("sitio.planta");
+export function FiltroDisponibles({ texto, children }: { texto: string; children: ReactNode }) {
   const [solo, setSolo] = useState(false);
 
   return (
@@ -25,7 +23,7 @@ export function FiltroDisponibles({ disponibles, children }: { disponibles: numb
         )}
       >
         {solo && <CheckIcon aria-hidden className="size-4" />}
-        {t("soloDisponibles", { n: disponibles })}
+        {texto}
       </button>
       {children}
     </div>

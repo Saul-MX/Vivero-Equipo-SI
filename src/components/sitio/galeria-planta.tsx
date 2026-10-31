@@ -2,16 +2,23 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { SproutIcon } from "lucide-react";
 import { urlImagen } from "@/lib/archivos/claves";
 import { cn } from "@/lib/utils";
 
 type Foto = { archivo: string; ancho: number; alto: number };
 
-/** Fotos de la ficha: la grande arriba (empieza con la portada) y las miniaturas para cambiarla. */
-export function GaleriaPlanta({ fotos, nombre }: { fotos: Foto[]; nombre: string }) {
-  const t = useTranslations("sitio.planta");
+/**
+ * Fotos de la ficha: la grande arriba (empieza con la portada) y las miniaturas para cambiarla.
+ * `textos` llega ya traducido desde el servidor: la descripción y el botón de cada foto.
+ */
+export function GaleriaPlanta({
+  fotos,
+  textos,
+}: {
+  fotos: Foto[];
+  textos: { fotos: string[]; verFoto: string[] };
+}) {
   const [actual, setActual] = useState(0);
   const foto = fotos[actual];
 
@@ -28,7 +35,7 @@ export function GaleriaPlanta({ fotos, nombre }: { fotos: Foto[]; nombre: string
       <Image
         key={foto.archivo}
         src={urlImagen(foto.archivo)}
-        alt={t("fotoDe", { nombre, n: actual + 1, total: fotos.length })}
+        alt={textos.fotos[actual]}
         width={foto.ancho}
         height={foto.alto}
         unoptimized
@@ -56,7 +63,7 @@ export function GaleriaPlanta({ fotos, nombre }: { fotos: Foto[]; nombre: string
                   unoptimized
                   className="size-20 object-cover"
                 />
-                <span className="sr-only">{t("verFoto", { n: indice + 1 })}</span>
+                <span className="sr-only">{textos.verFoto[indice]}</span>
               </button>
             </li>
           ))}

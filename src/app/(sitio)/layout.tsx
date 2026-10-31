@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { NextIntlClientProvider, useTranslations } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { EncabezadoSitio } from "@/components/sitio/encabezado";
 import { PieSitio } from "@/components/sitio/pie";
 import { BotonWhatsappFlotante, ProveedorWhatsapp } from "@/components/sitio/whatsapp";
@@ -11,17 +11,17 @@ import { catalogosDelMenu, temporadaDelSitio } from "@/lib/sitio/datos";
 // Marco de todas las páginas públicas. El color de la temporada que se ve hoy se aplica como
 // acento (--acento) sobre la paleta verde: franjas, botones, insignias y detalles.
 export default async function LayoutSitio({ children }: { children: ReactNode }) {
-  const [{ vigente, anio }, catalogos, datos, { sitio, errores, comun }] = await Promise.all([
+  const [{ vigente, anio }, catalogos, datos, t] = await Promise.all([
     temporadaDelSitio(),
     catalogosDelMenu(),
     obtenerDatosNegocio(),
-    getMessages(),
+    getTranslations("sitio.whatsapp"),
   ]);
 
-  // Al navegador solo van los textos del sitio (no los del panel): la página pesa mucho menos.
+  // El sitio no manda la librería de idiomas al navegador: cada parte interactiva recibe sus
+  // textos ya traducidos desde el servidor. Así el celular descarga y ejecuta mucho menos.
   return (
-    <NextIntlClientProvider messages={{ sitio, errores, comun }}>
-    <ProveedorWhatsapp numero={datos.whatsapp}>
+    <ProveedorWhatsapp numero={datos.whatsapp} mensajeGeneral={t("mensajeGeneral")} textoBoton={t("boton")}>
       <div
         data-testid="sitio"
         data-temporada={vigente?.slug ?? ""}
@@ -37,7 +37,6 @@ export default async function LayoutSitio({ children }: { children: ReactNode })
         <BotonWhatsappFlotante />
       </div>
     </ProveedorWhatsapp>
-    </NextIntlClientProvider>
   );
 }
 

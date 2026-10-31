@@ -1,20 +1,42 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { useTranslations } from "next-intl";
 import { crearEnlaceWhatsapp } from "@/lib/datos-negocio/normalizar";
 import { cn } from "@/lib/utils";
 
 // Botón de WhatsApp del sitio (regla 10): abre https://wa.me/52<número> con un mensaje prellenado.
 // El mensaje general se cambia por el de una planta mientras su ficha está abierta.
+// Los textos llegan ya traducidos desde el servidor (así el navegador no carga la librería de idiomas).
 
-type ContextoWhatsapp = { numero: string | null; mensaje: string | null; fijarMensaje: (mensaje: string | null) => void };
+type ContextoWhatsapp = {
+  numero: string | null;
+  mensajeGeneral: string;
+  textoBoton: string;
+  mensaje: string | null;
+  fijarMensaje: (mensaje: string | null) => void;
+};
 
-const Contexto = createContext<ContextoWhatsapp>({ numero: null, mensaje: null, fijarMensaje: () => {} });
+const Contexto = createContext<ContextoWhatsapp>({
+  numero: null,
+  mensajeGeneral: "",
+  textoBoton: "",
+  mensaje: null,
+  fijarMensaje: () => {},
+});
 
-export function ProveedorWhatsapp({ numero, children }: { numero: string | null; children: ReactNode }) {
+export function ProveedorWhatsapp({
+  numero,
+  mensajeGeneral,
+  textoBoton,
+  children,
+}: {
+  numero: string | null;
+  mensajeGeneral: string;
+  textoBoton: string;
+  children: ReactNode;
+}) {
   const [mensaje, fijarMensaje] = useState<string | null>(null);
-  return <Contexto value={{ numero, mensaje, fijarMensaje }}>{children}</Contexto>;
+  return <Contexto value={{ numero, mensajeGeneral, textoBoton, mensaje, fijarMensaje }}>{children}</Contexto>;
 }
 
 /** La ficha de una planta lo usa para que el botón flotante pregunte por esa planta. */
@@ -38,14 +60,13 @@ export function IconoWhatsapp({ className }: { className?: string }) {
 
 /** Enlace a WhatsApp con el mensaje de la página (o el indicado). Si no hay número, no se muestra. */
 export function useEnlaceWhatsapp(mensajePropio?: string): string | null {
-  const t = useTranslations("sitio.whatsapp");
-  const { numero, mensaje } = useContext(Contexto);
+  const { numero, mensaje, mensajeGeneral } = useContext(Contexto);
   if (!numero) return null;
-  return crearEnlaceWhatsapp(numero, mensajePropio ?? mensaje ?? t("mensajeGeneral"));
+  return crearEnlaceWhatsapp(numero, mensajePropio ?? mensaje ?? mensajeGeneral);
 }
 
 export function BotonWhatsappFlotante() {
-  const t = useTranslations("sitio.whatsapp");
+  const { textoBoton } = useContext(Contexto);
   const enlace = useEnlaceWhatsapp();
   if (!enlace) return null;
   return (
@@ -57,7 +78,7 @@ export function BotonWhatsappFlotante() {
       className="fixed right-4 bottom-4 z-40 inline-flex min-h-14 items-center gap-2 rounded-full bg-[#0b6b3a] px-4 text-white shadow-lg shadow-black/20 transition-transform outline-none hover:scale-105 focus-visible:ring-4 focus-visible:ring-[#0b6b3a]/40 sm:right-6 sm:bottom-6"
     >
       <IconoWhatsapp className="size-7" />
-      <span className="font-semibold max-sm:sr-only">{t("boton")}</span>
+      <span className="font-semibold max-sm:sr-only">{textoBoton}</span>
     </a>
   );
 }

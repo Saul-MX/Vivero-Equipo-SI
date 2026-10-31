@@ -3,11 +3,14 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ArrowRightIcon, FlaskConicalIcon, QuoteIcon } from "lucide-react";
 import { CarruselPortada } from "@/components/sitio/carrusel-portada";
+import { DiapositivaAnuncio } from "@/components/sitio/diapositiva-anuncio";
 import { AvatarTestimonio } from "@/components/sitio/avatar-testimonio";
 import { CONTENEDOR } from "@/components/sitio/encabezado";
 import { TarjetaCatalogo } from "@/components/sitio/tarjeta-catalogo";
 import { RejillaPlantas } from "@/components/sitio/tarjeta-planta";
 import { urlImagen } from "@/lib/archivos/claves";
+import { obtenerDatosNegocio } from "@/lib/datos-negocio/datos";
+import { crearEnlaceWhatsapp } from "@/lib/datos-negocio/normalizar";
 import {
   anunciosDeHoySitio,
   catalogosVisibles,
@@ -45,6 +48,21 @@ export default async function PaginaInicio() {
     testimoniosVisibles(),
     mostrarDisponibilidad(),
   ]);
+  // Las diapositivas se arman aquí (en el servidor); el carrusel del navegador solo elige cuál se ve.
+  const [tCarrusel, datos] = await Promise.all([getTranslations("sitio.carrusel"), obtenerDatosNegocio()]);
+  const enlaceWhatsapp = datos.whatsapp ? crearEnlaceWhatsapp(datos.whatsapp, t("whatsapp.mensajeGeneral")) : null;
+  const total = anuncios.length;
+  const textosCarrusel = {
+    carrusel: tCarrusel("carrusel"),
+    nombre: tCarrusel("nombre"),
+    diapositiva: tCarrusel("diapositiva"),
+    posiciones: anuncios.map((_, indice) => tCarrusel("posicion", { n: indice + 1, total })),
+    anterior: tCarrusel("anterior"),
+    siguiente: tCarrusel("siguiente"),
+    irA: anuncios.map((_, indice) => tCarrusel("irA", { n: indice + 1 })),
+    pausar: tCarrusel("pausar"),
+    reanudar: tCarrusel("reanudar"),
+  };
   const plantasTemporada = vigente ? (await plantasVisibles({ catalogoId: vigente.catalogoId })).slice(0, 4) : [];
   const permanentes = catalogos.filter((catalogo) => catalogo.permanente);
 
@@ -55,7 +73,17 @@ export default async function PaginaInicio() {
           <h1 className="sr-only">{t("inicio.tituloOculto")}</h1>
           <div className="mx-auto max-w-[1600px] sm:px-4 sm:pt-4">
             <div className="overflow-hidden sm:rounded-3xl">
-              <CarruselPortada anuncios={anuncios} />
+              <CarruselPortada
+                textos={textosCarrusel}
+                diapositivas={anuncios.map((anuncio, indice) => (
+                  <DiapositivaAnuncio
+                    key={anuncio.id}
+                    anuncio={anuncio}
+                    enlaceWhatsapp={enlaceWhatsapp}
+                    prioritario={indice === 0}
+                  />
+                ))}
+              />
             </div>
           </div>
         </>

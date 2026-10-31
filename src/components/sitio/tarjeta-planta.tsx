@@ -88,6 +88,7 @@ export function RejillaPlantas({
   /** false para una muestra corta (Inicio), donde no hace falta filtrar. */
   filtro?: boolean;
 }) {
+  const t = useTranslations("sitio.planta");
   if (plantas.length === 0) {
     return <p className="rounded-3xl bg-white p-10 text-center text-texto-suave ring-1 ring-border">{vacio}</p>;
   }
@@ -103,7 +104,7 @@ export function RejillaPlantas({
   // Con la disponibilidad encendida (y alguna agotada) se puede filtrar «Solo disponibles».
   const disponibles = plantas.filter((planta) => planta.disponible).length;
   return conDisponibilidad && filtro && disponibles < plantas.length ? (
-    <FiltroDisponibles disponibles={disponibles}>{rejilla}</FiltroDisponibles>
+    <FiltroDisponibles texto={t("soloDisponibles", { n: disponibles })}>{rejilla}</FiltroDisponibles>
   ) : (
     rejilla
   );

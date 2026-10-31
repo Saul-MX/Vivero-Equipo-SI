@@ -1,25 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useState, type ReactNode } from "react";
 import { ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DiapositivaAnuncio, type DatosDiapositiva } from "./diapositiva-anuncio";
-import { useEnlaceWhatsapp } from "./whatsapp";
 
 const INTERVALO_MS = 7000;
 
+export type TextosCarrusel = {
+  carrusel: string;
+  nombre: string;
+  diapositiva: string;
+  /** «{n} de {total}» ya armado para cada diapositiva. */
+  posiciones: string[];
+  anterior: string;
+  siguiente: string;
+  /** «Ver el anuncio {n}» ya armado para cada punto. */
+  irA: string[];
+  pausar: string;
+  reanudar: string;
+};
+
 /**
- * Carrusel de la portada con los anuncios de hoy. Avanza solo cada 7 segundos, salvo que la persona
- * lo pause, pase el cursor o el teclado por encima, o tenga activado «reducir movimiento».
+ * Carrusel de la portada con los anuncios de hoy. Las diapositivas llegan ya armadas desde el
+ * servidor; aquí solo se decide cuál se ve. Avanza solo cada 7 segundos, salvo que la persona lo
+ * pause, pase el cursor o el teclado por encima, o tenga activado «reducir movimiento».
  */
-export function CarruselPortada({ anuncios }: { anuncios: (DatosDiapositiva & { id: number })[] }) {
-  const t = useTranslations("sitio.carrusel");
-  const enlaceWhatsapp = useEnlaceWhatsapp();
+export function CarruselPortada({ diapositivas, textos }: { diapositivas: ReactNode[]; textos: TextosCarrusel }) {
   const [actual, setActual] = useState(0);
   const [pausado, setPausado] = useState(false);
   const [encima, setEncima] = useState(false);
-  const total = anuncios.length;
+  const total = diapositivas.length;
 
   useEffect(() => {
     if (total < 2 || pausado || encima) return;
@@ -32,8 +42,8 @@ export function CarruselPortada({ anuncios }: { anuncios: (DatosDiapositiva & { 
 
   return (
     <section
-      aria-roledescription={t("carrusel")}
-      aria-label={t("nombre")}
+      aria-roledescription={textos.carrusel}
+      aria-label={textos.nombre}
       onMouseEnter={() => setEncima(true)}
       onMouseLeave={() => setEncima(false)}
       onFocus={() => setEncima(true)}
@@ -41,12 +51,12 @@ export function CarruselPortada({ anuncios }: { anuncios: (DatosDiapositiva & { 
     >
       {/* Todas las diapositivas ocupan el mismo lugar; solo la actual se ve y se puede usar. */}
       <div className="grid">
-        {anuncios.map((anuncio, indice) => (
+        {diapositivas.map((diapositiva, indice) => (
           <div
-            key={anuncio.id}
+            key={indice}
             role="group"
-            aria-roledescription={t("diapositiva")}
-            aria-label={t("posicion", { n: indice + 1, total })}
+            aria-roledescription={textos.diapositiva}
+            aria-label={textos.posiciones[indice]}
             aria-hidden={indice !== actual}
             inert={indice !== actual}
             className={cn(
@@ -54,7 +64,7 @@ export function CarruselPortada({ anuncios }: { anuncios: (DatosDiapositiva & { 
               indice === actual ? "opacity-100" : "pointer-events-none opacity-0",
             )}
           >
-            <DiapositivaAnuncio anuncio={anuncio} enlaceWhatsapp={enlaceWhatsapp} prioritario={indice === 0} />
+            {diapositiva}
           </div>
         ))}
       </div>
@@ -64,11 +74,11 @@ export function CarruselPortada({ anuncios }: { anuncios: (DatosDiapositiva & { 
           <div className="flex flex-wrap items-center justify-center gap-1 rounded-full bg-white p-1 shadow-sm ring-1 ring-border">
             <button type="button" onClick={() => ir(actual - 1)} className={estiloBoton}>
               <ChevronLeftIcon aria-hidden className="size-5" />
-              <span className="sr-only">{t("anterior")}</span>
+              <span className="sr-only">{textos.anterior}</span>
             </button>
-            {anuncios.map((anuncio, indice) => (
+            {diapositivas.map((_, indice) => (
               <button
-                key={anuncio.id}
+                key={indice}
                 type="button"
                 aria-current={indice === actual ? "true" : undefined}
                 onClick={() => ir(indice)}
@@ -78,16 +88,16 @@ export function CarruselPortada({ anuncios }: { anuncios: (DatosDiapositiva & { 
                   aria-hidden
                   className={cn("rounded-full transition-all", indice === actual ? "h-2 w-5 bg-acento-fondo" : "size-2 bg-salvia")}
                 />
-                <span className="sr-only">{t("irA", { n: indice + 1 })}</span>
+                <span className="sr-only">{textos.irA[indice]}</span>
               </button>
             ))}
             <button type="button" onClick={() => ir(actual + 1)} className={estiloBoton}>
               <ChevronRightIcon aria-hidden className="size-5" />
-              <span className="sr-only">{t("siguiente")}</span>
+              <span className="sr-only">{textos.siguiente}</span>
             </button>
             <button type="button" onClick={() => setPausado((valor) => !valor)} className={estiloBoton}>
               {pausado ? <PlayIcon aria-hidden className="size-4" /> : <PauseIcon aria-hidden className="size-4" />}
-              <span className="sr-only">{pausado ? t("reanudar") : t("pausar")}</span>
+              <span className="sr-only">{pausado ? textos.reanudar : textos.pausar}</span>
             </button>
           </div>
         </div>

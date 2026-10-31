@@ -56,8 +56,9 @@ function Bloque({ titulo, icono, children, className }: { titulo: string; icono?
 /** Ficha de una planta (URL estable /plantas/<slug>, la misma del QR). */
 async function FichaPlanta({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [t, planta, conDisponibilidad] = await Promise.all([
+  const [t, tWhatsapp, planta, conDisponibilidad] = await Promise.all([
     getTranslations("sitio.planta"),
+    getTranslations("sitio.whatsapp"),
     plantaPorSlug(slug),
     mostrarDisponibilidad(),
   ]);
@@ -77,7 +78,15 @@ async function FichaPlanta({ params }: { params: Promise<{ slug: string }> }) {
   return (
     <article className={cn(CONTENEDOR, "pt-8 sm:pt-12")}>
       <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-        <GaleriaPlanta fotos={planta.fotos} nombre={nombreCompleto(planta)} />
+        <GaleriaPlanta
+          fotos={planta.fotos}
+          textos={{
+            fotos: planta.fotos.map((_, indice) =>
+              t("fotoDe", { nombre: nombreCompleto(planta), n: indice + 1, total: planta.fotos.length }),
+            ),
+            verFoto: planta.fotos.map((_, indice) => t("verFoto", { n: indice + 1 })),
+          }}
+        />
 
         <div className="flex flex-col gap-5">
           {planta.catalogo.visible && (
@@ -104,7 +113,10 @@ async function FichaPlanta({ params }: { params: Promise<{ slug: string }> }) {
             </div>
           )}
           {planta.descripcionCorta && <p className="text-lg text-pretty text-foreground">{planta.descripcionCorta}</p>}
-          <WhatsappDePlanta nombre={nombreCompleto(planta)} />
+          <WhatsappDePlanta
+            mensaje={tWhatsapp("mensajePlanta", { nombre: nombreCompleto(planta) })}
+            texto={tWhatsapp("preguntarPlanta")}
+          />
 
           {caracteristicas && (
             <dl className="grid gap-5 rounded-3xl bg-white p-6 ring-1 ring-border">
