@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { PlusIcon } from "lucide-react";
 import { EncabezadoPagina } from "@/components/panel/encabezado-pagina";
 import { EsqueletoContenido } from "@/components/panel/esqueleto";
-import { metadatosDeSeccion } from "@/components/panel/pagina-pendiente";
+import { metadatosDeSeccion } from "@/components/panel/metadatos-seccion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { requerirUsuario } from "@/lib/auth/sesion";

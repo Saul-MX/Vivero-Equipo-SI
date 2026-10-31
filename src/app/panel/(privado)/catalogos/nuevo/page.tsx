@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { EsqueletoContenido } from "@/components/panel/esqueleto";
-import { metadatosDeSeccion } from "@/components/panel/pagina-pendiente";
+import { metadatosDeSeccion } from "@/components/panel/metadatos-seccion";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { FormularioCatalogo } from "../formulario-catalogo";
 

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { EncabezadoPagina } from "@/components/panel/encabezado-pagina";
 import { EsqueletoContenido } from "@/components/panel/esqueleto";
-import { metadatosDeSeccion } from "@/components/panel/pagina-pendiente";
+import { metadatosDeSeccion } from "@/components/panel/metadatos-seccion";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { obtenerDatosNegocio } from "@/lib/datos-negocio/datos";
 import { listarColoresConUso, listarMacetasConUso } from "@/lib/datos-negocio/opciones-planta";
