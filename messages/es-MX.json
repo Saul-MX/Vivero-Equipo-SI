@@ -69,7 +69,8 @@
       "catalogosTexto": "Encuentra la planta ideal para tu casa, tu jardín o tu negocio.",
       "plantas": "{n, plural, =0 {Pronto, nuevas plantas} one {# planta} other {# plantas}}",
       "fertilizantesTexto": "Para que tus plantas crezcan sanas.",
-      "testimonios": "Lo que dicen nuestros clientes"
+      "testimonios": "Lo que dicen nuestros clientes",
+      "novedades": "Novedades"
     },
     "planta": {
       "disponible": "Disponible",
@@ -262,7 +263,9 @@
     "contactoInvalido": "Escribe un teléfono (con lada) o un correo válido.",
     "mensajeRequerido": "Escribe tu mensaje.",
     "mensajeCorto": "Cuéntanos un poco más (al menos 10 letras).",
-    "demasiadosMensajes": "Ya recibimos varios mensajes desde tu conexión. Intenta de nuevo en {minutos, plural, one {# minuto} other {# minutos}} o escríbenos por WhatsApp."
+    "demasiadosMensajes": "Ya recibimos varios mensajes desde tu conexión. Intenta de nuevo en {minutos, plural, one {# minuto} other {# minutos}} o escríbenos por WhatsApp.",
+    "tituloNovedadRequerido": "Escribe el título.",
+    "textoNovedadRequerido": "Escribe el texto de la novedad."
   },
   "acceso": {
     "ingresar": {
@@ -321,11 +324,33 @@
     "inicio": {
       "saludo": "Hola, {usuario}",
       "subtitulo": "Esto es lo que se ve hoy en el sitio",
-      "verSitio": "Ver el sitio"
-    },
-    "pendiente": {
-      "titulo": "Esta sección se arma en la fase {fase}",
-      "texto": "La estructura del panel ya está lista. El contenido de esta pantalla llega en una siguiente entrega."
+      "verSitio": "Ver el sitio",
+      "temporadaActual": "Temporada actual",
+      "cambiarTemporada": "Cambiar temporada",
+      "accesos": {
+        "titulo": "Accesos rápidos",
+        "planta": "Agregar planta",
+        "anuncio": "Nuevo anuncio",
+        "novedad": "Publicar novedad",
+        "mensajes": "Ver mensajes",
+        "sinLeer": "sin leer"
+      },
+      "pendientes": {
+        "titulo": "Pendientes",
+        "mensajes": "{n, plural, =0 {Ningún mensaje sin leer} one {# mensaje sin leer} other {# mensajes sin leer}}",
+        "ocultas": "{n, plural, =0 {Ninguna planta oculta} one {# planta oculta} other {# plantas ocultas}}",
+        "sinFoto": "{n, plural, =0 {Todas las plantas tienen foto} one {# planta sin foto} other {# plantas sin foto}}",
+        "whatsapp": "Falta número de WhatsApp",
+        "abrir": "Abrir",
+        "revisar": "Revisar",
+        "ver": "Ver",
+        "poner": "Poner"
+      },
+      "anuncios": {
+        "titulo": "Anuncios en portada hoy",
+        "ninguno": "Ninguno para esta temporada.",
+        "crear": "Crear uno"
+      }
     },
     "secciones": {
       "plantas": {
@@ -363,6 +388,14 @@
       "datos": {
         "titulo": "Datos y redes",
         "subtitulo": "Lo que aparece en el pie, en Contacto, en el mapa y en los botones de WhatsApp."
+      },
+      "mensajes": {
+        "titulo": "Mensajes",
+        "subtitulo": "Lo que te escriben desde el formulario de Contacto del sitio."
+      },
+      "novedades": {
+        "titulo": "Novedades",
+        "subtitulo": "Avisos cortos que se muestran en Inicio del sitio."
       }
     },
     "formulario": {
@@ -558,7 +591,9 @@
         "derecha": "Mover la foto {n} después",
         "quitar": "Quitar la foto {n}",
         "errorArchivo": "{archivo}: {error}"
-      }
+      },
+      "revisarOcultas": "Mostrando solo las plantas ocultas.",
+      "revisarSinFoto": "Mostrando solo las plantas sin foto."
     },
     "fertilizantes": {
       "agregar": "Agregar fertilizante",
@@ -927,6 +962,47 @@
         "borrado": "Se borró el archivo.",
         "pesoMb": "{n} MB",
         "pesoKb": "{n} KB"
+      }
+    },
+    "mensajes": {
+      "filtros": "Mostrar mensajes",
+      "todos": "Todos ({n})",
+      "sinLeer": "Sin leer ({n})",
+      "vacio": "Todavía no hay mensajes. Llegan desde el formulario de Contacto del sitio.",
+      "vacioSinLeer": "No hay mensajes sin leer.",
+      "nuevo": "sin leer",
+      "recibido": "Recibido el {fecha}",
+      "volver": "Volver a mensajes",
+      "contacto": "Teléfono o correo",
+      "responder": {
+        "whatsapp": "Responder por WhatsApp",
+        "llamar": "Llamar",
+        "correo": "Responder por correo"
+      },
+      "marcarLeido": "Marcar como leído",
+      "marcarNoLeido": "Marcar como no leído",
+      "marcadoLeido": "Se marcó como leído.",
+      "marcadoNoLeido": "Se marcó como no leído.",
+      "eliminar": "Eliminar mensaje",
+      "eliminarTitulo": "¿Eliminar el mensaje de {nombre}?",
+      "eliminarTexto": "Se borrará de la bandeja.",
+      "eliminado": "Se eliminó el mensaje de {nombre}."
+    },
+    "novedades": {
+      "publicar": "Publicar novedad",
+      "vacio": "Todavía no hay novedades.",
+      "visibleDe": "Mostrar «{titulo}» en el sitio",
+      "visibleCambiado": "{visible, select, true {«{titulo}» ya se ve en el sitio.} other {«{titulo}» quedó oculta; no se borró.}}",
+      "formulario": {
+        "tituloNueva": "Nueva novedad",
+        "subtitulo": "Se muestra en Inicio del sitio, de la más nueva a la más vieja.",
+        "titulo": "Título",
+        "tituloAyuda": "Ejemplo: Ya llegaron las nochebuenas",
+        "texto": "Texto",
+        "textoAyuda": "Corto y claro. Deja un renglón vacío entre párrafos.",
+        "imagen": "Imagen (opcional)",
+        "publicar": "Publicar",
+        "publicada": "Se publicó la novedad."
       }
     }
   }

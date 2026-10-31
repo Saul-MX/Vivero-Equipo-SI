@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { PlusIcon } from "lucide-react";
 import { EncabezadoPagina } from "@/components/panel/encabezado-pagina";
 import { EsqueletoContenido } from "@/components/panel/esqueleto";
-import { metadatosDeSeccion } from "@/components/panel/pagina-pendiente";
+import { metadatosDeSeccion } from "@/components/panel/metadatos-seccion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { requerirUsuario } from "@/lib/auth/sesion";
@@ -64,6 +64,14 @@ async function ContenidoPlantas({ searchParams }: { searchParams: Promise<Record
       <Card>
         <CardContent className="flex flex-col gap-6">
           <FiltrosPlantas filtros={filtros} catalogos={catalogos} colores={colores} />
+          {filtros.revisar && (
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-muted px-4 py-3 text-sm font-medium text-pino">
+              {t(filtros.revisar === "ocultas" ? "revisarOcultas" : "revisarSinFoto")}
+              <Link href="/panel/plantas" className="underline underline-offset-4">
+                {t("quitarFiltros")}
+              </Link>
+            </p>
+          )}
           {plantas.length > 0 ? (
             <TablaPlantas plantas={plantas} />
           ) : total === 0 ? (

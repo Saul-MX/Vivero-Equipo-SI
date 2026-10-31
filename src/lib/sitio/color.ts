@@ -51,3 +51,23 @@ export function variablesAcento(color: string | null | undefined): Record<string
   const fondo = fondoLegible(valido);
   return { "--acento": valido, "--acento-fondo": fondo, "--acento-texto": colorTextoSobre(fondo) };
 }
+
+function aclarar(hex: string, cantidad: number): string {
+  const canal = (inicio: number) => {
+    const valor = parseInt(hex.slice(inicio, inicio + 2), 16);
+    return Math.round(valor + (255 - valor) * cantidad)
+      .toString(16)
+      .padStart(2, "0");
+  };
+  return `#${canal(1)}${canal(3)}${canal(5)}`;
+}
+
+/**
+ * Fondo degradado de la tarjeta de temporada del panel: va del color legible hacia uno que se lee
+ * todavía mejor con el mismo texto (más oscuro si el texto es blanco, más claro si es oscuro).
+ */
+export function degradadoTemporada(color: string): { desde: string; hasta: string; texto: string } {
+  const { "--acento-fondo": desde, "--acento-texto": texto } = variablesAcento(color);
+  const hasta = texto === TEXTO_CLARO ? oscurecer(desde, 0.3) : aclarar(desde, 0.25);
+  return { desde, hasta, texto };
+}

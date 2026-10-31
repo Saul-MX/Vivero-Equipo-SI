@@ -56,5 +56,7 @@ export const esquemaFiltrosPlantas = z.object({
   catalogo: z.coerce.number().int().positive().optional().catch(undefined),
   color: z.coerce.number().int().positive().optional().catch(undefined),
   disponible: z.enum(["si", "no"]).optional().catch(undefined),
+  // Desde «Pendientes» del Inicio: solo las ocultas o solo las que no tienen foto.
+  revisar: z.enum(["ocultas", "sin-foto"]).optional().catch(undefined),
 });
 export type FiltrosPlantas = z.output<typeof esquemaFiltrosPlantas>;

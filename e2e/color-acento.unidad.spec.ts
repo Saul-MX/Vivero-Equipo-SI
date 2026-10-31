@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
   colorTextoSobre,
   contraste,
+  degradadoTemporada,
   fondoLegible,
   TEXTO_CLARO,
   TEXTO_OSCURO,
@@ -54,4 +55,12 @@ test("un color mal escrito no rompe el sitio: se usa el verde pino", () => {
   expect(variablesAcento("rojo")["--acento"]).toBe("#1e3a2e");
   expect(variablesAcento(null)["--acento-texto"]).toBe(TEXTO_CLARO);
   expect(variablesAcento("#D63A7A")["--acento"]).toBe("#D63A7A");
+});
+
+test("la tarjeta de temporada del panel se lee bien en los dos extremos del degradado", () => {
+  for (const [nombre, color] of Object.entries(COLORES)) {
+    const { desde, hasta, texto } = degradadoTemporada(color);
+    expect(contraste(desde, texto), `${nombre} (inicio)`).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(hasta, texto), `${nombre} (final)`).toBeGreaterThanOrEqual(4.5);
+  }
 });

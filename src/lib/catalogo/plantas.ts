@@ -27,6 +27,8 @@ export async function listarPlantasPanel(filtros: FiltrosPlantas): Promise<Plant
     ...(filtros.catalogo && { catalogoId: filtros.catalogo }),
     ...(filtros.color && { colores: { some: { colorId: filtros.color } } }),
     ...(filtros.disponible && { disponible: filtros.disponible === "si" }),
+    ...(filtros.revisar === "ocultas" && { visible: false }),
+    ...(filtros.revisar === "sin-foto" && { fotos: { none: {} } }),
   };
   const filas = await prisma.planta.findMany({
     where: donde,
