@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
 import { ArrowRightIcon, FlaskConicalIcon, QuoteIcon } from "lucide-react";
 import { CarruselPortada } from "@/components/sitio/carrusel-portada";
 import { AvatarTestimonio } from "@/components/sitio/avatar-testimonio";
@@ -12,6 +12,7 @@ import {
   anunciosDeHoySitio,
   catalogosVisibles,
   mostrarDisponibilidad,
+  novedadesVisibles,
   plantasVisibles,
   temporadaDelSitio,
   testimoniosVisibles,
@@ -35,10 +36,12 @@ const BOTON =
 
 export default async function PaginaInicio() {
   const t = await getTranslations("sitio");
-  const [anuncios, { vigente }, catalogos, testimonios, conDisponibilidad] = await Promise.all([
+  const [formato, anuncios, { vigente }, catalogos, novedades, testimonios, conDisponibilidad] = await Promise.all([
+    getFormatter(),
     anunciosDeHoySitio(),
     temporadaDelSitio(),
     catalogosVisibles(),
+    novedadesVisibles(),
     testimoniosVisibles(),
     mostrarDisponibilidad(),
   ]);
@@ -145,6 +148,39 @@ export default async function PaginaInicio() {
           <ArrowRightIcon aria-hidden className="size-4" />
         </Link>
       </section>
+
+      {novedades.length > 0 && (
+        <section aria-labelledby="titulo-novedades" className={cn(CONTENEDOR, "mt-20")}>
+          <h2 id="titulo-novedades" className="text-3xl font-semibold text-pino sm:text-4xl">
+            {t("inicio.novedades")}
+          </h2>
+          <ul className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {novedades.map((novedad) => (
+              <li key={novedad.id}>
+                <article className="flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-border">
+                  {novedad.imagen && (
+                    <Image
+                      src={urlImagen(novedad.imagen, "tarjeta")}
+                      alt=""
+                      width={640}
+                      height={400}
+                      unoptimized
+                      className="aspect-video h-auto w-full object-cover"
+                    />
+                  )}
+                  <div className="flex flex-1 flex-col gap-2 p-6">
+                    <time dateTime={novedad.creadoEn.toISOString()} className="text-sm font-medium text-texto-suave">
+                      {formato.dateTime(novedad.creadoEn, { dateStyle: "long" })}
+                    </time>
+                    <h3 className="font-serif text-2xl leading-snug font-semibold text-pino">{novedad.titulo}</h3>
+                    <p className="whitespace-pre-line text-foreground">{novedad.texto}</p>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {testimonios.length > 0 && (
         <section aria-labelledby="titulo-testimonios" className={cn(CONTENEDOR, "mt-20")}>

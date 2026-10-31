@@ -9,6 +9,7 @@ export const CARPETAS = [
   "anuncios",
   "nosotros",
   "testimonios",
+  "novedades",
 ] as const;
 export type Carpeta = (typeof CARPETAS)[number];
 export type TipoArchivo = "imagen" | "pdf" | "video";

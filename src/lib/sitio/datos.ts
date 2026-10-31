@@ -3,6 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import {
   ETIQUETA_ANUNCIOS,
   ETIQUETA_NOSOTROS,
+  ETIQUETA_NOVEDADES,
   ETIQUETA_PREGUNTAS,
   ETIQUETA_TESTIMONIOS,
 } from "@/lib/apartados/etiquetas";
@@ -299,6 +300,19 @@ export async function testimoniosVisibles() {
     where: { visible: true },
     orderBy: [{ orden: "asc" }, { id: "asc" }],
     select: { id: true, nombre: true, texto: true, avatar: true },
+  });
+}
+
+/** Las novedades visibles más recientes (se muestran en Inicio). */
+export async function novedadesVisibles(cuantas = 6) {
+  "use cache";
+  cacheTag(ETIQUETA_NOVEDADES);
+  cacheLife("days");
+  return prisma.novedad.findMany({
+    where: { visible: true },
+    orderBy: [{ creadoEn: "desc" }, { id: "desc" }],
+    take: cuantas,
+    select: { id: true, titulo: true, texto: true, imagen: true, creadoEn: true },
   });
 }
 
