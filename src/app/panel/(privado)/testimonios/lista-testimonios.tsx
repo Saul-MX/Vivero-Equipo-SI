@@ -58,7 +58,7 @@ export function ListaTestimonios({ testimonios }: { testimonios: TestimonioEnLis
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-texto-suave">{t("total", { n: testimonios.length })}</p>
+        <p className="text-sm text-texto-suave">{testimonios.length > 0 && t("total", { n: testimonios.length })}</p>
         {editando !== "nuevo" && (
           <Button type="button" onClick={() => setEditando("nuevo")}>
             <PlusIcon aria-hidden />

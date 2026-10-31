@@ -41,7 +41,7 @@ export function ListaPreguntas({ preguntas }: { preguntas: PreguntaEnLista[] }) 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-texto-suave">{t("total", { n: preguntas.length })}</p>
+        <p className="text-sm text-texto-suave">{preguntas.length > 0 && t("total", { n: preguntas.length })}</p>
         {editando !== "nueva" && (
           <Button type="button" onClick={() => setEditando("nueva")}>
             <PlusIcon aria-hidden />
