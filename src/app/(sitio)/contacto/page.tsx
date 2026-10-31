@@ -117,7 +117,22 @@ export default async function PaginaContacto() {
           </div>
         </section>
 
-        <FormularioContacto />
+        <FormularioContacto
+          textos={{
+            titulo: t("contacto.formulario.titulo"),
+            nombre: t("contacto.formulario.nombre"),
+            contacto: t("contacto.formulario.contacto"),
+            contactoAyuda: t("contacto.formulario.contactoAyuda"),
+            mensaje: t("contacto.formulario.mensaje"),
+            trampa: t("contacto.formulario.trampa"),
+            enviar: t("contacto.formulario.enviar"),
+            enviando: t("contacto.formulario.enviando"),
+            privacidad: t("contacto.formulario.privacidad"),
+            graciasTitulo: t("contacto.formulario.graciasTitulo"),
+            graciasTexto: t("contacto.formulario.graciasTexto"),
+            otro: t("contacto.formulario.otro"),
+          }}
+        />
       </div>
 
       {datos.mapaSrc && (
