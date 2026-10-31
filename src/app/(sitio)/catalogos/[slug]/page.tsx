@@ -68,7 +68,10 @@ async function Catalogo({ params }: { params: Promise<{ slug: string }> }) {
           </a>
         )}
       </CabeceraPagina>
-      <section aria-label={t("catalogos.plantasDe", { nombre: catalogo.nombre })} className={CONTENEDOR}>
+      <section aria-labelledby="titulo-plantas" className={CONTENEDOR}>
+        <h2 id="titulo-plantas" className="sr-only">
+          {t("catalogos.plantasDe", { nombre: catalogo.nombre })}
+        </h2>
         <RejillaPlantas plantas={catalogo.plantas} conDisponibilidad={conDisponibilidad} vacio={t("catalogos.vacio")} />
       </section>
     </>

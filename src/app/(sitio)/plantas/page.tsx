@@ -20,7 +20,10 @@ export default async function PaginaPlantas() {
       <CabeceraPagina titulo={t("titulo")}>
         <p>{t("descripcion")}</p>
       </CabeceraPagina>
-      <section aria-label={t("titulo")} className={CONTENEDOR}>
+      <section aria-labelledby="titulo-plantas" className={CONTENEDOR}>
+        <h2 id="titulo-plantas" className="sr-only">
+          {t("titulo")}
+        </h2>
         <RejillaPlantas plantas={plantas} conDisponibilidad={conDisponibilidad} vacio={t("vacio")} />
       </section>
     </>

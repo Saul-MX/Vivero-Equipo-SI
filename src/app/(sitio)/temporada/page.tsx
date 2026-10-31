@@ -26,7 +26,10 @@ export default async function PaginaTemporada() {
       <CabeceraPagina antetitulo={t("titulo")} titulo={vigente?.nombre ?? t("titulo")} foto={vigente?.fotoPortada}>
         <p>{vigente?.textoAviso || t("descripcion")}</p>
       </CabeceraPagina>
-      <section aria-label={t("plantas")} className={CONTENEDOR}>
+      <section aria-labelledby="titulo-plantas" className={CONTENEDOR}>
+        <h2 id="titulo-plantas" className="sr-only">
+          {t("plantas")}
+        </h2>
         <RejillaPlantas plantas={plantas} conDisponibilidad={conDisponibilidad} vacio={t("vacio")} />
       </section>
     </>
