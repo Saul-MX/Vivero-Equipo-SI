@@ -13,7 +13,17 @@ async function revisar(page: Page) {
 test.describe("sin sesión", () => {
   test.use({ storageState: SIN_SESION });
 
-  for (const ruta of ["/", "/panel/ingresar", "/panel/registro"]) {
+  for (const ruta of [
+    "/",
+    "/catalogos",
+    "/plantas",
+    "/temporada",
+    "/fertilizantes",
+    "/nosotros",
+    "/contacto",
+    "/panel/ingresar",
+    "/panel/registro",
+  ]) {
     test(`${ruta} cumple WCAG 2.1 AA`, async ({ page }) => {
       await page.goto(ruta);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
