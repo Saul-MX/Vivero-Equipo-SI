@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
+import { OPEN_GRAPH_COMUN, urlDelSitio } from "@/lib/sitio/metadatos";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -21,8 +22,10 @@ const inter = Inter({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("metadatos");
   return {
+    metadataBase: urlDelSitio(),
     title: { default: t("titulo"), template: t("plantillaTitulo") },
     description: t("descripcion"),
+    openGraph: { ...OPEN_GRAPH_COMUN, title: t("titulo"), description: t("descripcion") },
   };
 }
 

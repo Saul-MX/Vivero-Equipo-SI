@@ -3,6 +3,7 @@
 import { updateTag } from "next/cache";
 import { z } from "zod";
 import { requerirUsuario } from "@/lib/auth/sesion";
+import { ETIQUETA_PLANTAS } from "@/lib/catalogo/etiquetas";
 import { ETIQUETA_DATOS_NEGOCIO, guardarDatosNegocio } from "@/lib/datos-negocio/datos";
 import {
   eliminarColor,
@@ -54,12 +55,15 @@ export async function guardarListaColores(
 
   const resultado = await guardarColores(validacion.data);
   if (!resultado.ok) return { ok: false, error: resultado.error };
+  updateTag(ETIQUETA_PLANTAS); // las fichas de las plantas muestran sus colores
   return { ok: true, colores: await listarColoresConUso() };
 }
 
 export async function borrarColor(id: number): Promise<ResultadoEliminar> {
   await requerirUsuario();
-  return eliminarColor(esquemaId.parse(id));
+  const resultado = await eliminarColor(esquemaId.parse(id));
+  updateTag(ETIQUETA_PLANTAS);
+  return resultado;
 }
 
 export async function guardarListaMacetas(
@@ -73,10 +77,13 @@ export async function guardarListaMacetas(
 
   const resultado = await guardarMacetas(validacion.data);
   if (!resultado.ok) return { ok: false, error: resultado.error };
+  updateTag(ETIQUETA_PLANTAS); // y sus tamaños de maceta
   return { ok: true, macetas: await listarMacetasConUso() };
 }
 
 export async function borrarMaceta(id: number): Promise<ResultadoEliminar> {
   await requerirUsuario();
-  return eliminarMaceta(esquemaId.parse(id));
+  const resultado = await eliminarMaceta(esquemaId.parse(id));
+  updateTag(ETIQUETA_PLANTAS);
+  return resultado;
 }
