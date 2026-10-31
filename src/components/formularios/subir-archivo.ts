@@ -1,13 +1,10 @@
 "use client";
 
-import {
-  subirImagen,
-  subirPdf,
-  subirVideo,
-  type ResultadoSubida,
-} from "@/app/panel/(privado)/acciones-archivos";
+import type { ResultadoSubida } from "@/app/panel/subir/route";
 
-// Revisión rápida en el navegador antes de subir (el servidor vuelve a revisar todo).
+// Revisión rápida en el navegador antes de subir; el servidor (/panel/subir) vuelve a revisar todo.
+
+export type { ResultadoSubida };
 
 export const MAXIMO_BYTES = 15 * 1024 * 1024;
 export const MAXIMO_BYTES_VIDEO = 40 * 1024 * 1024;
@@ -34,9 +31,16 @@ export async function subirArchivo(archivo: File, tipo: TipoSubida): Promise<Res
   const datos = new FormData();
   datos.append("archivo", archivo);
   try {
-    if (tipo === "video") return await subirVideo(datos);
-    if (tipo === "pdf") return await subirPdf(datos);
-    return await subirImagen(datos, tipo === "imagenAnuncio" ? "anuncio" : "normal");
+    const respuesta = await fetch(`/panel/subir?tipo=${tipo}`, {
+      method: "POST",
+      body: datos,
+      // Encabezado propio del panel: un sitio ajeno no lo puede enviar (protección contra CSRF).
+      headers: { "x-vivero-subida": "1" },
+    });
+    if (respuesta.headers.get("content-type")?.includes("application/json")) {
+      return (await respuesta.json()) as ResultadoSubida;
+    }
+    return { ok: false, error: respuesta.status === 401 ? "sesionVencida" : "subidaFallida" };
   } catch {
     return { ok: false, error: "subidaFallida" };
   }

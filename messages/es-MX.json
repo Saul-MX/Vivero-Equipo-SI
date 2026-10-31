@@ -265,7 +265,8 @@
     "mensajeCorto": "Cuéntanos un poco más (al menos 10 letras).",
     "demasiadosMensajes": "Ya recibimos varios mensajes desde tu conexión. Intenta de nuevo en {minutos, plural, one {# minuto} other {# minutos}} o escríbenos por WhatsApp.",
     "tituloNovedadRequerido": "Escribe el título.",
-    "textoNovedadRequerido": "Escribe el texto de la novedad."
+    "textoNovedadRequerido": "Escribe el texto de la novedad.",
+    "sesionVencida": "Tu sesión terminó. Vuelve a entrar e intenta de nuevo."
   },
   "acceso": {
     "ingresar": {
