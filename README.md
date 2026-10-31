@@ -13,8 +13,8 @@ para las pruebas.
 | --- | --- | --- |
 | 1 | Base, registro por invitación, inicio de sesión, Mi cuenta, Salir y menú del panel | Aprobada |
 | 2 | Datos y redes | Aprobada |
-| 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Terminada, en revisión (rama `fase-3-catalogo`) |
-| 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Pendiente |
+| 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Aprobada |
+| 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Terminada, en revisión (rama `fase-4-apartados`) |
 | 5 | Sitio público | Pendiente |
 | 6 | Inicio del panel (pendientes, accesos rápidos, mensajes) | Pendiente |
 | 7 | Pulido | Pendiente |
@@ -112,6 +112,10 @@ WhatsApp listo, dirección, mapa y redes). Se guardan en caché y se renuevan al
 - Del código del mapa de Google solo se guarda la dirección (`src`), y solo si es un mapa de Google con https;
   los enlaces de Maps, Facebook e Instagram se validan contra sus dominios.
 - Secretos solo en variables de entorno (`.env` nunca se sube a Git).
+- Archivos subidos: se revisa su contenido real (no su nombre). Fotos JPG, PNG o WebP (y GIF en el carrusel)
+  de hasta 15 MB, convertidas a WebP y sin datos de ubicación; videos MP4 o WebM de hasta 40 MB.
+- Todos los textos del panel se limpian antes de guardarse (sin HTML ni caracteres invisibles).
+- Los botones del carrusel solo aceptan páginas del sitio, `whatsapp` o direcciones `https://`.
 
 ## Despliegue en Hostinger (resumen)
 
