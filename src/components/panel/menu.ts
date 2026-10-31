@@ -2,11 +2,13 @@ import {
   BookOpenIcon,
   CalendarRangeIcon,
   CircleHelpIcon,
+  InboxIcon,
   ContactIcon,
   FlaskConicalIcon,
   GalleryHorizontalEndIcon,
   HouseIcon,
   MessageSquareQuoteIcon,
+  NewspaperIcon,
   SproutIcon,
   UsersIcon,
   type LucideIcon,
@@ -17,6 +19,8 @@ import {
 
 export type ClaveMenu =
   | "inicio"
+  | "mensajes"
+  | "novedades"
   | "plantas"
   | "catalogos"
   | "temporadas"
@@ -40,7 +44,11 @@ export type GrupoMenu = {
 
 export const GRUPOS_MENU: GrupoMenu[] = [
   {
-    elementos: [{ clave: "inicio", ruta: "/panel", icono: HouseIcon }],
+    // «Mensajes» y «Novedades» se agregaron al menú a pedido del dueño (fase 6).
+    elementos: [
+      { clave: "inicio", ruta: "/panel", icono: HouseIcon },
+      { clave: "mensajes", ruta: "/panel/mensajes", icono: InboxIcon },
+    ],
   },
   {
     titulo: "grupoCatalogo",
@@ -58,6 +66,7 @@ export const GRUPOS_MENU: GrupoMenu[] = [
       { clave: "nosotros", ruta: "/panel/nosotros", icono: UsersIcon },
       { clave: "preguntas", ruta: "/panel/preguntas", icono: CircleHelpIcon },
       { clave: "testimonios", ruta: "/panel/testimonios", icono: MessageSquareQuoteIcon },
+      { clave: "novedades", ruta: "/panel/novedades", icono: NewspaperIcon },
       { clave: "datos", ruta: "/panel/datos-y-redes", icono: ContactIcon },
     ],
   },

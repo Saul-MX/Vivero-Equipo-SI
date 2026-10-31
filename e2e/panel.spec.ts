@@ -11,6 +11,8 @@ const PANTALLAS = [
   { menu: "Nosotros", titulo: "Nosotros", ruta: "/panel/nosotros" },
   { menu: "Preguntas frecuentes", titulo: "Preguntas frecuentes", ruta: "/panel/preguntas" },
   { menu: "Testimonios", titulo: "Testimonios", ruta: "/panel/testimonios" },
+  { menu: "Novedades", titulo: "Novedades", ruta: "/panel/novedades" },
+  { menu: "Mensajes", titulo: "Mensajes", ruta: "/panel/mensajes" },
   { menu: "Datos y redes", titulo: "Datos y redes", ruta: "/panel/datos-y-redes" },
   { menu: "Mi cuenta", titulo: "Mi cuenta", ruta: "/panel/mi-cuenta" },
   { menu: "Inicio", titulo: `Hola, ${ADMIN.usuario}`, ruta: "/panel" },
