@@ -74,7 +74,7 @@
     },
     "planta": {
       "disponible": "Disponible",
-      "agotada": "Agotada",
+      "agotada": "Agotado",
       "etiquetas": {
         "NUEVO": "Nuevo",
         "OFERTA": "Oferta"
@@ -101,7 +101,8 @@
       "colores": "Colores",
       "macetas": "Tamaños de maceta",
       "fertilizante": "Fertilizante recomendado:",
-      "cuidados": "Cuidados"
+      "cuidados": "Cuidados",
+      "soloDisponibles": "Solo disponibles ({n})"
     },
     "catalogos": {
       "titulo": "Catálogos",

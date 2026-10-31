@@ -184,6 +184,24 @@ test.describe("Sitio público", () => {
 
   test("la disponibilidad y lo oculto se respetan en el sitio", async ({ page }) => {
     const slugHelecho = await slugDe("Helecho del sitio");
+
+    // Con la disponibilidad encendida: una planta agotada dice «Agotado» y se puede filtrar.
+    await cambiarDisponibilidadGeneral(page, true);
+    await page.goto("/panel/plantas");
+    await page.getByRole("switch", { name: "Helecho del sitio disponible" }).click();
+    await expect(page.getByText("«Helecho del sitio» quedó agotada.")).toBeVisible();
+    await page.goto("/plantas");
+    const helecho = page.getByRole("link", { name: /Helecho del sitio/ });
+    await expect(helecho).toContainText("Agotado");
+    const filtro = page.getByRole("button", { name: /^Solo disponibles \(\d+\)$/ });
+    await filtro.click();
+    await expect(filtro).toHaveAttribute("aria-pressed", "true");
+    await expect(helecho).toBeHidden();
+    await filtro.click();
+    await expect(helecho).toBeVisible();
+    await page.goto("/panel/plantas");
+    await page.getByRole("switch", { name: "Helecho del sitio disponible" }).click();
+    await expect(page.getByText("«Helecho del sitio» quedó disponible.")).toBeVisible();
     await cambiarDisponibilidadGeneral(page, false);
     await page.goto(`/plantas/${slugHelecho}`);
     await expect(page.getByRole("heading", { level: 1, name: "Helecho del sitio" })).toBeVisible();

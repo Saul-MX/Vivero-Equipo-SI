@@ -106,7 +106,7 @@ export default async function PaginaInicio() {
           </div>
           {plantasTemporada.length > 0 && (
             <div className="mt-8">
-              <RejillaPlantas plantas={plantasTemporada} conDisponibilidad={conDisponibilidad} vacio="" primerasVisibles={0} />
+              <RejillaPlantas plantas={plantasTemporada} conDisponibilidad={conDisponibilidad} vacio="" primerasVisibles={0} filtro={false} />
             </div>
           )}
         </section>

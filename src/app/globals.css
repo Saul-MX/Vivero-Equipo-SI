@@ -140,3 +140,8 @@
     cursor: pointer;
   }
 }
+
+/* «Solo disponibles» del sitio (filtro-disponibles.tsx): esconde las tarjetas de plantas agotadas. */
+[data-solo-disponibles="true"] [data-disponible="false"] {
+  display: none;
+}

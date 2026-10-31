@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { SproutIcon } from "lucide-react";
 import { urlImagen } from "@/lib/archivos/claves";
 import type { TarjetaPlanta as DatosTarjeta } from "@/lib/sitio/datos";
+import { FiltroDisponibles } from "./filtro-disponibles";
 import { cn } from "@/lib/utils";
 
 /** Etiqueta «Disponible» / «Agotada»: solo si el interruptor general está encendido. */
@@ -77,23 +78,33 @@ export function RejillaPlantas({
   conDisponibilidad,
   vacio,
   primerasVisibles = 4,
+  filtro = true,
 }: {
   plantas: DatosTarjeta[];
   conDisponibilidad: boolean;
   vacio: string;
   /** Cuántas tarjetas se ven al abrir la página sin bajar (0 si la rejilla está más abajo). */
   primerasVisibles?: number;
+  /** false para una muestra corta (Inicio), donde no hace falta filtrar. */
+  filtro?: boolean;
 }) {
   if (plantas.length === 0) {
     return <p className="rounded-3xl bg-white p-10 text-center text-texto-suave ring-1 ring-border">{vacio}</p>;
   }
-  return (
+  const rejilla = (
     <ul className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
       {plantas.map((planta, indice) => (
-        <li key={planta.slug}>
+        <li key={planta.slug} data-disponible={planta.disponible}>
           <TarjetaPlanta planta={planta} conDisponibilidad={conDisponibilidad} prioritaria={indice < primerasVisibles} />
         </li>
       ))}
     </ul>
+  );
+  // Con la disponibilidad encendida (y alguna agotada) se puede filtrar «Solo disponibles».
+  const disponibles = plantas.filter((planta) => planta.disponible).length;
+  return conDisponibilidad && filtro && disponibles < plantas.length ? (
+    <FiltroDisponibles disponibles={disponibles}>{rejilla}</FiltroDisponibles>
+  ) : (
+    rejilla
   );
 }
