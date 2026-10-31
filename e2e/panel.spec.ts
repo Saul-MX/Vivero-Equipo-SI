@@ -68,7 +68,35 @@ test.describe("en celular", () => {
       expect(anchoContenido, ruta).toBeLessThanOrEqual(390);
     };
 
-    for (const ruta of ["/panel", "/panel/plantas", "/panel/plantas/nueva", "/panel/mi-cuenta", "/panel/datos-y-redes"]) {
+    for (const ruta of [
+      "/panel",
+      "/panel/plantas",
+      "/panel/plantas/nueva",
+      "/panel/catalogos",
+      "/panel/catalogos/nuevo",
+      "/panel/temporadas",
+      "/panel/fertilizantes",
+      "/panel/fertilizantes/nuevo",
+      "/panel/carrusel",
+      "/panel/carrusel?pestana=archivos",
+      "/panel/carrusel/nuevo",
+      "/panel/nosotros",
+      "/panel/preguntas",
+      "/panel/testimonios",
+      "/panel/novedades",
+      "/panel/novedades/nueva",
+      "/panel/mensajes",
+      "/panel/mi-cuenta",
+      "/panel/datos-y-redes",
+      // Sitio público
+      "/",
+      "/catalogos",
+      "/plantas",
+      "/temporada",
+      "/fertilizantes",
+      "/nosotros",
+      "/contacto",
+    ]) {
       await medirAncho(page, ruta);
     }
 

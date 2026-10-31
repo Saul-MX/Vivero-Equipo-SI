@@ -88,6 +88,14 @@ test.describe("Sitio público", () => {
     await page.keyboard.press("Escape");
     await expect(boton).toHaveAttribute("aria-expanded", "false");
 
+    // Con teclado: Enter abre y lleva al primer enlace; Escape cierra y regresa al botón.
+    await boton.focus();
+    await page.keyboard.press("Enter");
+    await expect(menu(page).getByRole("link", { name: textos[0], exact: true })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(boton).toBeFocused();
+    await expect(boton).toHaveAttribute("aria-expanded", "false");
+
     await boton.click();
     await menu(page).getByRole("link", { name: "Todo el año" }).click();
     await expect(page).toHaveURL("/catalogos/todo-el-anio");
@@ -339,5 +347,28 @@ test.describe("Sitio público", () => {
     const robots = await (await request.get("/robots.txt")).text();
     expect(robots).toContain("Disallow: /panel");
     expect(robots).toContain("Sitemap: ");
+  });
+
+  test("con teclado, lo primero es «Saltar al contenido»", async ({ page }) => {
+    await page.goto("/fertilizantes");
+    await page.keyboard.press("Tab");
+    const saltar = page.getByRole("link", { name: "Saltar al contenido" });
+    await expect(saltar).toBeFocused();
+    await expect(saltar).toBeVisible();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/#contenido$/);
+  });
+
+  test("con contenido real, las páginas del sitio cumplen WCAG 2.1 AA (computadora y celular)", async ({ page }) => {
+    const rutas = ["/", "/catalogos", "/catalogos/todo-el-anio", "/plantas", "/temporada", "/fertilizantes", "/nosotros", "/contacto"];
+    for (const ancho of [1280, 390]) {
+      await page.setViewportSize({ width: ancho, height: 900 });
+      for (const ruta of rutas) {
+        await page.goto(ruta);
+        await expect(page.getByRole("heading", { level: 1 })).toBeAttached();
+        const resultado = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
+        expect(resultado.violations, `${ruta} a ${ancho}px`).toEqual([]);
+      }
+    }
   });
 });
