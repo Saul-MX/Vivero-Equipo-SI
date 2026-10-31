@@ -23,7 +23,16 @@ export function EtiquetaDisponibilidad({ disponible, className }: { disponible: 
   );
 }
 
-export function TarjetaPlanta({ planta, conDisponibilidad }: { planta: DatosTarjeta; conDisponibilidad: boolean }) {
+export function TarjetaPlanta({
+  planta,
+  conDisponibilidad,
+  prioritaria = false,
+}: {
+  planta: DatosTarjeta;
+  conDisponibilidad: boolean;
+  /** Las primeras tarjetas se ven sin bajar: su foto se carga de inmediato (las demás, al acercarse). */
+  prioritaria?: boolean;
+}) {
   const t = useTranslations("sitio.planta");
 
   return (
@@ -39,6 +48,7 @@ export function TarjetaPlanta({ planta, conDisponibilidad }: { planta: DatosTarj
             width={planta.portada.ancho}
             height={planta.portada.alto}
             unoptimized
+            loading={prioritaria ? "eager" : "lazy"}
             className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
@@ -66,19 +76,22 @@ export function RejillaPlantas({
   plantas,
   conDisponibilidad,
   vacio,
+  primerasVisibles = 4,
 }: {
   plantas: DatosTarjeta[];
   conDisponibilidad: boolean;
   vacio: string;
+  /** Cuántas tarjetas se ven al abrir la página sin bajar (0 si la rejilla está más abajo). */
+  primerasVisibles?: number;
 }) {
   if (plantas.length === 0) {
     return <p className="rounded-3xl bg-white p-10 text-center text-texto-suave ring-1 ring-border">{vacio}</p>;
   }
   return (
     <ul className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
-      {plantas.map((planta) => (
+      {plantas.map((planta, indice) => (
         <li key={planta.slug}>
-          <TarjetaPlanta planta={planta} conDisponibilidad={conDisponibilidad} />
+          <TarjetaPlanta planta={planta} conDisponibilidad={conDisponibilidad} prioritaria={indice < primerasVisibles} />
         </li>
       ))}
     </ul>
