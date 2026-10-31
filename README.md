@@ -14,8 +14,8 @@ para las pruebas.
 | 1 | Base, registro por invitación, inicio de sesión, Mi cuenta, Salir y menú del panel | Aprobada |
 | 2 | Datos y redes | Aprobada |
 | 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Aprobada |
-| 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Terminada, en revisión (rama `fase-4-apartados`) |
-| 5 | Sitio público | Pendiente |
+| 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Aprobada |
+| 5 | Sitio público | Terminada, en revisión (rama `fase-5-sitio`) |
 | 6 | Inicio del panel (pendientes, accesos rápidos, mensajes) | Pendiente |
 | 7 | Pulido | Pendiente |
 
@@ -96,6 +96,12 @@ e2e/                 pruebas automáticas (Playwright)
 El logotipo vive en [src/components/marca/logo.tsx](src/components/marca/logo.tsx): cuando exista la imagen,
 solo se cambia ese archivo.
 
+**Sitio público:** las páginas están en [src/app/(sitio)/](src/app/(sitio)/) y leen todo con las funciones de
+[src/lib/sitio/datos.ts](src/lib/sitio/datos.ts) (solo lo visible). Se guardan en caché: al guardar algo en el panel se
+renuevan al momento, y lo que depende de la fecha (temporada vigente, anuncios de hoy) se recalcula cada 15 minutos.
+El color de la temporada se aplica como acento; si es un tono medio difícil de leer, los botones usan una versión un
+poco más oscura para cumplir el contraste (WCAG AA).
+
 **Datos del negocio:** todo el sitio los lee con `obtenerDatosNegocio()` de
 [src/lib/datos-negocio/datos.ts](src/lib/datos-negocio/datos.ts) (contacto, teléfonos ya separados, enlace de
 WhatsApp listo, dirección, mapa y redes). Se guardan en caché y se renuevan al momento cuando se presiona
@@ -131,6 +137,8 @@ Hostinger arma las apps de Next.js en modo servidor («standalone») y las arran
 4. **Variables de entorno** (en la misma pantalla):
    - `DATABASE_URL` = `mysql://USUARIO:CONTRASEÑA@SERVIDOR:3306/BASE?connectionLimit=5`
    - `CODIGO_INVITACION_INICIAL` = un código nuevo y largo (no el de tu computadora).
+   - `SITIO_URL` = la dirección de tu dominio, por ejemplo `https://viveroelencanto.com` (para compartir enlaces
+     y para el mapa del sitio que leen los buscadores).
 5. **Dominio y HTTPS:** conecta el dominio y activa el certificado SSL en hPanel.
 6. Entra a `https://tu-dominio/panel/registro` y crea la primera cuenta.
 
