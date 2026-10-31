@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces } from "next/font/google";
 import { getLocale, getTranslations } from "next-intl/server";
 import { OPEN_GRAPH_COMUN, urlDelSitio } from "@/lib/sitio/metadatos";
 import "./globals.css";
@@ -13,11 +13,8 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
+// El texto normal usa la fuente del propio teléfono o computadora (Roboto, San Francisco, Segoe…):
+// no se descarga nada y se ve limpia y legible. Solo los títulos usan Fraunces.
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("metadatos");
@@ -36,7 +33,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
+    <html lang={locale} className={`${fraunces.variable} h-full antialiased`}>
       <body className="min-h-full">{children}</body>
     </html>
   );
