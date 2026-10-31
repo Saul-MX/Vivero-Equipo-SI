@@ -22,9 +22,159 @@
     "volver": "Ir al inicio"
   },
   "sitio": {
-    "construccion": {
-      "titulo": "Nuestro sitio está creciendo",
-      "texto": "Muy pronto vas a poder ver aquí nuestras plantas de temporada, plantas de todo el año, árboles y fertilizantes."
+    "menu": {
+      "nombre": "Menú principal",
+      "abrir": "Abrir el menú",
+      "cerrar": "Cerrar el menú",
+      "irInicio": "Ir al inicio",
+      "saltar": "Saltar al contenido",
+      "inicio": "Inicio",
+      "catalogos": "Catálogos",
+      "temporada": "Temporada",
+      "fertilizantes": "Fertilizantes",
+      "nosotros": "Nosotros",
+      "contacto": "Contacto",
+      "todasLasPlantas": "Ver todas las plantas"
+    },
+    "whatsapp": {
+      "boton": "Escríbenos",
+      "mensajeGeneral": "Hola, me gustaría información sobre sus plantas.",
+      "mensajePlanta": "Hola, me interesa la planta {nombre}. ¿Me pueden dar más información?",
+      "preguntarPlanta": "Preguntar por WhatsApp"
+    },
+    "pie": {
+      "catalogos": "Catálogos",
+      "vivero": "El vivero",
+      "derechos": "© {anio} Vivero El Encanto · Atlixco, Puebla"
+    },
+    "carrusel": {
+      "carrusel": "carrusel",
+      "nombre": "Anuncios",
+      "diapositiva": "anuncio",
+      "posicion": "{n} de {total}",
+      "anterior": "Anuncio anterior",
+      "siguiente": "Anuncio siguiente",
+      "irA": "Ver el anuncio {n}",
+      "pausar": "Pausar el carrusel",
+      "reanudar": "Reanudar el carrusel"
+    },
+    "inicio": {
+      "tituloOculto": "Vivero El Encanto: plantas de temporada, de todo el año, árboles y fertilizantes en Atlixco, Puebla",
+      "lugar": "Atlixco, Puebla",
+      "bienvenidaTitulo": "Plantas que llenan tu casa de vida",
+      "bienvenidaTexto": "Plantas de temporada, de todo el año, árboles y fertilizantes, cultivados con cuidado en Atlixco.",
+      "verTemporada": "Ver la temporada",
+      "temporadaActual": "Temporada actual",
+      "catalogos": "Nuestros catálogos",
+      "catalogosTexto": "Encuentra la planta ideal para tu casa, tu jardín o tu negocio.",
+      "plantas": "{n, plural, =0 {Pronto, nuevas plantas} one {# planta} other {# plantas}}",
+      "fertilizantesTexto": "Para que tus plantas crezcan sanas.",
+      "testimonios": "Lo que dicen nuestros clientes"
+    },
+    "planta": {
+      "disponible": "Disponible",
+      "agotada": "Agotada",
+      "etiquetas": {
+        "NUEVO": "Nuevo",
+        "OFERTA": "Oferta"
+      },
+      "fotoDe": "{nombre}, foto {n} de {total}",
+      "verFoto": "Ver la foto {n}",
+      "noEncontrada": "Planta no encontrada",
+      "descripcionPorDefecto": "{nombre} en Vivero El Encanto, Atlixco, Puebla. Pregunta por ella por WhatsApp.",
+      "riego": "Riego",
+      "riegoDiario": "Riego diario",
+      "riegoVeces": "{n, plural, one {Regar # vez por semana} other {Regar # veces por semana}}",
+      "cantidadAgua": "Cantidad de agua: {cantidad}",
+      "cantidades": {
+        "POCA": "poca",
+        "MODERADA": "moderada",
+        "ABUNDANTE": "abundante"
+      },
+      "luz": "Luz",
+      "luces": {
+        "SOL": "Sol",
+        "MEDIA_SOMBRA": "Media sombra",
+        "SOMBRA": "Sombra"
+      },
+      "colores": "Colores",
+      "macetas": "Tamaños de maceta",
+      "fertilizante": "Fertilizante recomendado:",
+      "cuidados": "Cuidados"
+    },
+    "catalogos": {
+      "titulo": "Catálogos",
+      "antetitulo": "Catálogo",
+      "descripcion": "Plantas de todo el año, árboles y la temporada que se vive hoy en el vivero.",
+      "temporada": "Temporada: {nombre}",
+      "noEncontrado": "Catálogo no encontrado",
+      "descripcionCatalogo": "{nombre} en Vivero El Encanto, Atlixco, Puebla.",
+      "folleto": "Descargar el folleto (PDF)",
+      "plantasDe": "Plantas de {nombre}",
+      "vacio": "Pronto tendremos plantas en este catálogo. Pregúntanos por WhatsApp."
+    },
+    "plantas": {
+      "titulo": "Todas las plantas",
+      "descripcion": "Todas las plantas del vivero, de todos los catálogos.",
+      "vacio": "Pronto verás aquí nuestras plantas."
+    },
+    "temporada": {
+      "titulo": "Temporada",
+      "tituloCon": "Temporada de {nombre}",
+      "descripcion": "Las plantas de la temporada que se vive hoy en el vivero.",
+      "plantas": "Plantas de la temporada",
+      "vacio": "Pronto tendremos aquí las plantas de esta temporada. Pregúntanos por WhatsApp."
+    },
+    "fertilizantes": {
+      "titulo": "Fertilizantes",
+      "descripcion": "Los fertilizantes que vendemos, con su dosis, cada cuánto se aplican y cómo usarlos.",
+      "vacio": "Pronto verás aquí nuestros fertilizantes.",
+      "fotoDe": "Presentación de {nombre}",
+      "dosis": "Dosis",
+      "frecuencia": "Cada cuánto",
+      "presentacion": "Presentación",
+      "comoSeAplica": "Cómo se aplica",
+      "precauciones": "Precauciones:",
+      "recomendadoPara": "Recomendado para:"
+    },
+    "nosotros": {
+      "titulo": "Nosotros",
+      "descripcion": "Conoce la historia, la misión, la visión y los valores de Vivero El Encanto.",
+      "enEstaPagina": "En esta página",
+      "vacio": "Pronto contaremos aquí nuestra historia.",
+      "historia": "Historia",
+      "momentos": "Momentos importantes",
+      "mision": "Misión",
+      "vision": "Visión",
+      "valores": "Valores",
+      "galeriaDe": "Fotos de {seccion}"
+    },
+    "contacto": {
+      "titulo": "Contacto",
+      "descripcion": "Visítanos en Atlixco, llámanos, escríbenos por WhatsApp o déjanos un mensaje.",
+      "visitanos": "Visítanos",
+      "direccion": "Dirección",
+      "comoLlegar": "Cómo llegar (Google Maps)",
+      "telefonos": "Teléfonos",
+      "correo": "Correo",
+      "horario": "Horario",
+      "escribirWhatsapp": "Escribir por WhatsApp",
+      "mapa": "Mapa de la ubicación del vivero",
+      "preguntas": "Preguntas frecuentes",
+      "formulario": {
+        "titulo": "Escríbenos un mensaje",
+        "nombre": "Tu nombre",
+        "contacto": "Teléfono o correo",
+        "contactoAyuda": "Para poder responderte.",
+        "mensaje": "Mensaje",
+        "trampa": "No llenes este campo",
+        "enviar": "Enviar mensaje",
+        "enviando": "Enviando…",
+        "privacidad": "Solo usamos tus datos para responderte.",
+        "graciasTitulo": "¡Gracias! Recibimos tu mensaje",
+        "graciasTexto": "Te responderemos lo antes posible al teléfono o correo que nos dejaste.",
+        "otro": "Enviar otro mensaje"
+      }
     }
   },
   "errores": {
@@ -106,7 +256,13 @@
     "fechasInvertidas": "La fecha «Hasta» debe ser igual o posterior a «Desde».",
     "oscurecidoInvalido": "Elige un valor entre 0 y 100 %.",
     "temporadaNoExiste": "Esa temporada ya no existe. Elige otra.",
-    "archivoEnUso": "Ese archivo lo usa un anuncio; no se puede borrar."
+    "archivoEnUso": "Ese archivo lo usa un anuncio; no se puede borrar.",
+    "nombreContactoRequerido": "Escribe tu nombre.",
+    "contactoRequerido": "Escribe un teléfono o correo para responderte.",
+    "contactoInvalido": "Escribe un teléfono (con lada) o un correo válido.",
+    "mensajeRequerido": "Escribe tu mensaje.",
+    "mensajeCorto": "Cuéntanos un poco más (al menos 10 letras).",
+    "demasiadosMensajes": "Ya recibimos varios mensajes desde tu conexión. Intenta de nuevo en {minutos, plural, one {# minuto} other {# minutos}} o escríbenos por WhatsApp."
   },
   "acceso": {
     "ingresar": {
