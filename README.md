@@ -16,8 +16,8 @@ para las pruebas.
 | 3 | Catálogos, Temporadas, Plantas y Fertilizantes | Aprobada |
 | 4 | Carrusel, Nosotros, Preguntas frecuentes y Testimonios | Aprobada |
 | 5 | Sitio público | Aprobada |
-| 6 | Inicio del panel (pendientes, accesos rápidos, mensajes y novedades) | Terminada, en revisión (rama `fase-6-inicio`) |
-| 7 | Pulido | Pendiente |
+| 6 | Inicio del panel (pendientes, accesos rápidos, mensajes y novedades) | Aprobada |
+| 7 | Pulido | Terminada, en revisión (rama `fase-7-pulido`) |
 
 ## Requisitos
 
@@ -122,6 +122,11 @@ WhatsApp listo, dirección, mapa y redes). Se guardan en caché y se renuevan al
   de hasta 15 MB, convertidas a WebP y sin datos de ubicación; videos MP4 o WebM de hasta 40 MB.
 - Todos los textos del panel se limpian antes de guardarse (sin HTML ni caracteres invisibles).
 - Los botones del carrusel solo aceptan páginas del sitio, `whatsapp` o direcciones `https://`.
+- Los formularios (incluidos Contacto e inicio de sesión) aceptan como máximo 2 MB. Las fotos y videos se suben
+  por `/panel/subir`, que revisa la sesión y el tamaño antes de leer el archivo.
+- En producción se envían las cabeceras HSTS (siempre https) y CSP (el sitio solo carga cosas de su propio dominio,
+  más el mapa de Google).
+- Formulario de Contacto: campo trampa, tiempo mínimo de llenado y máximo 5 mensajes por hora por conexión.
 
 ## Despliegue en Hostinger (resumen)
 
