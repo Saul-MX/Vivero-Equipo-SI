@@ -63,7 +63,7 @@ export function ArchivosCarrusel({ archivos }: { archivos: ArchivoDelCarrusel[] 
                 width={320}
                 height={180}
                 unoptimized
-                className="aspect-video w-full object-cover"
+                className="aspect-video h-auto w-full object-cover"
               />
             ) : (
               <span className="flex aspect-video w-full items-center justify-center bg-pino text-white">

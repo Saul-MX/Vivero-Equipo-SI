@@ -69,8 +69,8 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar, redonda = false
           <Image
             src={urlImagen(valor, "tarjeta")}
             alt={t("vistaPrevia")}
-            width={160}
-            height={120}
+            width={redonda ? 112 : 160}
+            height={112}
             unoptimized
             className={cn("shrink-0 bg-card object-cover", marco)}
           />

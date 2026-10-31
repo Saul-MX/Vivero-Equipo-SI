@@ -168,7 +168,7 @@ export function FormularioNosotros({ inicial }: { inicial: EntradaNosotros }) {
                 </div>
               </div>
               <CampoTexto
-                id={`momento-titulo-${momento.id}`}
+                id={`momento-titulo-${indice}`}
                 etiqueta={t("momentoTitulo")}
                 ayuda={t("momentoTituloAyuda")}
                 error={error(`momentos.${indice}.titulo`)}
@@ -176,7 +176,7 @@ export function FormularioNosotros({ inicial }: { inicial: EntradaNosotros }) {
                 defaultValue={momento.titulo}
               />
               <CampoAreaTexto
-                id={`momento-texto-${momento.id}`}
+                id={`momento-texto-${indice}`}
                 etiqueta={t("momentoTexto")}
                 rows={3}
                 error={error(`momentos.${indice}.texto`)}
@@ -246,7 +246,7 @@ export function FormularioNosotros({ inicial }: { inicial: EntradaNosotros }) {
                 </div>
               </div>
               <CampoTexto
-                id={`valor-titulo-${valor.id}`}
+                id={`valor-titulo-${indice}`}
                 etiqueta={t("valorTitulo")}
                 ayuda={t("valorTituloAyuda")}
                 error={error(`valores.lista.${indice}.titulo`)}
@@ -254,7 +254,7 @@ export function FormularioNosotros({ inicial }: { inicial: EntradaNosotros }) {
                 defaultValue={valor.titulo}
               />
               <CampoAreaTexto
-                id={`valor-descripcion-${valor.id}`}
+                id={`valor-descripcion-${indice}`}
                 etiqueta={t("valorDescripcion")}
                 rows={2}
                 error={error(`valores.lista.${indice}.descripcion`)}

@@ -96,7 +96,7 @@ export function GaleriaFotos({
                   width={320}
                   height={320}
                   unoptimized
-                  className="aspect-square w-full object-cover"
+                  className="aspect-square h-auto w-full object-cover"
                 />
                 {foto.esPortada && (
                   <Badge className="absolute top-2 left-2 bg-hoja text-white">
