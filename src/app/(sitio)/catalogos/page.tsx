@@ -18,10 +18,10 @@ export default async function PaginaCatalogos() {
 
   return (
     <>
-      <CabeceraPagina titulo={t("catalogos.titulo")}>
+      <CabeceraPagina migas={[{ texto: t("catalogos.titulo") }]} titulo={t("catalogos.titulo")}>
         <p>{t("catalogos.descripcion")}</p>
       </CabeceraPagina>
-      <ul className={`${CONTENEDOR} grid gap-4 sm:grid-cols-2 lg:grid-cols-3`}>
+      <ul className={`${CONTENEDOR} border-b border-hilo`}>
         {temporada && (
           <li>
             <TarjetaCatalogo

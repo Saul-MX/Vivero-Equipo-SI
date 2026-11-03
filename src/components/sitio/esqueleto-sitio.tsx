@@ -12,7 +12,7 @@ export function EsqueletoSitio() {
       <div className="mt-4 h-5 w-1/2 rounded-full bg-muted" />
       <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
         {[1, 2, 3, 4].map((n) => (
-          <div key={n} className="aspect-4/5 rounded-3xl bg-muted" />
+          <div key={n} className="aspect-4/5 rounded-md bg-muted" />
         ))}
       </div>
     </div>

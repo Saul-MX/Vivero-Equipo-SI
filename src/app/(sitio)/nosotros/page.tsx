@@ -65,7 +65,7 @@ function Seccion({
           width={1600}
           height={900}
           unoptimized
-          className="mt-6 aspect-video h-auto w-full rounded-3xl object-cover"
+          className="mt-6 aspect-video h-auto w-full rounded-md object-cover"
         />
       )}
       {children}
@@ -97,7 +97,7 @@ export default async function PaginaNosotros() {
 
   return (
     <>
-      <CabeceraPagina titulo={t("titulo")}>
+      <CabeceraPagina migas={[{ texto: t("titulo") }]} titulo={t("titulo")}>
         <p>{t("descripcion")}</p>
         {secciones.length > 1 && (
           <nav aria-label={t("enEstaPagina")}>
@@ -106,7 +106,7 @@ export default async function PaginaNosotros() {
                 <li key={seccion.id}>
                   <a
                     href={`#${seccion.id}`}
-                    className="inline-flex min-h-10 items-center rounded-full bg-white px-4 font-medium text-pino ring-1 ring-border hover:bg-muted"
+                    className="inline-flex min-h-10 items-center rounded-full bg-white px-4 font-medium text-pino border border-hilo hover:bg-muted"
                   >
                     {seccion.titulo}
                   </a>
@@ -131,7 +131,7 @@ export default async function PaginaNosotros() {
                 {momentos.map((momento) => (
                   <li key={momento.id} className="relative">
                     <span aria-hidden className="absolute top-1.5 -left-[2.6rem] size-4 rounded-full border-4 border-white bg-acento-fondo ring-2 ring-acento" />
-                    <p className="font-serif text-2xl font-semibold text-pino">{momento.titulo}</p>
+                    <p className="text-2xl font-semibold text-pino">{momento.titulo}</p>
                     {momento.texto && <p className="mt-1 max-w-2xl text-lg text-foreground">{momento.texto}</p>}
                     {momento.foto && (
                       <Image
@@ -171,8 +171,8 @@ export default async function PaginaNosotros() {
           {valores.lista.length > 0 && (
             <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {valores.lista.map((valor) => (
-                <li key={valor.id} className="rounded-3xl bg-white p-6 ring-1 ring-border">
-                  <h3 className="font-serif text-xl font-semibold text-pino">{valor.titulo}</h3>
+                <li key={valor.id} className="rounded-md border border-hilo bg-white p-6">
+                  <h3 className="text-xl font-semibold text-pino">{valor.titulo}</h3>
                   {valor.descripcion && <p className="mt-2 text-foreground">{valor.descripcion}</p>}
                 </li>
               ))}

@@ -17,7 +17,7 @@ export default async function PaginaPlantas() {
 
   return (
     <>
-      <CabeceraPagina titulo={t("titulo")}>
+      <CabeceraPagina migas={[{ texto: t("titulo") }]} titulo={t("titulo")}>
         <p>{t("descripcion")}</p>
       </CabeceraPagina>
       <section aria-labelledby="titulo-plantas" className={CONTENEDOR}>

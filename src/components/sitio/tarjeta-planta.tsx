@@ -13,8 +13,8 @@ export function EtiquetaDisponibilidad({ disponible, className }: { disponible: 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
-        disponible ? "bg-[#e3efe0] text-[#1f4d22]" : "bg-[#f3e3e1] text-[#8a2018]",
+        "dato inline-flex items-center gap-1.5",
+        disponible ? "text-[#1f4d22]" : "text-[#8a2018]",
         className,
       )}
     >
@@ -39,9 +39,9 @@ export function TarjetaPlanta({
   return (
     <Link
       href={`/plantas/${planta.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-border outline-none transition-shadow hover:shadow-lg focus-visible:ring-3 focus-visible:ring-ring/60"
+      className="group flex h-full flex-col gap-3 rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/60"
     >
-      <div className="relative aspect-4/5 overflow-hidden bg-muted">
+      <div className="relative aspect-4/5 overflow-hidden rounded-md bg-muted">
         {planta.portada ? (
           <Image
             src={urlImagen(planta.portada.archivo, "tarjeta")}
@@ -50,7 +50,7 @@ export function TarjetaPlanta({
             height={planta.portada.alto}
             unoptimized
             loading={prioritaria ? "eager" : "lazy"}
-            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="size-full object-cover"
           />
         ) : (
           <span aria-hidden className="flex size-full items-center justify-center text-salvia">
@@ -58,14 +58,16 @@ export function TarjetaPlanta({
           </span>
         )}
         {planta.etiqueta && (
-          <span className="absolute top-3 left-3 rounded-full bg-acento-fondo px-3 py-1 text-xs font-semibold text-acento-texto">
+          <span className="dato absolute top-3 left-3 rounded-sm bg-acento-fondo px-2 py-0.5 text-acento-texto">
             {t(`etiquetas.${planta.etiqueta}`)}
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-4">
-        <h3 className="font-serif text-xl leading-snug font-semibold text-pino">{planta.nombre}</h3>
-        {planta.variedad && <p className="text-sm text-texto-suave">{planta.variedad}</p>}
+      <div className="flex flex-1 flex-col gap-0.5 border-t border-hilo pt-3">
+        <h3 className="text-lg leading-snug font-bold tracking-tight text-pino underline-offset-4 group-hover:underline">
+          {planta.nombre}
+        </h3>
+        {planta.variedad && <p className="dato text-texto-suave">{planta.variedad}</p>}
         {conDisponibilidad && <EtiquetaDisponibilidad disponible={planta.disponible} className="mt-auto self-start pt-1" />}
       </div>
     </Link>
@@ -90,10 +92,10 @@ export function RejillaPlantas({
 }) {
   const t = useTranslations("sitio.planta");
   if (plantas.length === 0) {
-    return <p className="rounded-3xl bg-white p-10 text-center text-texto-suave ring-1 ring-border">{vacio}</p>;
+    return <p className="rounded-md border border-dashed border-hilo p-10 text-center text-texto-suave">{vacio}</p>;
   }
   const rejilla = (
-    <ul className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
       {plantas.map((planta, indice) => (
         <li key={planta.slug} data-disponible={planta.disponible}>
           <TarjetaPlanta planta={planta} conDisponibilidad={conDisponibilidad} prioritaria={indice < primerasVisibles} />

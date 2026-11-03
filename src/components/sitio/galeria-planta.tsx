@@ -24,7 +24,7 @@ export function GaleriaPlanta({
 
   if (!foto) {
     return (
-      <div aria-hidden className="flex aspect-4/5 items-center justify-center rounded-3xl bg-muted text-salvia">
+      <div aria-hidden className="flex aspect-4/5 items-center justify-center rounded-md bg-muted text-salvia">
         <SproutIcon className="size-16" />
       </div>
     );
@@ -40,7 +40,7 @@ export function GaleriaPlanta({
         height={foto.alto}
         unoptimized
         preload={actual === 0}
-        className="aspect-4/5 h-auto w-full rounded-3xl bg-muted object-cover"
+        className="aspect-4/5 h-auto w-full rounded-md bg-muted object-cover"
       />
       {fotos.length > 1 && (
         <ul className="flex gap-2 overflow-x-auto pb-1">

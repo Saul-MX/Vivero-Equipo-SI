@@ -41,7 +41,12 @@ async function Catalogo({ params }: { params: Promise<{ slug: string }> }) {
 
   return (
     <>
-      <CabeceraPagina antetitulo={t("catalogos.antetitulo")} titulo={catalogo.nombre} foto={catalogo.fotoPortada}>
+      <CabeceraPagina
+        migas={[{ texto: t("catalogos.titulo"), href: "/catalogos" }, { texto: catalogo.nombre }]}
+        antetitulo={t("catalogos.antetitulo")}
+        titulo={catalogo.nombre}
+        foto={catalogo.fotoPortada}
+      >
         {catalogo.presentacion
           ?.split(/\n\s*\n/)
           .filter(Boolean)

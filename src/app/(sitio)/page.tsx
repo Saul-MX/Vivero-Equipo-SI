@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { ArrowRightIcon, FlaskConicalIcon, QuoteIcon } from "lucide-react";
+import { FlaskConicalIcon } from "lucide-react";
 import { CarruselPortada } from "@/components/sitio/carrusel-portada";
 import { DiapositivaAnuncio } from "@/components/sitio/diapositiva-anuncio";
 import { AvatarTestimonio } from "@/components/sitio/avatar-testimonio";
@@ -72,7 +72,7 @@ export default async function PaginaInicio() {
         <>
           <h1 className="sr-only">{t("inicio.tituloOculto")}</h1>
           <div className="mx-auto max-w-[1600px] sm:px-4 sm:pt-4">
-            <div className="overflow-hidden sm:rounded-3xl">
+            <div className="overflow-hidden sm:rounded-md">
               <CarruselPortada
                 textos={textosCarrusel}
                 diapositivas={anuncios.map((anuncio, indice) => (
@@ -88,14 +88,14 @@ export default async function PaginaInicio() {
           </div>
         </>
       ) : (
-        <section className="bg-bosque text-white">
+        <section className="bg-pino text-white">
           <div className={cn(CONTENEDOR, "flex flex-col items-start gap-5 py-20 sm:py-28")}>
-            <p className="text-xs font-semibold tracking-[0.2em] text-crema uppercase">{t("inicio.lugar")}</p>
-            <h1 className="max-w-2xl text-4xl leading-tight font-semibold text-balance text-white sm:text-6xl">
+            <p className="dato entrada text-crema">{t("inicio.lugar")}</p>
+            <h1 className="titulo-etiqueta entrada max-w-3xl text-5xl text-white sm:text-7xl">
               {t("inicio.bienvenidaTitulo")}
             </h1>
-            <p className="max-w-xl text-lg text-crema">{t("inicio.bienvenidaTexto")}</p>
-            <div className="flex flex-wrap gap-3">
+            <p className="entrada-2 max-w-[56ch] text-lg text-crema">{t("inicio.bienvenidaTexto")}</p>
+            <div className="entrada-2 flex flex-wrap gap-3">
               <Link href="/temporada" className={cn(BOTON, "bg-acento-fondo text-acento-texto")}>
                 {t("inicio.verTemporada")}
               </Link>
@@ -109,16 +109,15 @@ export default async function PaginaInicio() {
 
       {vigente && (
         <section aria-labelledby="titulo-temporada" className={cn(CONTENEDOR, "mt-14")}>
-          <div className="grid overflow-hidden rounded-3xl bg-acento-fondo text-acento-texto md:grid-cols-2">
+          <div className="grid overflow-hidden rounded-md bg-acento-fondo text-acento-texto md:grid-cols-2">
             <div className="flex flex-col items-start justify-center gap-4 p-8 sm:p-12">
-              <p className="text-xs font-semibold tracking-[0.2em] uppercase opacity-90">{t("inicio.temporadaActual")}</p>
-              <h2 id="titulo-temporada" className="text-4xl leading-tight font-semibold text-acento-texto sm:text-5xl">
+              <p className="dato">{t("inicio.temporadaActual")}</p>
+              <h2 id="titulo-temporada" className="titulo-etiqueta text-5xl text-acento-texto sm:text-7xl">
                 {vigente.nombre}
               </h2>
-              {vigente.textoAviso && <p className="text-lg">{vigente.textoAviso}</p>}
+              {vigente.textoAviso && <p className="max-w-[44ch] text-lg">{vigente.textoAviso}</p>}
               <Link href="/temporada" className={cn(BOTON, "mt-2 bg-white text-pino")}>
                 {t("inicio.verTemporada")}
-                <ArrowRightIcon aria-hidden className="size-4" />
               </Link>
             </div>
             {vigente.fotoPortada && (
@@ -141,11 +140,11 @@ export default async function PaginaInicio() {
       )}
 
       <section aria-labelledby="titulo-catalogos" className={cn(CONTENEDOR, "mt-20")}>
-        <h2 id="titulo-catalogos" className="text-3xl font-semibold text-pino sm:text-4xl">
+        <h2 id="titulo-catalogos" className="titulo-etiqueta text-4xl text-pino sm:text-5xl">
           {t("inicio.catalogos")}
         </h2>
-        <p className="mt-2 text-lg text-texto-suave">{t("inicio.catalogosTexto")}</p>
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <p className="mt-3 max-w-[56ch] text-lg text-texto-suave">{t("inicio.catalogosTexto")}</p>
+        <ul className="mt-8 border-b border-hilo">
           {permanentes.map((catalogo) => (
             <li key={catalogo.slug}>
               <TarjetaCatalogo
@@ -159,33 +158,34 @@ export default async function PaginaInicio() {
           <li>
             <Link
               href="/fertilizantes"
-              className="flex aspect-4/3 flex-col justify-between rounded-3xl bg-white p-5 ring-1 ring-border outline-none hover:shadow-lg focus-visible:ring-4 focus-visible:ring-ring/60"
+              className="group grid grid-cols-[5rem_1fr] items-center gap-4 border-t border-hilo py-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/60 sm:grid-cols-[7rem_1fr] sm:gap-6"
             >
-              <span aria-hidden className="flex size-12 items-center justify-center rounded-full bg-acento-fondo text-acento-texto">
+              <span aria-hidden className="flex aspect-4/3 items-center justify-center rounded-md bg-pino text-white">
                 <FlaskConicalIcon className="size-6" />
               </span>
               <span>
-                <span className="block font-serif text-2xl font-semibold text-pino">{t("menu.fertilizantes")}</span>
-                <span className="text-sm text-texto-suave">{t("inicio.fertilizantesTexto")}</span>
+                <span className="titulo-etiqueta block text-2xl text-pino underline-offset-4 group-hover:underline sm:text-3xl">
+                  {t("menu.fertilizantes")}
+                </span>
+                <span className="dato mt-1 block text-texto-suave">{t("inicio.fertilizantesTexto")}</span>
               </span>
             </Link>
           </li>
         </ul>
-        <Link href="/plantas" className="mt-6 inline-flex items-center gap-2 font-semibold text-pino underline underline-offset-4">
+        <Link href="/plantas" className="mt-6 inline-flex items-center font-semibold text-pino underline underline-offset-4">
           {t("menu.todasLasPlantas")}
-          <ArrowRightIcon aria-hidden className="size-4" />
         </Link>
       </section>
 
       {novedades.length > 0 && (
         <section aria-labelledby="titulo-novedades" className={cn(CONTENEDOR, "mt-20")}>
-          <h2 id="titulo-novedades" className="text-3xl font-semibold text-pino sm:text-4xl">
+          <h2 id="titulo-novedades" className="titulo-etiqueta text-4xl text-pino sm:text-5xl">
             {t("inicio.novedades")}
           </h2>
-          <ul className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-8 grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {novedades.map((novedad) => (
               <li key={novedad.id}>
-                <article className="flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-border">
+                <article className="flex h-full flex-col gap-4">
                   {novedad.imagen && (
                     <Image
                       src={urlImagen(novedad.imagen, "tarjeta")}
@@ -193,15 +193,15 @@ export default async function PaginaInicio() {
                       width={640}
                       height={400}
                       unoptimized
-                      className="aspect-video h-auto w-full object-cover"
+                      className="aspect-video h-auto w-full rounded-md object-cover"
                     />
                   )}
-                  <div className="flex flex-1 flex-col gap-2 p-6">
-                    <time dateTime={novedad.creadoEn.toISOString()} className="text-sm font-medium text-texto-suave">
+                  <div className="flex flex-1 flex-col gap-2 border-t border-hilo pt-4">
+                    <time dateTime={novedad.creadoEn.toISOString()} className="dato text-texto-suave">
                       {formato.dateTime(novedad.creadoEn, { dateStyle: "long" })}
                     </time>
-                    <h3 className="font-serif text-2xl leading-snug font-semibold text-pino">{novedad.titulo}</h3>
-                    <p className="whitespace-pre-line text-foreground">{novedad.texto}</p>
+                    <h3 className="text-2xl leading-snug font-bold tracking-tight text-pino">{novedad.titulo}</h3>
+                    <p className="max-w-[62ch] whitespace-pre-line text-foreground">{novedad.texto}</p>
                   </div>
                 </article>
               </li>
@@ -212,15 +212,14 @@ export default async function PaginaInicio() {
 
       {testimonios.length > 0 && (
         <section aria-labelledby="titulo-testimonios" className={cn(CONTENEDOR, "mt-20")}>
-          <h2 id="titulo-testimonios" className="text-3xl font-semibold text-pino sm:text-4xl">
+          <h2 id="titulo-testimonios" className="titulo-etiqueta text-4xl text-pino sm:text-5xl">
             {t("inicio.testimonios")}
           </h2>
-          <ul className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-8 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {testimonios.map((testimonio) => (
               <li key={testimonio.id}>
-                <figure className="flex h-full flex-col gap-5 rounded-3xl bg-white p-6 ring-1 ring-border">
-                  <QuoteIcon aria-hidden className="size-8 text-acento" />
-                  <blockquote className="flex-1 text-lg text-pretty text-foreground">{testimonio.texto}</blockquote>
+                <figure className="flex h-full flex-col gap-5 border-l-4 border-acento pl-5">
+                  <blockquote className="flex-1 text-xl text-pretty text-foreground">{testimonio.texto}</blockquote>
                   <figcaption className="flex items-center gap-3">
                     <AvatarTestimonio avatar={testimonio.avatar} nombre={testimonio.nombre} />
                     <span className="font-semibold text-pino">{testimonio.nombre}</span>

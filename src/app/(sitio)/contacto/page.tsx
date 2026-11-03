@@ -27,13 +27,13 @@ export default async function PaginaContacto() {
 
   return (
     <>
-      <CabeceraPagina titulo={t("contacto.titulo")}>
+      <CabeceraPagina migas={[{ texto: t("contacto.titulo") }]} titulo={t("contacto.titulo")}>
         <p>{t("contacto.descripcion")}</p>
       </CabeceraPagina>
 
       <div className={cn(CONTENEDOR, "grid gap-6 lg:grid-cols-2")}>
-        <section aria-labelledby="titulo-datos" className="flex flex-col gap-6 rounded-3xl bg-white p-6 ring-1 ring-border sm:p-8">
-          <h2 id="titulo-datos" className="font-serif text-2xl font-semibold text-pino">
+        <section aria-labelledby="titulo-datos" className="flex flex-col gap-6 rounded-md border border-hilo bg-white p-6 sm:p-8">
+          <h2 id="titulo-datos" className="text-2xl font-semibold text-pino">
             {t("contacto.visitanos")}
           </h2>
           <dl className="flex flex-col gap-5">
@@ -145,7 +145,7 @@ export default async function PaginaContacto() {
             referrerPolicy="no-referrer-when-downgrade"
             sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
             allowFullScreen
-            className="aspect-4/3 w-full rounded-3xl border-0 bg-muted ring-1 ring-border sm:aspect-21/9"
+            className="aspect-4/3 w-full rounded-md border border-hilo bg-muted sm:aspect-21/9"
           />
         </section>
       )}
@@ -155,7 +155,7 @@ export default async function PaginaContacto() {
           <h2 id="titulo-preguntas" className="text-3xl font-semibold text-pino sm:text-4xl">
             {t("contacto.preguntas")}
           </h2>
-          <div className="mt-6 divide-y divide-border rounded-3xl bg-white ring-1 ring-border">
+          <div className="mt-6 divide-y divide-border rounded-md border border-hilo bg-white">
             {preguntas.map((pregunta) => (
               <details key={pregunta.id} className="group px-6 py-1">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-semibold text-pino outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">

@@ -23,7 +23,12 @@ export default async function PaginaTemporada() {
 
   return (
     <>
-      <CabeceraPagina antetitulo={t("titulo")} titulo={vigente?.nombre ?? t("titulo")} foto={vigente?.fotoPortada}>
+      <CabeceraPagina
+        migas={[{ texto: t("titulo") }]}
+        antetitulo={t("titulo")}
+        titulo={vigente?.nombre ?? t("titulo")}
+        foto={vigente?.fotoPortada}
+      >
         <p>{vigente?.textoAviso || t("descripcion")}</p>
       </CabeceraPagina>
       <section aria-labelledby="titulo-plantas" className={CONTENEDOR}>

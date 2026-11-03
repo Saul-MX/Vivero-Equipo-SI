@@ -25,8 +25,8 @@ export function EncabezadoSitio({ catalogos }: { catalogos: ItemCatalogo[] }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
-      <div aria-hidden className="h-1 bg-acento" />
+    <header className="sticky top-0 z-40 border-b border-hilo bg-papel">
+      <div aria-hidden className="trazo h-1 bg-acento" />
       <div className={`${CONTENEDOR} flex h-16 items-center justify-between gap-4`}>
         <Link href="/" className="rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
           <Logo tamano="sm" />

@@ -60,7 +60,7 @@ export function PieSitio({ datos, catalogos, anio }: { datos: DatosNegocio; cata
         </div>
 
         <nav aria-label={t("pie.catalogos")}>
-          <h2 className="mb-4 font-sans text-sm font-semibold tracking-[0.15em] text-white uppercase">
+          <h2 className="mb-4 dato text-white">
             {t("pie.catalogos")}
           </h2>
           <ul className="flex flex-col gap-2 text-sm">
@@ -90,7 +90,7 @@ export function PieSitio({ datos, catalogos, anio }: { datos: DatosNegocio; cata
         </nav>
 
         <div>
-          <h2 className="mb-4 font-sans text-sm font-semibold tracking-[0.15em] text-white uppercase">{t("pie.vivero")}</h2>
+          <h2 className="mb-4 dato text-white">{t("pie.vivero")}</h2>
           <ul className="flex flex-col gap-2 text-sm">
             <li>
               <Link href="/nosotros" className={enlace}>

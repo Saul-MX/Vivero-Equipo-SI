@@ -26,7 +26,7 @@ export function AvatarTestimonio({
     <span
       aria-hidden
       data-avatar="por-defecto"
-      className={cn(clases, "flex items-center justify-center bg-hoja font-serif text-lg font-semibold text-white")}
+      className={cn(clases, "flex items-center justify-center bg-hoja text-lg font-semibold text-white")}
     >
       {inicial}
     </span>

@@ -75,7 +75,7 @@ export function BotonWhatsappFlotante() {
       target="_blank"
       rel="noopener noreferrer"
       data-testid="whatsapp-flotante"
-      className="fixed right-4 bottom-4 z-40 inline-flex min-h-14 items-center gap-2 rounded-full bg-[#0b6b3a] px-4 text-white shadow-lg shadow-black/20 transition-transform outline-none hover:scale-105 focus-visible:ring-4 focus-visible:ring-[#0b6b3a]/40 sm:right-6 sm:bottom-6"
+      className="fixed right-4 bottom-4 z-40 inline-flex min-h-14 items-center gap-2 rounded-full bg-[#0b6b3a] px-4 text-white outline-none focus-visible:ring-4 focus-visible:ring-[#0b6b3a]/40 sm:right-6 sm:bottom-6"
     >
       <IconoWhatsapp className="size-7" />
       <span className="font-semibold max-sm:sr-only">{textoBoton}</span>

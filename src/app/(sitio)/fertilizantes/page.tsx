@@ -26,17 +26,17 @@ export default async function PaginaFertilizantes() {
 
   return (
     <>
-      <CabeceraPagina titulo={t("titulo")}>
+      <CabeceraPagina migas={[{ texto: t("titulo") }]} titulo={t("titulo")}>
         <p>{t("descripcion")}</p>
       </CabeceraPagina>
       <div className={CONTENEDOR}>
         {fertilizantes.length === 0 ? (
-          <p className="rounded-3xl bg-white p-10 text-center text-texto-suave ring-1 ring-border">{t("vacio")}</p>
+          <p className="rounded-md border border-dashed border-hilo p-10 text-center text-texto-suave">{t("vacio")}</p>
         ) : (
           <ul className="flex flex-col gap-6">
             {fertilizantes.map((fertilizante) => (
               <li key={fertilizante.id} id={`fertilizante-${fertilizante.id}`} className="scroll-mt-24">
-                <article className="grid overflow-hidden rounded-3xl bg-white ring-1 ring-border md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+                <article className="grid overflow-hidden rounded-md border border-hilo bg-white md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
                   {fertilizante.foto ? (
                     <Image
                       src={urlImagen(fertilizante.foto)}
@@ -54,7 +54,7 @@ export default async function PaginaFertilizantes() {
                   <div className="flex flex-col gap-5 p-6 sm:p-8">
                     <div>
                       {fertilizante.tipo && (
-                        <p className="text-xs font-semibold tracking-[0.2em] text-texto-suave uppercase">
+                        <p className="dato text-texto-suave">
                           {(TIPOS_FERTILIZANTE as readonly string[]).includes(fertilizante.tipo)
                             ? tTipos(fertilizante.tipo as Tipo)
                             : fertilizante.tipo}

@@ -27,7 +27,7 @@ export function Logo({ tono = "oscuro", tamano = "md", conLugar = false, classNa
     <span className={cn("inline-flex flex-col leading-none", className)}>
       <span
         className={cn(
-          "font-serif font-semibold tracking-tight",
+          "font-bold tracking-[-0.03em]",
           TAMANOS[tamano],
           tono === "claro" ? "text-white" : "text-pino",
         )}
@@ -37,7 +37,7 @@ export function Logo({ tono = "oscuro", tamano = "md", conLugar = false, classNa
       {conLugar && (
         <span
           className={cn(
-            "mt-2 text-xs font-medium tracking-[0.2em] uppercase",
+            "dato mt-2",
             tono === "claro" ? "text-crema" : "text-texto-suave",
           )}
         >

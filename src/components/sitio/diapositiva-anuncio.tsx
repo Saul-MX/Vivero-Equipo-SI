@@ -114,7 +114,7 @@ export function DiapositivaAnuncio({ anuncio, enlaceWhatsapp, vistaPrevia, prior
 
   return (
     <div className="@container">
-      <div className="relative isolate aspect-4/5 w-full overflow-hidden bg-bosque @md:aspect-4/3 @2xl:aspect-21/9">
+      <div className="relative isolate aspect-4/5 w-full overflow-hidden bg-pino @md:aspect-4/3 @2xl:aspect-21/9">
         {anuncio.imagenConTexto ? (
           // Toda la imagen lleva al botón principal; no se oscurece ni lleva texto encima.
           principal && !vistaPrevia ? (
@@ -145,9 +145,9 @@ export function DiapositivaAnuncio({ anuncio, enlaceWhatsapp, vistaPrevia, prior
             >
               <div className={cn("flex max-w-xl flex-col gap-3", POSICION[anuncio.posicionTexto])}>
                 {anuncio.textoPequeno && (
-                  <p className="text-xs font-semibold tracking-[0.2em] uppercase @2xl:text-sm">{anuncio.textoPequeno}</p>
+                  <p className="dato @2xl:text-sm">{anuncio.textoPequeno}</p>
                 )}
-                <p className="font-serif text-3xl leading-tight font-semibold text-balance @md:text-4xl @2xl:text-5xl">
+                <p className="text-3xl leading-tight font-semibold text-balance @md:text-4xl @2xl:text-5xl">
                   {anuncio.titulo}
                 </p>
                 {anuncio.texto && <p className="text-base text-pretty @2xl:text-lg">{anuncio.texto}</p>}

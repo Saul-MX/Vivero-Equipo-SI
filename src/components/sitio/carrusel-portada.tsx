@@ -71,7 +71,7 @@ export function CarruselPortada({ diapositivas, textos }: { diapositivas: ReactN
 
       {total > 1 && (
         <div className="flex justify-center px-4 pt-3">
-          <div className="flex flex-wrap items-center justify-center gap-1 rounded-full bg-white p-1 shadow-sm ring-1 ring-border">
+          <div className="flex flex-wrap items-center justify-center gap-1 rounded-full bg-white p-1 border border-hilo">
             <button type="button" onClick={() => ir(actual - 1)} className={estiloBoton}>
               <ChevronLeftIcon aria-hidden className="size-5" />
               <span className="sr-only">{textos.anterior}</span>

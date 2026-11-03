@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import { Fraunces } from "next/font/google";
 import { getLocale, getTranslations } from "next-intl/server";
 import { OPEN_GRAPH_COMUN, urlDelSitio } from "@/lib/sitio/metadatos";
 import "./globals.css";
 
-// Los títulos solo usan el grosor «semibold» (600): se carga ese único archivo, no la fuente
-// variable completa, y los títulos aparecen antes en el celular.
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  weight: "600",
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-// El texto normal usa la fuente del propio teléfono o computadora (Roboto, San Francisco, Segoe…):
-// no se descarga nada y se ve limpia y legible. Solo los títulos usan Fraunces.
+// Todo el sitio usa la fuente del propio teléfono o computadora (Roboto, San Francisco, Segoe…):
+// no se descarga ninguna fuente y se ve limpia y legible.
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("metadatos");
@@ -33,7 +23,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={`${fraunces.variable} h-full antialiased`}>
+    <html lang={locale} className="h-full antialiased">
       <body className="min-h-full">{children}</body>
     </html>
   );

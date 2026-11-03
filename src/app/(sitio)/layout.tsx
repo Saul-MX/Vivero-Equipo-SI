@@ -26,7 +26,7 @@ export default async function LayoutSitio({ children }: { children: ReactNode })
         data-testid="sitio"
         data-temporada={vigente?.slug ?? ""}
         style={variablesAcento(vigente?.color)}
-        className="flex min-h-dvh flex-col bg-[#f7f8f4]"
+        className="flex min-h-dvh flex-col bg-papel text-tinta"
       >
         <SaltarAlContenido />
         <EncabezadoSitio catalogos={catalogos} />

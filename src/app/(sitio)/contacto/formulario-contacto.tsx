@@ -40,9 +40,9 @@ function Formulario({ textos, alOtro }: { textos: TextosContacto; alOtro: () => 
 
   if (estado.estado === "enviado") {
     return (
-      <div role="status" className="flex flex-col items-start gap-4 rounded-3xl bg-white p-6 ring-1 ring-border sm:p-8">
+      <div role="status" className="flex flex-col items-start gap-4 rounded-md border border-hilo bg-white p-6 sm:p-8">
         <CircleCheckIcon aria-hidden className="size-10 text-hoja" />
-        <h3 className="font-serif text-2xl font-semibold text-pino">{textos.graciasTitulo}</h3>
+        <h3 className="text-2xl font-semibold text-pino">{textos.graciasTitulo}</h3>
         <p className="text-foreground">{textos.graciasTexto}</p>
         <button type="button" onClick={alOtro} className="font-semibold text-pino underline underline-offset-4">
           {textos.otro}
@@ -109,9 +109,9 @@ function Formulario({ textos, alOtro }: { textos: TextosContacto; alOtro: () => 
         const tiempo = evento.currentTarget.elements.namedItem("tiempoMs") as HTMLInputElement;
         tiempo.value = String(inicio.current === null ? 0 : ahora() - inicio.current);
       }}
-      className="relative flex flex-col gap-5 rounded-3xl bg-white p-6 ring-1 ring-border sm:p-8"
+      className="relative flex flex-col gap-5 rounded-md border border-hilo bg-white p-6 sm:p-8"
     >
-      <h2 id={`${id}-titulo`} className="font-serif text-2xl font-semibold text-pino">
+      <h2 id={`${id}-titulo`} className="text-2xl font-semibold text-pino">
         {textos.titulo}
       </h2>
       {error && (

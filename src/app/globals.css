@@ -19,6 +19,13 @@
   --texto-suave: #55654f;
   --fondo-panel: #f1f3ee;
 
+  /* Sitio público («la etiqueta de la maceta»): papel verde-neutro, tinta oscura y líneas finas.
+   * Contraste sobre el papel: tinta 14.4:1, pino 11.2:1, hoja viva 5.8:1, texto suave 5.7:1. */
+  --papel: #f3f5ee;
+  --tinta: #16261d;
+  --hoja-viva: #2f6b3a;
+  --hilo: #c3ccb8;
+
   --acento: var(--pino);
   --acento-fondo: var(--pino); /* versión del acento para poner texto encima (siempre legible) */
   --acento-texto: #ffffff;
@@ -69,6 +76,10 @@
   --color-crema: var(--crema);
   --color-musgo: var(--musgo);
   --color-texto-suave: var(--texto-suave);
+  --color-papel: var(--papel);
+  --color-tinta: var(--tinta);
+  --color-hoja-viva: var(--hoja-viva);
+  --color-hilo: var(--hilo);
   --color-acento: var(--acento);
   --color-acento-fondo: var(--acento-fondo);
   --color-acento-texto: var(--acento-texto);
@@ -106,11 +117,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-titulo: var(--sidebar-titulo);
 
-  /* Serif con carácter para títulos; sans-serif limpia para formularios y textos */
-  /* Fuente del sistema: no se descarga (más rápido en celular). */
+  /* Una sola fuente, la del sistema, para todo: no se descarga (más rápido en celular). */
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-serif: var(--font-fraunces);
-  --font-heading: var(--font-fraunces);
+  /* Datos de la ficha (luz, riego, macetas…), como una etiqueta mecanografiada: también del sistema. */
+  --font-etiqueta: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -134,11 +144,59 @@
   h1,
   h2,
   h3 {
-    @apply font-heading text-pino;
+    @apply text-pino;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+/* Títulos del sitio público: sin fuente propia, la personalidad viene del peso y del apretado. */
+@utility titulo-etiqueta {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* Datos cortos (etiquetas, fechas, cantidades) en la tipografía de etiqueta. */
+@utility dato {
+  font-family: var(--font-etiqueta);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+/*
+ * Único momento animado del sitio: al abrir, la franja del color de la temporada se traza y el
+ * texto de la portada sube unos píxeles. Solo mueve (no cambia la opacidad), así no retrasa el
+ * pintado; con «reducir movimiento» no se anima nada.
+ */
+@keyframes trazo {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes entrada {
+  from {
+    transform: translateY(14px);
+  }
+}
+@utility trazo {
+  transform-origin: left;
+  animation: trazo 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@utility entrada {
+  animation: entrada 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+}
+@utility entrada-2 {
+  animation: entrada 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .trazo,
+  .entrada,
+  .entrada-2 {
+    animation: none;
   }
 }
 

@@ -112,7 +112,7 @@ function DesplegableCatalogos({ catalogos, textos, activo }: { catalogos: ItemCa
       <ul
         id={idLista}
         hidden={!abierto}
-        className="absolute top-full left-0 z-50 mt-2 min-w-60 rounded-2xl border border-border bg-white p-2 shadow-xl shadow-black/10"
+        className="absolute top-full left-0 z-50 mt-2 min-w-60 rounded-md border border-hilo bg-white p-2 shadow-lg shadow-black/10"
       >
         {enlacesCatalogos(catalogos, textos).map((enlace, indice, lista) => (
           <li key={enlace.href} className={cn(indice === lista.length - 1 && "mt-1 border-t border-border pt-1")}>
@@ -176,7 +176,7 @@ export function MenuSitio({ catalogos, textos, rutaActual }: Props) {
         className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-[85%] max-w-xs overflow-y-auto border-0 bg-white px-4 pt-4 pb-8 shadow-2xl backdrop:bg-black/40"
       >
         <div className="mb-6 flex items-center justify-between">
-          <span className="font-serif text-lg font-semibold text-pino">Vivero El Encanto</span>
+          <span className="text-lg font-semibold text-pino">Vivero El Encanto</span>
           <button
             type="button"
             popoverTarget={idPanel}
@@ -192,7 +192,7 @@ export function MenuSitio({ catalogos, textos, rutaActual }: Props) {
             {APARTADOS.map((apartado) =>
               apartado === "catalogos" ? (
                 <li key={apartado} className="py-1">
-                  <p className="px-3 py-2 text-xs font-semibold tracking-[0.15em] text-texto-suave uppercase">
+                  <p className="px-3 py-2 dato text-texto-suave">
                     {textos.catalogos}
                   </p>
                   <ul className="flex flex-col gap-1 border-l-2 border-acento pl-2">

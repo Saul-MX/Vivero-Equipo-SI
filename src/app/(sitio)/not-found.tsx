@@ -9,7 +9,7 @@ export default function NoEncontradaSitio() {
 
   return (
     <section className={`${CONTENEDOR} flex flex-col items-start gap-5 py-20`}>
-      <p className="text-xs font-semibold tracking-[0.2em] text-texto-suave uppercase">404</p>
+      <p className="dato text-texto-suave">404</p>
       <h1 className="text-4xl font-semibold text-pino sm:text-5xl">{t("noEncontrado.titulo")}</h1>
       <p className="max-w-xl text-lg text-texto-suave">{t("noEncontrado.texto")}</p>
       <div className="flex flex-wrap gap-3">
@@ -21,7 +21,7 @@ export default function NoEncontradaSitio() {
         </Link>
         <Link
           href="/plantas"
-          className="inline-flex min-h-11 items-center rounded-full px-6 font-semibold text-pino ring-1 ring-border outline-none hover:bg-muted focus-visible:ring-4 focus-visible:ring-ring/50"
+          className="inline-flex min-h-11 items-center rounded-full px-6 font-semibold text-pino border border-hilo outline-none hover:bg-muted focus-visible:ring-4 focus-visible:ring-ring/50"
         >
           {t("sitio.menu.todasLasPlantas")}
         </Link>

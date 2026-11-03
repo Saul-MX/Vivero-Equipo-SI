@@ -26,6 +26,9 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // Solo en desarrollo: permite abrir el sitio desde la red local (ej. http://192.168.56.1:3000 o el
+  // celular). Sin esto, Next bloquea sus scripts de desarrollo y los menús no responden.
+  allowedDevOrigins: ["192.168.*.*"],
   experimental: {
     // Las acciones del servidor (formularios, Contacto, inicio de sesión) solo reciben datos: 2 MB bastan.
     // Las fotos y videos se suben por /panel/subir, que revisa la sesión y el tamaño antes de leerlos;

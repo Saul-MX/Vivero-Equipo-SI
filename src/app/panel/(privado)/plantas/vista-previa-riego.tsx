@@ -28,7 +28,7 @@ export function VistaPreviaRiego({ dias, cantidad, fertilizante, nota }: Props) 
           <DropletsIcon className="size-5" />
         </span>
         <div className="min-w-0">
-          <p className="font-serif text-lg font-semibold text-pino">{t("previaRiego")}</p>
+          <p className="text-lg font-semibold text-pino">{t("previaRiego")}</p>
           {lineas.length === 0 ? (
             <p className="text-sm text-texto-suave">{t("previaVacia")}</p>
           ) : (
