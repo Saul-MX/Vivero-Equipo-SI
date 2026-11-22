@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { ADMIN, CODIGO_INICIAL_PRUEBA, SIN_SESION } from "./datos";
+import { ADMIN, CODIGO_INICIAL_PRUEBA, COOKIE_SESION, SIN_SESION } from "./datos";
 import { iniciarSesion, registrarCuenta } from "./utilidades";
 
 test.use({ storageState: SIN_SESION });
@@ -12,7 +12,7 @@ test("las pantallas del panel piden iniciar sesión", async ({ page }) => {
 });
 
 test("una cookie de sesión inventada no da acceso", async ({ page, context, baseURL }) => {
-  await context.addCookies([{ name: "vivero_sesion", value: "token-inventado", url: baseURL! }]);
+  await context.addCookies([{ name: COOKIE_SESION, value: "token-inventado.firma-inventada", url: baseURL! }]);
   await page.goto("/panel/mi-cuenta");
   await expect(page).toHaveURL("/panel/ingresar");
 });

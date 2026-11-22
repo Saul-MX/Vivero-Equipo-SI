@@ -98,7 +98,7 @@ async function Inicio() {
   return (
     <>
       <EncabezadoPagina
-        titulo={t("inicio.saludo", { usuario: usuario.usuario })}
+        titulo={t("inicio.saludo", { usuario: usuario.nombreVisible })}
         subtitulo={t("inicio.subtitulo")}
         acciones={
           <Button asChild>

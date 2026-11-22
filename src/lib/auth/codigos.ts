@@ -31,10 +31,16 @@ export function hashCodigo(codigo: string): string {
 
 /** Compara contra el código inicial del .env en tiempo constante (no filtra pistas por tiempo). */
 export function esCodigoInicial(ingresado: string, configurado: string | undefined): boolean {
+  return esHashDelCodigoInicial(hashCodigo(ingresado), configurado);
+}
+
+/** Igual que esCodigoInicial, pero recibe el hash (así viaja el código durante el registro con Google). */
+export function esHashDelCodigoInicial(hashIngresado: string, configurado: string | undefined): boolean {
   if (!configurado || normalizarCodigo(configurado).length < LARGO_MINIMO_CODIGO_INICIAL) {
     return false;
   }
-  const a = Buffer.from(hashCodigo(ingresado), "hex");
+  if (!/^[0-9a-f]{64}$/.test(hashIngresado)) return false;
+  const a = Buffer.from(hashIngresado, "hex");
   const b = Buffer.from(hashCodigo(configurado), "hex");
   return timingSafeEqual(a, b);
 }

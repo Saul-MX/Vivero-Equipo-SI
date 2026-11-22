@@ -268,7 +268,11 @@
     "demasiadosMensajes": "Ya recibimos varios mensajes desde tu conexión. Intenta de nuevo en {minutos, plural, one {# minuto} other {# minutos}} o escríbenos por WhatsApp.",
     "tituloNovedadRequerido": "Escribe el título.",
     "textoNovedadRequerido": "Escribe el texto de la novedad.",
-    "sesionVencida": "Tu sesión terminó. Vuelve a entrar e intenta de nuevo."
+    "sesionVencida": "Tu sesión terminó. Vuelve a entrar e intenta de nuevo.",
+    "googleNoDisponible": "El acceso con Google no está disponible por ahora. Usa tu usuario y contraseña.",
+    "sinContrasena": "Tu cuenta no tiene contraseña: entras con Google.",
+    "googleUnicoAcceso": "No puedes quitar Google porque es tu única forma de entrar.",
+    "sesionNoReciente": "Por seguridad, sal y vuelve a entrar antes de quitar Google."
   },
   "acceso": {
     "ingresar": {
@@ -297,6 +301,20 @@
       "enviando": "Creando tu cuenta…",
       "pregunta": "¿Ya tienes cuenta?",
       "enlace": "Entra aquí"
+    },
+    "google": {
+      "boton": "Continuar con Google",
+      "enviando": "Abriendo Google…",
+      "separador": "o",
+      "separadorRegistro": "o con usuario y contraseña",
+      "errores": {
+        "signup_disabled": "Esa cuenta de Google no está vinculada a ninguna cuenta del panel. Si te invitaron, crea tu cuenta con tu código; si ya tienes cuenta, entra con tu usuario y vincula Google en «Mi cuenta».",
+        "account_not_linked": "Esa cuenta de Google no está vinculada a ninguna cuenta del panel. Entra con tu usuario y vincúlala en «Mi cuenta».",
+        "invitacion_invalida": "El código no es válido, ya se usó o ya venció.",
+        "correo_sin_verificar": "Tu cuenta de Google no tiene el correo verificado. Verifícalo en Google e intenta de nuevo.",
+        "access_denied": "Se canceló el inicio con Google.",
+        "generico": "No se pudo continuar con Google. Intenta de nuevo."
+      }
     }
   },
   "panel": {
@@ -756,7 +774,7 @@
     },
     "cuenta": {
       "titulo": "Mi cuenta",
-      "subtitulo": "Cambia tu contraseña cuando quieras.",
+      "subtitulo": "Tu forma de entrar al panel: contraseña y cuenta de Google.",
       "tarjeta": "Contraseña",
       "usuario": "Usuario",
       "usuarioAyuda": "Tu nombre de usuario no se puede cambiar.",
@@ -766,7 +784,33 @@
       "repetir": "Repítela",
       "boton": "Cambiar contraseña",
       "enviando": "Cambiando…",
-      "exito": "Listo, tu contraseña se cambió. Si tenías la sesión abierta en otro aparato, ahí tendrás que volver a entrar."
+      "exito": "Listo, tu contraseña se cambió. Si tenías la sesión abierta en otro aparato, ahí tendrás que volver a entrar.",
+      "correo": "Correo de Google",
+      "sinContrasena": "Creaste tu cuenta con Google, así que entras con el botón «Continuar con Google». No tiene contraseña.",
+      "google": {
+        "titulo": "Cuenta de Google",
+        "descripcion": "Vincula tu cuenta de Google para entrar con un clic, sin escribir la contraseña.",
+        "vinculada": "Vinculada con {correo}.",
+        "vinculadaSinCorreo": "Tu cuenta de Google está vinculada.",
+        "noVinculada": "Todavía no vinculas ninguna cuenta de Google.",
+        "vincular": "Vincular cuenta de Google",
+        "abriendo": "Abriendo Google…",
+        "desvincular": "Quitar Google",
+        "quitando": "Quitando…",
+        "unicoAcceso": "Es tu única forma de entrar, por eso no se puede quitar.",
+        "noDisponible": "El acceso con Google no está configurado en este servidor.",
+        "exitoVincular": "Listo, ya puedes entrar con Google.",
+        "exitoQuitar": "Se quitó Google de tu cuenta.",
+        "confirmarTitulo": "¿Quitar Google de tu cuenta?",
+        "confirmarTexto": "Después solo podrás entrar con tu usuario y contraseña. Puedes volver a vincularla cuando quieras.",
+        "confirmar": "Sí, quitarla",
+        "errores": {
+          "account_already_linked_to_different_user": "Esa cuenta de Google ya está vinculada a otra cuenta del panel.",
+          "correo_sin_verificar": "Esa cuenta de Google no tiene el correo verificado.",
+          "access_denied": "Se canceló la vinculación con Google.",
+          "generico": "No se pudo vincular la cuenta de Google. Intenta de nuevo."
+        }
+      }
     },
     "invitaciones": {
       "titulo": "Invitar a otra persona",

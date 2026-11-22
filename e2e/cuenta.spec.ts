@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { consultar } from "./base-de-datos";
 import { crearCodigoInvitacion, iniciarSesion, nuevaVentanaSinSesion, registrarCuenta } from "./utilidades";
 
 const CODIGO_NO_VALIDO = "El código no es válido, ya se usó o ya venció.";
@@ -13,6 +14,15 @@ test("un código de invitación sirve una sola vez", async ({ page, browser }) =
   await expect(ana.pagina).toHaveURL("/panel");
   await expect(ana.pagina.getByRole("heading", { level: 1, name: "Hola, ana" })).toBeVisible();
   await ana.contexto.close();
+
+  // En la base, el código quedó gastado y ligado a la cuenta de ana (hook «user.create.after»).
+  const [invitacion] = await consultar<{ usuario: string | null; usadaEn: Date | null }>(
+    `SELECT u.usuario, i.usadaEn FROM invitaciones i LEFT JOIN usuarios u ON u.id = i.usadaPorId
+     WHERE i.terminacion = ? ORDER BY i.id DESC LIMIT 1`,
+    [codigo.replace(/-/g, "").slice(-4)],
+  );
+  expect(invitacion.usadaEn).not.toBeNull();
+  expect(invitacion.usuario).toBe("ana");
 
   const beto = await nuevaVentanaSinSesion(browser);
   await registrarCuenta(beto.pagina, { codigo, usuario: "beto", contrasena: "contrasena-de-beto-1" });

@@ -22,9 +22,14 @@ export const esquemaIngreso = z.object({
   contrasena: z.string().min(1, "contrasenaRequerida").max(128, "contrasenaLarga"),
 });
 
+const codigoInvitacion = z.string().trim().min(1, "codigoRequerido").max(64, "codigoInvalido");
+
+/** Registro con Google: solo se pide el código; el nombre y el correo los da Google. */
+export const esquemaRegistroGoogle = z.object({ codigo: codigoInvitacion });
+
 export const esquemaRegistro = z
   .object({
-    codigo: z.string().trim().min(1, "codigoRequerido").max(64, "codigoInvalido"),
+    codigo: codigoInvitacion,
     usuario: usuarioNuevo,
     contrasena: contrasenaNueva,
     repetirContrasena: z.string().min(1, "repetirRequerida"),
@@ -51,4 +56,5 @@ export const esquemaCambioContrasena = z
 
 export type DatosIngreso = z.infer<typeof esquemaIngreso>;
 export type DatosRegistro = z.infer<typeof esquemaRegistro>;
+export type DatosRegistroGoogle = z.infer<typeof esquemaRegistroGoogle>;
 export type DatosCambioContrasena = z.infer<typeof esquemaCambioContrasena>;

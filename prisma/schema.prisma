@@ -12,32 +12,83 @@ datasource db {
 }
 
 // ───────────────────────── Acceso al panel ─────────────────────────
+// Usuario, Sesion, CuentaAcceso y Verificacion son las tablas de better-auth (src/lib/auth/auth.ts).
+// Sus nombres en español se traducen allí (modelName y fields): si se cambia uno aquí, hay que
+// cambiarlo también allá.
 
 model Usuario {
-  id             Int      @id @default(autoincrement())
-  usuario        String   @unique @db.VarChar(30) // siempre en minúsculas
-  hashContrasena String   @db.VarChar(255) // argon2id: la contraseña nunca se guarda
-  creadoEn       DateTime @default(now())
+  id               String   @id @db.VarChar(64)
+  nombre           String   @db.VarChar(191) // el usuario, o el nombre que trae Google
+  /// Correo de Google. Las cuentas con usuario y contraseña llevan uno interno terminado en
+  /// «.invalid» (dominio reservado que no existe), porque better-auth exige un correo único.
+  correo           String   @unique @db.VarChar(191)
+  correoVerificado Boolean  @default(false)
+  imagen           String?  @db.Text
+  usuario          String?  @unique @db.VarChar(30) // siempre en minúsculas; vacío si se registró con Google
+  creadoEn         DateTime @default(now())
+  actualizadoEn    DateTime @updatedAt
 
   sesiones            Sesion[]
-  invitacionesCreadas Invitacion[] @relation("InvitacionCreadaPor")
-  invitacionUsada     Invitacion?  @relation("InvitacionUsadaPor")
+  cuentas             CuentaAcceso[]
+  invitacionesCreadas Invitacion[]   @relation("InvitacionCreadaPor")
+  invitacionUsada     Invitacion?    @relation("InvitacionUsadaPor")
 
   @@map("usuarios")
 }
 
-/// Sesión abierta. El id es el hash SHA-256 del token; el token real solo vive en la cookie.
+/// Sesión abierta. La cookie lleva el token firmado con BETTER_AUTH_SECRET; sin el secreto,
+/// leer esta tabla no basta para fabricar una cookie válida.
 model Sesion {
-  id        String   @id @db.Char(64)
-  usuarioId Int
-  expiraEn  DateTime
-  creadaEn  DateTime @default(now())
+  id            String   @id @db.VarChar(64)
+  token         String   @unique @db.VarChar(191)
+  usuarioId     String   @db.VarChar(64)
+  expiraEn      DateTime
+  ip            String?  @db.VarChar(64)
+  navegador     String?  @db.Text
+  creadaEn      DateTime @default(now())
+  actualizadaEn DateTime @updatedAt
 
   usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@index([usuarioId])
   @@index([expiraEn])
   @@map("sesiones")
+}
+
+/// Forma de entrar de un usuario: «credential» (usuario y contraseña) o «google».
+model CuentaAcceso {
+  id                 String    @id @db.VarChar(64)
+  idEnProveedor      String    @db.VarChar(191) // en Google, el identificador fijo de la cuenta
+  proveedor          String    @db.VarChar(32)
+  usuarioId          String    @db.VarChar(64)
+  tokenAcceso        String?   @db.Text // cifrado (encryptOAuthTokens)
+  tokenRenovacion    String?   @db.Text // cifrado (encryptOAuthTokens)
+  tokenId            String?   @db.Text
+  accesoExpiraEn     DateTime?
+  renovacionExpiraEn DateTime?
+  permisos           String?   @db.Text
+  contrasena         String?   @db.VarChar(255) // argon2id: la contraseña nunca se guarda
+  creadaEn           DateTime  @default(now())
+  actualizadaEn      DateTime  @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([proveedor, idEnProveedor])
+  @@index([usuarioId])
+  @@map("cuentas_acceso")
+}
+
+/// Datos temporales de better-auth (por ejemplo, el «state» mientras se va y vuelve de Google).
+model Verificacion {
+  id            String   @id @db.VarChar(64)
+  identificador String   @db.VarChar(191)
+  valor         String   @db.Text
+  expiraEn      DateTime
+  creadaEn      DateTime @default(now())
+  actualizadaEn DateTime @updatedAt
+
+  @@index([identificador])
+  @@map("verificaciones")
 }
 
 /// Código de invitación de un solo uso y con vencimiento. Solo se guarda su hash.
@@ -48,8 +99,8 @@ model Invitacion {
   creadaEn    DateTime  @default(now())
   expiraEn    DateTime
   usadaEn     DateTime?
-  creadaPorId Int?
-  usadaPorId  Int?      @unique
+  creadaPorId String?   @db.VarChar(64)
+  usadaPorId  String?   @unique @db.VarChar(64)
 
   creadaPor Usuario? @relation("InvitacionCreadaPor", fields: [creadaPorId], references: [id], onDelete: SetNull)
   usadaPor  Usuario? @relation("InvitacionUsadaPor", fields: [usadaPorId], references: [id], onDelete: SetNull)

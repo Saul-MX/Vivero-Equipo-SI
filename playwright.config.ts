@@ -1,7 +1,7 @@
 import "dotenv/config";
 import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
-import { ARCHIVO_SESION_ADMIN, CODIGO_INICIAL_PRUEBA, PUERTO_PRUEBAS } from "./e2e/datos";
+import { ARCHIVO_SESION_ADMIN, CODIGO_INICIAL_PRUEBA, GOOGLE_CLIENT_ID_PRUEBA, PUERTO_PRUEBAS } from "./e2e/datos";
 
 // Pruebas de punta a punta: se arma el sitio como en producción y se usa con un navegador real.
 // Usan SU PROPIA base de datos (DATABASE_URL_PRUEBA), que se borra y se vuelve a crear en cada corrida.
@@ -39,6 +39,12 @@ export default defineConfig({
       DATABASE_URL: process.env.DATABASE_URL_PRUEBA ?? "",
       CODIGO_INVITACION_INICIAL: CODIGO_INICIAL_PRUEBA,
       UPLOADS_DIR: path.resolve(".archivos-prueba"),
+      SITIO_URL: `http://localhost:${PUERTO_PRUEBAS}`,
+      BETTER_AUTH_SECRET: "secreto-solo-para-las-pruebas-automaticas-2026",
+      // Credenciales falsas: bastan para probar el viaje HACIA Google (las pruebas lo interceptan
+      // antes de salir); Google nunca las recibe.
+      GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID_PRUEBA,
+      GOOGLE_CLIENT_SECRET: "secreto-falso-de-google",
     },
   },
 });

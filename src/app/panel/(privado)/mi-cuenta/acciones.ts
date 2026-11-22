@@ -1,9 +1,12 @@
 "use server";
 
+import { isAPIError } from "better-auth/api";
 import { refresh } from "next/cache";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
-import { MINUTO_MS } from "@/lib/auth/constantes";
-import { hashearContrasena, verificarContrasena } from "@/lib/auth/contrasena";
+import { auth, googleConfigurado } from "@/lib/auth/auth";
+import { MINUTO_MS, RUTA_MI_CUENTA } from "@/lib/auth/constantes";
 import { cancelarInvitacion, crearInvitacion } from "@/lib/auth/invitaciones";
 import {
   limpiarIntentos,
@@ -11,7 +14,7 @@ import {
   registrarFallo,
   type ReglaIntentos,
 } from "@/lib/auth/limite-intentos";
-import { cerrarOtrasSesiones, obtenerSesion, requerirUsuario } from "@/lib/auth/sesion";
+import { requerirUsuario } from "@/lib/auth/sesion";
 import { prisma } from "@/lib/db";
 import { erroresDeCampos, type ResultadoAccion } from "@/lib/resultado";
 import { esquemaCambioContrasena, type DatosCambioContrasena } from "@/lib/validacion/cuenta";
@@ -33,25 +36,66 @@ export async function cambiarContrasena(
   const minutos = await minutosDeBloqueo([regla]);
   if (minutos) return { ok: false, error: "demasiadosIntentos", minutos };
 
-  const cuenta = await prisma.usuario.findUniqueOrThrow({
-    where: { id: usuario.id },
-    select: { hashContrasena: true },
-  });
-  if (!(await verificarContrasena(cuenta.hashContrasena, actual))) {
-    await registrarFallo([regla]);
-    return { ok: false, campos: { actual: "contrasenaActualIncorrecta" } };
+  try {
+    // Por seguridad se cierran TODAS las sesiones y esta recibe un token nuevo (better-auth actualiza
+    // la cookie): quien tuviera el token anterior, en este u otro aparato, ya no puede usarlo.
+    await auth.api.changePassword({
+      body: { currentPassword: actual, newPassword: nueva, revokeOtherSessions: true },
+      headers: await headers(),
+    });
+  } catch (error) {
+    if (!isAPIError(error)) throw error;
+    if (error.body?.code === "INVALID_PASSWORD") {
+      await registrarFallo([regla]);
+      return { ok: false, campos: { actual: "contrasenaActualIncorrecta" } };
+    }
+    if (error.body?.code === "CREDENTIAL_ACCOUNT_NOT_FOUND") return { ok: false, error: "sinContrasena" };
+    throw error;
   }
-
-  await prisma.usuario.update({
-    where: { id: usuario.id },
-    data: { hashContrasena: await hashearContrasena(nueva) },
-  });
   await limpiarIntentos(regla.clave);
 
-  // Por seguridad se cierran las sesiones abiertas en otros aparatos; esta sigue activa.
-  const sesion = await obtenerSesion();
-  if (sesion) await cerrarOtrasSesiones(usuario.id, sesion.sesionId);
+  return { ok: true };
+}
 
+/** Lleva a Google para vincular esa cuenta a la del panel; al volver, regresa a «Mi cuenta». */
+export async function vincularGoogle(): Promise<ResultadoAccion> {
+  await requerirUsuario();
+  if (!googleConfigurado) return { ok: false, error: "googleNoDisponible" };
+  const { url } = await auth.api.linkSocialAccount({
+    body: {
+      provider: "google",
+      callbackURL: `${RUTA_MI_CUENTA}?google=vinculada`,
+      errorCallbackURL: RUTA_MI_CUENTA,
+      disableRedirect: true,
+    },
+    headers: await headers(),
+  });
+  if (!url) return { ok: false, error: "inesperado" };
+  redirect(url);
+}
+
+/** Quita Google. Solo se puede si la cuenta tiene contraseña (si no, ya no habría cómo entrar). */
+export async function desvincularGoogle(): Promise<ResultadoAccion> {
+  const usuario = await requerirUsuario();
+  const google = await prisma.cuentaAcceso.findFirst({
+    where: { usuarioId: usuario.id, proveedor: "google" },
+    select: { id: true },
+  });
+  if (!google) {
+    refresh();
+    return { ok: true };
+  }
+  try {
+    // better-auth vuelve a revisar que esa forma de entrar sea del usuario de la sesión.
+    await auth.api.unlinkAccount({ body: { accountId: google.id }, headers: await headers() });
+  } catch (error) {
+    if (!isAPIError(error)) throw error;
+    if (error.body?.code === "FAILED_TO_UNLINK_LAST_ACCOUNT") return { ok: false, error: "googleUnicoAcceso" };
+    // better-auth pide una sesión reciente (de menos de un día) para quitar una forma de entrar.
+    if (error.body?.code === "SESSION_NOT_FRESH") return { ok: false, error: "sesionNoReciente" };
+    throw error;
+  }
+  refresh();
   return { ok: true };
 }
 

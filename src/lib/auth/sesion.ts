@@ -1,58 +1,57 @@
 import "server-only";
-import { createHash, randomBytes } from "node:crypto";
+import { getSessionCookie } from "better-auth/cookies";
 import { cache } from "react";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { prisma } from "@/lib/db";
-import { COOKIE_SESION, DIA_MS, DIAS_SESION, RUTA_INGRESO } from "./constantes";
+import { auth, esCorreoInterno } from "./auth";
+import { PREFIJO_COOKIES, RUTA_INGRESO } from "./constantes";
 
-// Sesiones propias guardadas en la base de datos:
-// - La cookie lleva un token aleatorio de 256 bits (httpOnly: el JavaScript del navegador no lo ve).
-// - En la base solo se guarda el hash SHA-256 del token; si alguien leyera la base, no podría usarlo.
-// - Cerrar sesión borra la fila, así que la cookie deja de servir de inmediato.
+// Sesiones de better-auth guardadas en la base de datos:
+// - La cookie (httpOnly) lleva un token aleatorio firmado con BETTER_AUTH_SECRET.
+// - Cada petición se revisa contra la base (sin caché en cookie), así que cerrar una sesión
+//   la invalida de inmediato, también en otros aparatos.
 
 export type UsuarioActual = {
-  id: number;
-  usuario: string;
+  id: string;
+  /** Nombre de usuario; null si la cuenta se creó con Google. */
+  usuario: string | null;
+  /** Lo que se muestra en el saludo: el usuario, o el nombre de pila que trae Google. */
+  nombreVisible: string;
+  /** Correo de Google; null en las cuentas de usuario y contraseña. */
+  correo: string | null;
 };
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
-}
-
-export async function crearSesion(usuarioId: number): Promise<void> {
-  const token = randomBytes(32).toString("base64url");
-  const expiraEn = new Date(Date.now() + DIAS_SESION * DIA_MS);
-
-  await prisma.sesion.create({ data: { id: hashToken(token), usuarioId, expiraEn } });
-  (await cookies()).set(COOKIE_SESION, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    expires: expiraEn,
-  });
-}
 
 /** Sesión vigente de quien hace la petición (o null). Se consulta una sola vez por petición. */
 export const obtenerSesion = cache(
   async (): Promise<{ sesionId: string; usuario: UsuarioActual } | null> => {
-    const token = (await cookies()).get(COOKIE_SESION)?.value;
-    if (!token) return null;
+    // Las cookies se leen con cookies() y no del encabezado original: si una acción acaba de cambiar
+    // la sesión (por ejemplo, al cambiar la contraseña better-auth da un token nuevo), la página que
+    // se vuelve a dibujar en esa misma petición ya debe usar el token nuevo.
+    const encabezados = new Headers(await headers());
+    encabezados.set("cookie", (await cookies()).toString());
+    if (!getSessionCookie(encabezados, { cookiePrefix: PREFIJO_COOKIES })) return null;
 
     // Desde aquí todo depende de la visita (la base de datos y la hora actual), así que Next
     // no debe intentar prepararlo por adelantado. Las páginas que llaman a requerirUsuario()
     // quedan cubiertas también para sus consultas posteriores.
     await connection();
 
-    const sesion = await prisma.sesion.findUnique({
-      where: { id: hashToken(token) },
-      select: { id: true, expiraEn: true, usuario: { select: { id: true, usuario: true } } },
-    });
-    if (!sesion || sesion.expiraEn <= new Date()) return null;
+    const sesion = await auth.api.getSession({ headers: encabezados });
+    if (!sesion) return null;
 
-    return { sesionId: sesion.id, usuario: sesion.usuario };
+    const { user } = sesion;
+    const usuario = user.username ?? null;
+    return {
+      sesionId: sesion.session.id,
+      usuario: {
+        id: user.id,
+        usuario,
+        nombreVisible: usuario ?? (user.name.split(" ")[0] || user.email),
+        correo: esCorreoInterno(user.email) ? null : user.email,
+      },
+    };
   },
 );
 
@@ -66,21 +65,18 @@ export async function requerirUsuario(): Promise<UsuarioActual> {
   return sesion.usuario;
 }
 
+/** Cierra la sesión actual (borra la fila y la cookie). */
 export async function cerrarSesion(): Promise<void> {
-  const almacen = await cookies();
-  const token = almacen.get(COOKIE_SESION)?.value;
-  if (token) {
-    await prisma.sesion.deleteMany({ where: { id: hashToken(token) } });
+  try {
+    await auth.api.signOut({ headers: await headers() });
+  } catch {
+    // Si la sesión ya no existía, no hay nada que cerrar.
   }
-  almacen.delete(COOKIE_SESION);
 }
 
-/** Cierra las demás sesiones del usuario (por ejemplo, después de cambiar la contraseña). */
-export async function cerrarOtrasSesiones(usuarioId: number, sesionActualId: string): Promise<void> {
-  await prisma.sesion.deleteMany({ where: { usuarioId, id: { not: sesionActualId } } });
-}
-
-/** Borra sesiones vencidas para que la tabla no crezca sin fin. */
-export async function limpiarSesionesVencidas(): Promise<void> {
-  await prisma.sesion.deleteMany({ where: { expiraEn: { lt: new Date() } } });
+/** Borra sesiones y datos temporales vencidos para que las tablas no crezcan sin fin. */
+export async function limpiarVencidos(): Promise<void> {
+  const ahora = new Date();
+  await prisma.sesion.deleteMany({ where: { expiraEn: { lt: ahora } } });
+  await prisma.verificacion.deleteMany({ where: { expiraEn: { lt: ahora } } });
 }

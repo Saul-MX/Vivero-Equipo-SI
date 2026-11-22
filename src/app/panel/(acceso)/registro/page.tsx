@@ -5,7 +5,10 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RUTA_INGRESO } from "@/lib/auth/constantes";
+import { AvisoErrorGoogle } from "../aviso-error-google";
+import { SiHayGoogle } from "../google";
 import { RedirigirSiHaySesion } from "../redirigir-si-hay-sesion";
+import { BotonRegistroGoogle } from "./boton-registro-google";
 import { FormularioRegistro } from "./formulario-registro";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +32,18 @@ export default function PaginaRegistro() {
           <CardDescription className="text-base">{t("subtitulo")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <FormularioRegistro />
+          <Suspense fallback={null}>
+            <AvisoErrorGoogle />
+          </Suspense>
+          <FormularioRegistro
+            opcionGoogle={
+              <Suspense fallback={null}>
+                <SiHayGoogle>
+                  <BotonRegistroGoogle />
+                </SiHayGoogle>
+              </Suspense>
+            }
+          />
         </CardContent>
       </Card>
       <p className="mt-6 text-center text-sm text-texto-suave">

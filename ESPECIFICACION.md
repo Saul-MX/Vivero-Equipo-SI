@@ -21,9 +21,10 @@ El acceso al dashboard exige cuenta. Las capturas muestran a un usuario llamado 
 | Elemento | Requisito |
 | --- | --- |
 | Registro | Solo por invitación: formulario con código de invitación, usuario, contraseña (mínimo 8 caracteres) y repetir contraseña. Sin un código válido no se puede registrar. |
-| Inicio de sesión | Usuario y contraseña; sesión persistente con cookie segura. |
+| Inicio de sesión | Usuario y contraseña, o «Continuar con Google»; sesión persistente con cookie segura (better-auth). |
 | Cierre de sesión | Opción «Salir» en el menú del dashboard. |
 | Cambio de contraseña | En «Mi cuenta»: contraseña actual, nueva (mínimo 8) y repetirla. |
+| Google | Registro con Google solo con código de invitación. Una cuenta existente vincula (o quita) su Google en «Mi cuenta». Un Google no vinculado no puede entrar. Las cuentas creadas con Google no tienen contraseña. |
 | Seguridad | Contraseñas con hash (bcrypt o argon2), protección contra fuerza bruta, rutas del dashboard protegidas en servidor. |
 | Roles | Un solo rol: administrador. El registro es solo por invitación. |
 

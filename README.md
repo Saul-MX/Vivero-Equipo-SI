@@ -4,7 +4,7 @@ Sitio público (escaparate, sin precios) y panel de administración de **Vivero 
 La especificación completa está en [ESPECIFICACION.md](ESPECIFICACION.md).
 
 **Tecnología:** Next.js 16 (App Router) con TypeScript, Tailwind CSS y shadcn/ui, MySQL/MariaDB con Prisma 7,
-sesiones propias con argon2, React Hook Form + Zod, next-intl (español de México, listo para inglés) y Playwright
+better-auth (usuario y contraseña con argon2, y Google), React Hook Form + Zod, next-intl (español de México, listo para inglés) y Playwright
 para las pruebas.
 
 ## Estado
@@ -38,6 +38,9 @@ Todos los comandos se escriben en una terminal (PowerShell o la terminal de VS C
    Copy-Item .env.example .env
    ```
    Abre `.env` y cambia `CODIGO_INVITACION_INICIAL` por un código tuyo (mínimo 12 letras o números).
+   Llena `BETTER_AUTH_SECRET` con un secreto al azar (el comando para generarlo está en el mismo archivo).
+   Para probar «Continuar con Google», llena también `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` (los pasos para
+   crearlos están en `.env.example`); si los dejas vacíos, el botón de Google no aparece.
    Si tu MySQL tiene contraseña, agrégala en `DATABASE_URL` (`mysql://root:TU_CONTRASEÑA@localhost:3306/...`).
 3. Crea la base de datos y sus tablas, y carga los datos iniciales:
    ```powershell
@@ -87,7 +90,7 @@ prisma/              modelo de datos (schema.prisma), migraciones y datos inicia
 messages/es-MX.json  TODOS los textos de la interfaz (para traducir, se agrega en.json)
 src/app/             pantallas: / (sitio público) y /panel (panel de administración)
 src/components/      componentes: ui/ (shadcn), panel/, formularios/, marca/ (logotipo)
-src/lib/auth/        sesiones, contraseñas, invitaciones y límite de intentos
+src/lib/auth/        better-auth (auth.ts), sesiones, contraseñas, invitaciones y límite de intentos
 src/lib/validacion/  reglas de los formularios (las mismas en navegador y servidor)
 src/proxy.ts         primera barrera: sin sesión no se entra al panel
 e2e/                 pruebas automáticas (Playwright)
@@ -109,8 +112,14 @@ WhatsApp listo, dirección, mapa y redes). Se guardan en caché y se renuevan al
 
 ## Seguridad (resumen)
 
+- Acceso con **better-auth**: usuario y contraseña, o «Continuar con Google» (opcional).
 - Contraseñas guardadas con **argon2id**; nunca en texto.
-- Sesión en una cookie `httpOnly` con un token aleatorio; en la base solo se guarda su hash. «Salir» la invalida.
+- Sesión en una cookie `httpOnly` firmada con `BETTER_AUTH_SECRET` y guardada en la base: «Salir» la invalida
+  al momento. Los tokens de Google se guardan cifrados.
+- De las rutas de better-auth, desde fuera solo se puede abrir la vuelta de Google (`/api/auth/callback/google`);
+  entrar, registrarse y cambiar la contraseña pasan por acciones del servidor que validan y limitan intentos.
+- Google con `state` y PKCE. Una cuenta de Google nunca crea cuenta ni se une sola a una existente: para
+  registrarse con Google hace falta un código de invitación, y una cuenta existente la vincula desde «Mi cuenta».
 - Cada pantalla y cada acción del panel revisan la sesión en el servidor.
 - Registro solo con código de invitación de un solo uso que vence en 7 días.
 - Bloqueo temporal tras 5 contraseñas equivocadas (15 minutos) y tras 10 códigos equivocados por hora.
@@ -142,6 +151,9 @@ Hostinger arma las apps de Next.js en modo servidor («standalone») y las arran
 4. **Variables de entorno** (en la misma pantalla):
    - `DATABASE_URL` = `mysql://USUARIO:CONTRASEÑA@SERVIDOR:3306/BASE?connectionLimit=5`
    - `CODIGO_INVITACION_INICIAL` = un código nuevo y largo (no el de tu computadora).
+   - `BETTER_AUTH_SECRET` = un secreto nuevo de al menos 32 caracteres al azar (no el de tu computadora).
+   - `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` (opcional), con `https://tu-dominio/api/auth/callback/google`
+     registrada en Google Cloud como URI de redireccionamiento.
    - `SITIO_URL` = la dirección de tu dominio, por ejemplo `https://viveroelencanto.com` (para compartir enlaces
      y para el mapa del sitio que leen los buscadores).
 5. **Dominio y HTTPS:** conecta el dominio y activa el certificado SSL en hPanel.
