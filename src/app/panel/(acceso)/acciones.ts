@@ -1,16 +1,24 @@
 "use server";
 
+import { randomUUID } from "node:crypto";
 import { isAPIError } from "better-auth/api";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth, correoInterno, ENCABEZADO_INVITACION, googleConfigurado } from "@/lib/auth/auth";
+import {
+  auth,
+  correoInterno,
+  ENCABEZADO_INTENTO,
+  ENCABEZADO_INVITACION,
+  googleConfigurado,
+  tomarReservaSinCuenta,
+} from "@/lib/auth/auth";
 import { hashCodigo } from "@/lib/auth/codigos";
 import { MINUTO_MS, RUTA_INGRESO, RUTA_PANEL, RUTA_REGISTRO } from "@/lib/auth/constantes";
-import { invitacionVigente } from "@/lib/auth/invitaciones";
+import { invitacionVigente, liberarInvitacion } from "@/lib/auth/invitaciones";
 import {
+  consumirIntento,
+  devolverIntento,
   limpiarIntentos,
-  minutosDeBloqueo,
-  registrarFallo,
   type ReglaIntentos,
 } from "@/lib/auth/limite-intentos";
 import { limpiarVencidos } from "@/lib/auth/sesion";
@@ -26,12 +34,25 @@ import {
   type DatosRegistroGoogle,
 } from "@/lib/validacion/cuenta";
 
+// Los límites cuentan el intento ANTES de hacerlo (consumirIntento) y lo devuelven si al final no
+// contaba (salió bien o el error no era culpa de quien lo intentó). Ver limite-intentos.ts.
+
 const VENTANA_INGRESO_MS = 15 * MINUTO_MS;
 const VENTANA_REGISTRO_MS = 60 * MINUTO_MS;
 
 /** 10 códigos equivocados por hora desde la misma IP bloquean temporalmente (con o sin Google). */
 async function reglaRegistro(): Promise<ReglaIntentos> {
   return { clave: `registro:ip:${await obtenerIp()}`, maximo: 10, ventanaMs: VENTANA_REGISTRO_MS };
+}
+
+/**
+ * Cada viaje a Google guarda su «state» en la base: se limitan a 20 por IP cada 15 minutos para que
+ * nadie pueda llenar la tabla a propósito (se cuentan todos los viajes, no solo los fallidos).
+ */
+async function limitarViajesAGoogle(): Promise<number | null> {
+  return consumirIntento([
+    { clave: `google:ip:${await obtenerIp()}`, maximo: 20, ventanaMs: VENTANA_INGRESO_MS },
+  ]);
 }
 
 export async function ingresar(
@@ -47,7 +68,7 @@ export async function ingresar(
     { clave: `ingreso:usuario:${usuario}`, maximo: 5, ventanaMs: VENTANA_INGRESO_MS },
     { clave: `ingreso:ip:${ip}`, maximo: 30, ventanaMs: VENTANA_INGRESO_MS },
   ];
-  const minutos = await minutosDeBloqueo(reglas);
+  const minutos = await consumirIntento(reglas);
   if (minutos) return { ok: false, error: "demasiadosIntentos", minutos };
 
   try {
@@ -59,12 +80,12 @@ export async function ingresar(
     });
   } catch (error) {
     if (!isAPIError(error)) throw error;
-    await registrarFallo(reglas);
-    // Mismo mensaje si el usuario no existe o si la contraseña está mal.
+    // El intento ya quedó contado. Mismo mensaje si el usuario no existe o si la contraseña está mal.
     return { ok: false, error: "credencialesInvalidas" };
   }
 
   await limpiarIntentos(reglas[0].clave);
+  await devolverIntento([reglas[1].clave]);
   await limpiarVencidos();
   redirect(RUTA_PANEL);
 }
@@ -77,47 +98,51 @@ export async function registrarse(
   const { codigo, usuario, contrasena } = validacion.data;
 
   const regla = await reglaRegistro();
-  const minutos = await minutosDeBloqueo([regla]);
+  const minutos = await consumirIntento([regla]);
   if (minutos) return { ok: false, error: "demasiadosIntentos", minutos };
 
   const hash = hashCodigo(codigo);
   if (!(await invitacionVigente(hash))) {
-    await registrarFallo([regla]);
     return { ok: false, campos: { codigo: "codigoInvalido" } };
   }
-  const ocupado = await prisma.usuario.findUnique({ where: { usuario }, select: { id: true } });
-  if (ocupado) return { ok: false, campos: { usuario: "usuarioOcupado" } };
+  const usuarioOcupado = async () =>
+    !!(await prisma.usuario.findUnique({ where: { usuario }, select: { id: true } }));
+  if (await usuarioOcupado()) {
+    await devolverIntento([regla.clave]);
+    return { ok: false, campos: { usuario: "usuarioOcupado" } };
+  }
 
   // El código viaja (como hash) al hook de auth.ts, que lo gasta justo antes de crear la cuenta.
+  const intento = randomUUID();
   const encabezados = new Headers(await headers());
   encabezados.set(ENCABEZADO_INVITACION, hash);
+  encabezados.set(ENCABEZADO_INTENTO, intento);
   try {
     await auth.api.signUpEmail({
       body: { email: correoInterno(usuario), name: usuario, username: usuario, password: contrasena },
       headers: encabezados,
     });
   } catch (error) {
+    // Si este intento alcanzó a gastar el código pero la cuenta no se creó, el código se devuelve.
+    const reservada = tomarReservaSinCuenta(intento);
+    if (reservada) await liberarInvitacion(reservada);
     if (!isAPIError(error)) throw error;
-    if (error.body?.code === "USERNAME_IS_ALREADY_TAKEN" || error.body?.code?.startsWith("USER_ALREADY_EXISTS")) {
+
+    // Solo un código que no sirve cuenta como intento fallido.
+    if (error.body?.code === "invitacion_invalida") {
+      return { ok: false, campos: { codigo: "codigoInvalido" } };
+    }
+    await devolverIntento([regla.clave]);
+    // Lo más común: otra persona tomó el mismo usuario un instante antes.
+    if (error.body?.code === "USERNAME_IS_ALREADY_TAKEN" || (await usuarioOcupado())) {
       return { ok: false, campos: { usuario: "usuarioOcupado" } };
     }
-    // Lo más probable: alguien más usó el mismo código un instante antes.
-    await registrarFallo([regla]);
-    return { ok: false, campos: { codigo: "codigoInvalido" } };
+    return { ok: false, error: "inesperado" };
   }
+  tomarReservaSinCuenta(intento);
+  await devolverIntento([regla.clave]);
 
   redirect(RUTA_PANEL);
-}
-
-/**
- * Cada viaje a Google guarda su «state» en la base: se limitan a 20 por IP cada 15 minutos para que
- * nadie pueda llenar la tabla a propósito (se cuentan todos los intentos, no solo los fallidos).
- */
-async function limitarViajesAGoogle(): Promise<number | null> {
-  const regla: ReglaIntentos = { clave: `google:ip:${await obtenerIp()}`, maximo: 20, ventanaMs: VENTANA_INGRESO_MS };
-  const minutos = await minutosDeBloqueo([regla]);
-  if (!minutos) await registrarFallo([regla]);
-  return minutos;
 }
 
 /** «Continuar con Google» en Entrar: solo sirve si esa cuenta de Google ya está vinculada. */
@@ -147,14 +172,14 @@ export async function registrarseConGoogle(
   if (!validacion.success) return { ok: false, campos: erroresDeCampos(validacion.error) };
 
   const regla = await reglaRegistro();
-  const minutos = await minutosDeBloqueo([regla]);
+  const minutos = await consumirIntento([regla]);
   if (minutos) return { ok: false, error: "demasiadosIntentos", minutos };
 
   const hash = hashCodigo(validacion.data.codigo);
   if (!(await invitacionVigente(hash))) {
-    await registrarFallo([regla]);
     return { ok: false, campos: { codigo: "codigoInvalido" } };
   }
+  await devolverIntento([regla.clave]);
   const minutosGoogle = await limitarViajesAGoogle();
   if (minutosGoogle) return { ok: false, error: "demasiadosIntentos", minutos: minutosGoogle };
 

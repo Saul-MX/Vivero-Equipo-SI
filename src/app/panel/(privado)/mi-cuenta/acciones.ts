@@ -9,9 +9,9 @@ import { auth, googleConfigurado } from "@/lib/auth/auth";
 import { MINUTO_MS, RUTA_MI_CUENTA } from "@/lib/auth/constantes";
 import { cancelarInvitacion, crearInvitacion } from "@/lib/auth/invitaciones";
 import {
+  consumirIntento,
+  devolverIntento,
   limpiarIntentos,
-  minutosDeBloqueo,
-  registrarFallo,
   type ReglaIntentos,
 } from "@/lib/auth/limite-intentos";
 import { requerirUsuario } from "@/lib/auth/sesion";
@@ -33,7 +33,8 @@ export async function cambiarContrasena(
     maximo: 5,
     ventanaMs: 15 * MINUTO_MS,
   };
-  const minutos = await minutosDeBloqueo([regla]);
+  // El intento se cuenta antes de probar la contraseña (ver limite-intentos.ts).
+  const minutos = await consumirIntento([regla]);
   if (minutos) return { ok: false, error: "demasiadosIntentos", minutos };
 
   try {
@@ -45,10 +46,11 @@ export async function cambiarContrasena(
     });
   } catch (error) {
     if (!isAPIError(error)) throw error;
+    // Solo una contraseña actual equivocada cuenta como intento fallido.
     if (error.body?.code === "INVALID_PASSWORD") {
-      await registrarFallo([regla]);
       return { ok: false, campos: { actual: "contrasenaActualIncorrecta" } };
     }
+    await devolverIntento([regla.clave]);
     if (error.body?.code === "CREDENTIAL_ACCOUNT_NOT_FOUND") return { ok: false, error: "sinContrasena" };
     throw error;
   }

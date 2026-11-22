@@ -9,6 +9,9 @@ const LARGO = 12;
 /** El código inicial del .env debe tener al menos 12 letras o números para aceptarse. */
 export const LARGO_MINIMO_CODIGO_INICIAL = 12;
 
+/** El valor de ejemplo de .env.example: es público, así que nunca se acepta como código inicial. */
+export const CODIGO_INICIAL_DE_EJEMPLO = "CAMBIA-ESTE-CODIGO-2026";
+
 /** Genera un código con el formato «K7QH-M2ZD-9RXA» (60 bits de azar). */
 export function generarCodigo(): string {
   let codigo = "";
@@ -39,6 +42,8 @@ export function esHashDelCodigoInicial(hashIngresado: string, configurado: strin
   if (!configurado || normalizarCodigo(configurado).length < LARGO_MINIMO_CODIGO_INICIAL) {
     return false;
   }
+  // Si quedó el valor de ejemplo, el panel estaría abierto a cualquiera que conozca la plantilla.
+  if (normalizarCodigo(configurado) === normalizarCodigo(CODIGO_INICIAL_DE_EJEMPLO)) return false;
   if (!/^[0-9a-f]{64}$/.test(hashIngresado)) return false;
   const a = Buffer.from(hashIngresado, "hex");
   const b = Buffer.from(hashCodigo(configurado), "hex");

@@ -28,3 +28,11 @@ test("el registro con Google reconoce el código inicial por su hash", () => {
   expect(esHashDelCodigoInicial("no-es-un-hash", "VIVERO-INICIO-2026")).toBe(false);
   expect(esHashDelCodigoInicial(hashCodigo("CORTO-1"), "CORTO-1")).toBe(false);
 });
+
+// Hallazgo de la revisión (corregido): el valor de ejemplo de .env.example se aceptaba como código
+// inicial; quien copiara la plantilla sin cambiarlo dejaba el panel abierto.
+test("el código de ejemplo de .env.example nunca sirve como código inicial", () => {
+  const ejemplo = "CAMBIA-ESTE-CODIGO-2026";
+  expect(esCodigoInicial(ejemplo, ejemplo)).toBe(false);
+  expect(esHashDelCodigoInicial(hashCodigo(ejemplo), ejemplo)).toBe(false);
+});

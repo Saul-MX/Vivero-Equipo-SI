@@ -52,7 +52,12 @@ export type FotoEnFormulario = EntradaPlanta["fotos"][number];
 
 /** Filtros del listado de plantas (vienen en la dirección: ?q=…&catalogo=…&color=…&disponible=si). */
 export const esquemaFiltrosPlantas = z.object({
-  q: z.string().trim().max(120).catch(""),
+  // Una búsqueda muy larga se recorta (no se borra): si no, se verían todas las plantas sin aviso.
+  q: z
+    .string()
+    .trim()
+    .transform((texto) => texto.slice(0, 120))
+    .catch(""),
   catalogo: z.coerce.number().int().positive().optional().catch(undefined),
   color: z.coerce.number().int().positive().optional().catch(undefined),
   disponible: z.enum(["si", "no"]).optional().catch(undefined),

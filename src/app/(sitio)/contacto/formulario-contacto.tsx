@@ -79,7 +79,9 @@ function Formulario({ textos, alOtro }: { textos: TextosContacto; alOtro: () => 
           <input
             {...comunes}
             type="text"
-            autoComplete={nombre === "nombre" ? "name" : "email"}
+            // «Teléfono o correo» acepta las dos cosas: no hay un valor de autocompletado que lo describa
+            // (WCAG 1.3.5), así que no se le dice al navegador que es solo un correo.
+            autoComplete={nombre === "nombre" ? "name" : undefined}
             className={cn(clases, "h-11")}
           />
         )}

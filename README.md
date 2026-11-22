@@ -19,43 +19,138 @@ para las pruebas.
 | 6 | Inicio del panel (pendientes, accesos rápidos, mensajes y novedades) | Aprobada |
 | 7 | Pulido | Terminada, en revisión (rama `fase-7-pulido`) |
 
-## Requisitos
+## Instalación en tu computadora
 
-- **Node.js 22 o más nuevo** (`node -v` en la terminal).
-- **MySQL o MariaDB.** En Windows sirve XAMPP: abre el *XAMPP Control Panel* y presiona **Start** en «MySQL».
-- **Git.**
+Esta guía te lleva de cero hasta entrar al panel con tu cuenta. Toma unos 15 minutos. Los comandos son para
+**PowerShell** (o la terminal de VS Code en Windows); donde cambian en macOS o Linux, se indica.
 
-## Ponerlo a funcionar por primera vez
+### Paso 1. Instala lo necesario
 
-Todos los comandos se escriben en una terminal (PowerShell o la terminal de VS Code) dentro de la carpeta del proyecto.
+| Programa | Versión | Cómo revisar que ya lo tienes |
+| --- | --- | --- |
+| [Node.js](https://nodejs.org) | 22 o más nueva | `node -v` |
+| [Git](https://git-scm.com) | cualquiera reciente | `git --version` |
+| MySQL o MariaDB | MariaDB 10.11 o MySQL 8 | En Windows, con [XAMPP](https://www.apachefriends.org) basta |
 
-1. Instala las dependencias:
+**Si usas XAMPP:** abre el *XAMPP Control Panel* y presiona **Start** en la fila «MySQL». Déjalo encendido
+mientras trabajas; si lo cierras, el sitio no puede leer la base de datos. XAMPP trae el usuario `root` sin
+contraseña, que es lo que ya espera la plantilla de configuración.
+
+### Paso 2. Descarga el proyecto e instala sus dependencias
+
+```powershell
+git clone https://github.com/Saul-MX/Vivero-Equipo-SI.git
+cd Vivero-Equipo-SI
+npm install
+```
+
+`npm install` tarda uno o dos minutos y al final prepara Prisma (la conexión con la base de datos).
+
+> Es normal que al final aparezcan avisos de npm como «`N vulnerabilities`» o
+> «`packages have install scripts not yet covered by allowScripts`». No impiden que el sitio funcione y no hace
+> falta correr `npm audit fix`.
+
+### Paso 3. Crea tu archivo de configuración (`.env`)
+
+Copia la plantilla:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+(En macOS o Linux: `cp .env.example .env`.)
+
+Abre `.env` en tu editor y llena **dos valores obligatorios**:
+
+1. **`CODIGO_INVITACION_INICIAL`**: inventa un código de al menos 12 letras o números, por ejemplo
+   `MI-VIVERO-2026-ABC`. Con él vas a crear la primera cuenta.
+   > **No dejes el valor de ejemplo** (`CAMBIA-ESTE-CODIGO-2026`): el sitio lo rechaza a propósito y verías
+   > «El código no es válido» al registrarte.
+2. **`BETTER_AUTH_SECRET`**: un secreto al azar para firmar las sesiones. Genera uno con este comando y pega lo que
+   salga entre las comillas:
    ```powershell
-   npm install
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
    ```
-2. Crea tu archivo de configuración copiando la plantilla:
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-   Abre `.env` y cambia `CODIGO_INVITACION_INICIAL` por un código tuyo (mínimo 12 letras o números).
-   Llena `BETTER_AUTH_SECRET` con un secreto al azar (el comando para generarlo está en el mismo archivo).
-   Para probar «Continuar con Google», llena también `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` (los pasos para
-   crearlos están en `.env.example`); si los dejas vacíos, el botón de Google no aparece.
-   Si tu MySQL tiene contraseña, agrégala en `DATABASE_URL` (`mysql://root:TU_CONTRASEÑA@localhost:3306/...`).
-3. Crea la base de datos y sus tablas, y carga los datos iniciales:
-   ```powershell
-   npm run db:migrar
-   npm run db:semilla
-   ```
-4. Arranca el sitio:
-   ```powershell
-   npm run dev
-   ```
-5. Abre <http://localhost:3000/panel/registro> y crea la primera cuenta con el código de `CODIGO_INVITACION_INICIAL`.
-   Ese código **solo funciona mientras no exista ninguna cuenta**. Para invitar a más personas, entra a
-   **Mi cuenta → Invitar a otra persona**.
 
-Para detener el sitio, presiona `Ctrl + C` en la terminal.
+Lo demás puede quedarse como viene. Solo cámbialo en estos casos:
+
+- **Tu MySQL tiene contraseña:** agrégala en `DATABASE_URL` y en `DATABASE_URL_PRUEBA`:
+  `mysql://root:TU_CONTRASEÑA@localhost:3306/vivero_encanto?connectionLimit=5`.
+- **Quieres probar «Continuar con Google»:** llena `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` (ver
+  [Activar el inicio con Google](#activar-el-inicio-con-google-opcional)). Si los dejas vacíos, el botón de Google
+  simplemente no aparece y todo lo demás funciona igual.
+
+> El archivo `.env` es tuyo: **nunca lo subas a Git** (ya está en `.gitignore`) ni lo compartas por chat.
+
+### Paso 4. Crea la base de datos y carga los datos iniciales
+
+Con MySQL encendido:
+
+```powershell
+npm run db:migrar
+npm run db:semilla
+```
+
+- `db:migrar` crea la base `vivero_encanto` (si no existe) y todas sus tablas.
+- `db:semilla` carga los catálogos, temporadas, colores y tamaños de maceta de inicio. Al terminar dice
+  «Datos iniciales listos».
+
+> Si ves un recuadro de Prisma que dice «This is a major update», ignóralo: solo avisa que existe una versión
+> nueva. No actualices Prisma por tu cuenta.
+
+### Paso 5. Arranca el sitio
+
+```powershell
+npm run dev
+```
+
+Cuando la terminal diga `Ready`, abre <http://localhost:3000>. La primera vez cada página tarda unos segundos en
+aparecer, porque se prepara al momento; después es inmediata.
+
+Para detener el sitio, presiona `Ctrl + C` en esa terminal. Para volver a trabajar otro día, basta con encender
+MySQL y correr `npm run dev`; los pasos 2 a 4 no se repiten.
+
+### Paso 6. Crea tu cuenta del panel
+
+1. Abre <http://localhost:3000/panel/registro>.
+2. Escribe el código que pusiste en `CODIGO_INVITACION_INICIAL`, un usuario (por ejemplo `saul`) y una contraseña
+   de al menos 8 caracteres.
+3. Presiona **Crear cuenta**. Entrarás al panel con el saludo «Hola, …».
+
+Ese código **solo sirve para la primera cuenta**. Para que alguien más entre al panel, ve a **Mi cuenta → Crear
+código de invitación** y compártele el código: sirve una sola vez y vence en 7 días.
+
+### Activar el inicio con Google (opcional)
+
+1. Entra a <https://console.cloud.google.com> con tu cuenta de Google y crea un proyecto (por ejemplo
+   «Vivero El Encanto»).
+2. Google te pedirá configurar la **pantalla de consentimiento** (lo que ve la gente al elegir su cuenta): elige
+   tipo **Externo** y llena el nombre de la app y tu correo. Google cambia de lugar este menú seguido; si no lo
+   encuentras, búscalo como «OAuth consent screen».
+3. Ve a **APIs y servicios → Credenciales → Crear credenciales → ID de cliente de OAuth**, tipo
+   **Aplicación web**, con:
+   - **Orígenes autorizados de JavaScript:** `http://localhost:3000`
+   - **URI de redireccionamiento autorizados:** `http://localhost:3000/api/auth/callback/google`
+4. Copia el *ID de cliente* y el *Secreto del cliente* en `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` de tu `.env`.
+5. Detén el sitio (`Ctrl + C`) y vuelve a correr `npm run dev`.
+
+Ahora en «Entrar» y en «Crear cuenta» aparece **Continuar con Google**. Una cuenta de Google solo entra si ya está
+vinculada:
+- **Si ya tienes cuenta del panel:** entra con tu usuario y contraseña, y en **Mi cuenta → Vincular cuenta de
+  Google** vincula tu Google.
+- **Si eres nuevo:** en «Crear cuenta» escribe tu código de invitación y presiona **Continuar con Google**.
+
+### Problemas comunes
+
+| Lo que ves | Qué pasa y cómo se arregla |
+| --- | --- |
+| `P1001: Can't reach database server at localhost:3306` | MySQL está apagado. Enciéndelo en XAMPP (**Start** en «MySQL») y repite el comando. |
+| `P1000: Authentication failed against database server` | El usuario o la contraseña de MySQL no coinciden: corrígelos en `DATABASE_URL` (paso 3). |
+| «El código no es válido, ya se usó o ya venció» al crear la primera cuenta | Dejaste el código de ejemplo, escribiste otro distinto al de `.env`, o ya existe una cuenta. Si cambiaste `.env`, reinicia `npm run dev`. |
+| No aparece «Continuar con Google» | Faltan `GOOGLE_CLIENT_ID` o `GOOGLE_CLIENT_SECRET`, o no reiniciaste `npm run dev` después de llenarlos. |
+| Google dice `redirect_uri_mismatch` | La URI de redireccionamiento en Google Cloud no es exactamente `http://localhost:3000/api/auth/callback/google`. |
+| `Port 3000 is in use` | Ya tienes el sitio abierto en otra terminal. Ciérralo, o usa la dirección que Next te propone. |
+| «Demasiados intentos» al entrar | Te equivocaste de contraseña 5 veces: espera 15 minutos. |
 
 ## Comandos útiles
 
@@ -73,15 +168,23 @@ Para detener el sitio, presiona `Ctrl + C` en la terminal.
 
 ## Pruebas
 
-`npm run pruebas` hace todo solo:
+La primera vez, descarga el navegador que usan las pruebas:
+
+```powershell
+npx playwright install chromium
+```
+
+Después, con MySQL encendido, `npm run pruebas` hace todo solo (tarda unos 5 minutos):
 
 1. Borra y vuelve a crear la base **de pruebas** (`DATABASE_URL_PRUEBA`). Por seguridad, solo acepta una base cuyo
    nombre termine en `_prueba`, así que nunca toca tus datos reales.
 2. Arma el sitio como en producción y lo abre en un navegador automático (Chromium).
-3. Prueba registro, inicio de sesión, bloqueo por intentos, cambio de contraseña, invitaciones, menú en computadora
-   y celular, y accesibilidad (WCAG 2.1 AA).
+3. Prueba registro, inicio de sesión (con contraseña y Google), bloqueo por intentos, cambio de contraseña,
+   invitaciones, todas las pantallas del panel y del sitio, menú en computadora y celular, y accesibilidad
+   (WCAG 2.1 AA).
 
-La primera vez descarga el navegador de pruebas con `npx playwright install chromium`.
+Las pruebas no necesitan credenciales reales de Google: usan unas falsas y detienen el viaje a Google antes de
+salir. Las pruebas que no usan navegador ni base de datos corren aparte y en segundos con `npm run pruebas:unidad`.
 
 ## Estructura
 
@@ -152,9 +255,11 @@ Hostinger arma las apps de Next.js en modo servidor («standalone») y las arran
    - `DATABASE_URL` = `mysql://USUARIO:CONTRASEÑA@SERVIDOR:3306/BASE?connectionLimit=5`
    - `CODIGO_INVITACION_INICIAL` = un código nuevo y largo (no el de tu computadora).
    - `BETTER_AUTH_SECRET` = un secreto nuevo de al menos 32 caracteres al azar (no el de tu computadora).
+   - `PROXIES_DE_CONFIANZA` = `1` (el proxy de Hostinger). Súbelo a `2` si pones un CDN delante. Sirve para
+     saber la IP real de cada visita en los límites de intentos.
    - `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` (opcional), con `https://tu-dominio/api/auth/callback/google`
      registrada en Google Cloud como URI de redireccionamiento.
-   - `SITIO_URL` = la dirección de tu dominio, por ejemplo `https://viveroelencanto.com` (para compartir enlaces
+   - `SITIO_URL` = la dirección de tu dominio, por ejemplo `https://www.example.com` (para compartir enlaces
      y para el mapa del sitio que leen los buscadores).
 5. **Dominio y HTTPS:** conecta el dominio y activa el certificado SSL en hPanel.
 6. Entra a `https://tu-dominio/panel/registro` y crea la primera cuenta.

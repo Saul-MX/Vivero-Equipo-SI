@@ -2,7 +2,7 @@
 
 import { getTranslations } from "next-intl/server";
 import { MINUTO_MS } from "@/lib/auth/constantes";
-import { minutosDeBloqueo, registrarFallo, type ReglaIntentos } from "@/lib/auth/limite-intentos";
+import { consumirIntento, type ReglaIntentos } from "@/lib/auth/limite-intentos";
 import { prisma } from "@/lib/db";
 import { obtenerIp } from "@/lib/peticion";
 import { erroresDeCampos } from "@/lib/resultado";
@@ -59,12 +59,12 @@ export async function enviarMensaje(_previo: EstadoContacto, datos: FormData): P
     maximo: MENSAJES_POR_HORA,
     ventanaMs: 60 * MINUTO_MS,
   };
-  const minutos = await minutosDeBloqueo([regla]);
+  // Se cuenta antes de guardar: varios envíos al mismo tiempo no pueden pasar del límite.
+  const minutos = await consumirIntento([regla]);
   if (minutos !== null) {
     return { estado: "error", general: t("demasiadosMensajes", { minutos }), campos: {}, valores };
   }
 
   await prisma.mensaje.create({ data: { nombre, contacto, texto: mensaje } });
-  await registrarFallo([regla]); // cuenta este envío dentro de la hora
   return { estado: "enviado" };
 }

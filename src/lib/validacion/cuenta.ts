@@ -10,7 +10,15 @@ const usuarioNuevo = z
   .toLowerCase()
   .min(3, "usuarioCorto")
   .max(30, "usuarioLargo")
-  .regex(/^[a-z0-9._-]+$/, "usuarioFormato");
+  .regex(/^[a-z0-9._-]+$/, "usuarioFormato")
+  // El usuario también forma su correo interno (usuario@cuentas.vivero.invalid), y un correo no puede
+  // empezar ni terminar con punto ni llevar dos seguidos.
+  .refine(esUsuarioConPuntosValidos, "usuarioPuntos");
+
+/** Misma regla en el formulario y en better-auth (auth.ts). */
+export function esUsuarioConPuntosValidos(usuario: string): boolean {
+  return !usuario.startsWith(".") && !usuario.endsWith(".") && !usuario.includes("..");
+}
 
 const contrasenaNueva = z
   .string()

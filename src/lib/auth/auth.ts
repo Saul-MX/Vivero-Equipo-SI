@@ -5,6 +5,7 @@ import { APIError, getOAuthState } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins";
 import { prisma } from "@/lib/db";
+import { esUsuarioConPuntosValidos } from "@/lib/validacion/cuenta";
 import { DIA_MS, DIAS_SESION, PREFIJO_COOKIES, RUTA_INGRESO } from "./constantes";
 import { hashearContrasena, verificarContrasena } from "./contrasena";
 import { asignarInvitacion, reservarInvitacion } from "./invitaciones";
@@ -58,6 +59,25 @@ async function invitacionDelIntento(ctx: ContextoAuth): Promise<string | null> {
 
 // Hash reservado en «create.before», para anotar en «create.after» quién lo usó.
 const reservas = new WeakMap<object, string>();
+
+/** Identificador de cada intento de registro con contraseña (lo pone la acción del servidor). */
+export const ENCABEZADO_INTENTO = "x-vivero-intento";
+
+// Códigos que un intento de registro ya gastó pero cuya cuenta todavía no existe. Si la cuenta no se
+// llega a crear (por ejemplo, otra persona tomó el mismo usuario un instante antes), la acción toma el
+// código de aquí y lo devuelve. Va por intento para no devolver nunca la reserva de otra persona.
+const reservasSinCuenta = new Map<string, string>();
+
+/** El código que gastó este intento sin llegar a crear la cuenta (y lo olvida), o undefined. */
+export function tomarReservaSinCuenta(intento: string): string | undefined {
+  const hash = reservasSinCuenta.get(intento);
+  reservasSinCuenta.delete(intento);
+  return hash;
+}
+
+function intentoDeRegistro(ctx: ContextoAuth): string | null {
+  return ctx?.path === "/sign-up/email" ? (ctx.headers?.get(ENCABEZADO_INTENTO) ?? null) : null;
+}
 
 const SEGUNDOS_DIA = DIA_MS / 1000;
 
@@ -189,8 +209,12 @@ export const auth = betterAuth({
             });
           }
           if (ctx) reservas.set(ctx, hash);
+          const intento = intentoDeRegistro(ctx);
+          if (intento) reservasSinCuenta.set(intento, hash);
         },
         after: async (usuario, ctx) => {
+          const intento = intentoDeRegistro(ctx);
+          if (intento) reservasSinCuenta.delete(intento);
           const hash = ctx ? reservas.get(ctx) : undefined;
           if (hash) await asignarInvitacion(hash, usuario.id);
         },
@@ -203,7 +227,7 @@ export const auth = betterAuth({
       minUsernameLength: 3,
       maxUsernameLength: 30,
       // Las mismas reglas que el formulario (validacion/cuenta.ts).
-      usernameValidator: (valor) => /^[a-z0-9._-]+$/.test(valor),
+      usernameValidator: (valor) => /^[a-z0-9._-]+$/.test(valor) && esUsuarioConPuntosValidos(valor),
       displayUsername: false,
       schema: { user: { fields: { username: "usuario" } } },
     }),

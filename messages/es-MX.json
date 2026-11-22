@@ -185,6 +185,7 @@
     "usuarioCorto": "El usuario debe tener al menos 3 caracteres.",
     "usuarioLargo": "El usuario puede tener máximo 30 caracteres.",
     "usuarioFormato": "Usa solo letras minúsculas sin acentos, números, punto, guion o guion bajo.",
+    "usuarioPuntos": "El usuario no puede empezar ni terminar con punto, ni llevar dos puntos seguidos.",
     "usuarioOcupado": "Ese usuario ya existe. Elige otro.",
     "contrasenaRequerida": "Escribe tu contraseña.",
     "contrasenaCorta": "La contraseña debe tener al menos 8 caracteres.",
