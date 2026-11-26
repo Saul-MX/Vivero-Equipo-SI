@@ -7,10 +7,11 @@ import { listarCatalogosParaElegir } from "@/lib/catalogo/catalogos";
 import { obtenerFertilizante } from "@/lib/catalogo/fertilizantes";
 import { TIPOS_FERTILIZANTE, type EntradaFertilizante } from "@/lib/validacion/fertilizante";
 import { FormularioFertilizante } from "../formulario-fertilizante";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("fertilizantes");
 
-export default function PaginaEditarFertilizante({ params }: PageProps<"/panel/fertilizantes/[id]">) {
+function PaginaEditarFertilizanteContenido({ params }: PageProps<"/panel/fertilizantes/[id]">) {
   return (
     <Suspense
       fallback={
@@ -56,5 +57,13 @@ async function EditarFertilizante({ params }: { params: Promise<{ id: string }> 
         },
       }}
     />
+  );
+}
+
+export default function PaginaEditarFertilizante(props: Parameters<typeof PaginaEditarFertilizanteContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaEditarFertilizanteContenido {...props} />
+    </VisitaNueva>
   );
 }

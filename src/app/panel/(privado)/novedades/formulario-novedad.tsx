@@ -91,7 +91,7 @@ export function FormularioNovedad({ novedad }: { novedad: { id: number; valores:
   );
 
   return (
-    <form onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
+    <form method="post" onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
       <EncabezadoPagina
         titulo={novedad ? titulo || inicial.titulo : t("tituloNueva")}
         subtitulo={t("subtitulo")}

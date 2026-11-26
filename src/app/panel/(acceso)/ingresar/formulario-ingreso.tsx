@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CampoTexto } from "@/components/formularios/campo-texto";
 import { useTraductorErrores } from "@/components/formularios/use-traductor-errores";
+import { useVaciarAlOcultar } from "@/components/formularios/use-vaciar-al-ocultar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -20,11 +21,15 @@ export function FormularioIngreso() {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<DatosIngreso>({
     resolver: zodResolver(esquemaIngreso),
     defaultValues: { usuario: "", contrasena: "" },
   });
+  // Next conserva oculta esta pantalla al entrar al panel; se vacía en cuanto deja de verse para que
+  // la contraseña no quede en la página ni reaparezca después de «Salir».
+  useVaciarAlOcultar(reset);
 
   const enviar = handleSubmit(async (datos) => {
     setErrorGeneral(undefined);
@@ -42,7 +47,7 @@ export function FormularioIngreso() {
   });
 
   return (
-    <form onSubmit={enviar} noValidate>
+    <form method="post" onSubmit={enviar} noValidate>
       <FieldGroup>
         {errorGeneral && (
           <Alert variant="destructive">

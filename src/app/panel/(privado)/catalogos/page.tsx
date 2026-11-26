@@ -11,10 +11,11 @@ import { requerirUsuario } from "@/lib/auth/sesion";
 import { listarCatalogosPanel } from "@/lib/catalogo/catalogos";
 import { leerEstadoTemporadas } from "@/lib/temporadas/temporadas";
 import { ListaCatalogos } from "./lista-catalogos";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("catalogos");
 
-export default function PaginaCatalogos() {
+function PaginaCatalogosContenido() {
   const t = useTranslations("panel");
 
   return (
@@ -48,5 +49,13 @@ async function ContenidoCatalogos() {
         <ListaCatalogos catalogos={catalogos} idCatalogoVigente={vigente?.catalogo.id ?? null} />
       </CardContent>
     </Card>
+  );
+}
+
+export default function PaginaCatalogos() {
+  return (
+    <VisitaNueva>
+      <PaginaCatalogosContenido />
+    </VisitaNueva>
   );
 }

@@ -14,13 +14,14 @@ import { requerirUsuario } from "@/lib/auth/sesion";
 import { FormularioContrasena } from "./formulario-contrasena";
 import { TarjetaGoogle } from "./tarjeta-google";
 import { TarjetaInvitaciones } from "./tarjeta-invitaciones";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("panel.cuenta");
   return { title: t("titulo") };
 }
 
-export default function PaginaMiCuenta() {
+function PaginaMiCuentaContenido() {
   const t = useTranslations("panel.cuenta");
 
   return (
@@ -79,5 +80,13 @@ async function ContenidoMiCuenta() {
         }))}
       />
     </div>
+  );
+}
+
+export default function PaginaMiCuenta() {
+  return (
+    <VisitaNueva>
+      <PaginaMiCuentaContenido />
+    </VisitaNueva>
   );
 }

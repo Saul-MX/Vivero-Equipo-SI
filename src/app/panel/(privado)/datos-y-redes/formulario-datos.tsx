@@ -71,7 +71,7 @@ export function FormularioDatos({ inicial }: { inicial: EntradaDatosNegocio }) {
   );
 
   return (
-    <form onSubmit={enviar} noValidate className="flex flex-col gap-6">
+    <form method="post" onSubmit={enviar} noValidate className="flex flex-col gap-6">
       {botonGuardar}
 
       <Card>

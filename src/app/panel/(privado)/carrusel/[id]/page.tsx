@@ -6,10 +6,11 @@ import { requerirUsuario } from "@/lib/auth/sesion";
 import { obtenerAnuncio, opcionesTemporadas } from "@/lib/carrusel/anuncios";
 import { obtenerDatosNegocio } from "@/lib/datos-negocio/datos";
 import { FormularioAnuncio } from "../formulario-anuncio";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("carrusel");
 
-export default function PaginaEditarAnuncio({ params }: PageProps<"/panel/carrusel/[id]">) {
+function PaginaEditarAnuncioContenido({ params }: PageProps<"/panel/carrusel/[id]">) {
   return (
     <Suspense
       fallback={
@@ -35,4 +36,12 @@ async function EditarAnuncio({ params }: { params: Promise<{ id: string }> }) {
   ]);
   if (!valores) notFound();
   return <FormularioAnuncio anuncio={{ id, valores }} temporadas={temporadas} enlaceWhatsapp={datos.enlaceWhatsapp} />;
+}
+
+export default function PaginaEditarAnuncio(props: Parameters<typeof PaginaEditarAnuncioContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaEditarAnuncioContenido {...props} />
+    </VisitaNueva>
+  );
 }

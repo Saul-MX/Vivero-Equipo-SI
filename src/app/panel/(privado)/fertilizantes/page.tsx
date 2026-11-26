@@ -11,10 +11,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { listarFertilizantesPanel } from "@/lib/catalogo/fertilizantes";
 import { TablaFertilizantes } from "./tabla-fertilizantes";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("fertilizantes");
 
-export default function PaginaFertilizantes() {
+function PaginaFertilizantesContenido() {
   const t = useTranslations("panel");
 
   return (
@@ -60,5 +61,13 @@ async function ContenidoFertilizantes() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+export default function PaginaFertilizantes() {
+  return (
+    <VisitaNueva>
+      <PaginaFertilizantesContenido />
+    </VisitaNueva>
   );
 }

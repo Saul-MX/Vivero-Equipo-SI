@@ -14,10 +14,11 @@ import { archivosDelCarrusel, listarAnunciosPanel } from "@/lib/carrusel/anuncio
 import { cn } from "@/lib/utils";
 import { ArchivosCarrusel } from "./archivos-carrusel";
 import { TablaAnuncios } from "./tabla-anuncios";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("carrusel");
 
-export default function PaginaCarrusel({ searchParams }: PageProps<"/panel/carrusel">) {
+function PaginaCarruselContenido({ searchParams }: PageProps<"/panel/carrusel">) {
   const t = useTranslations("panel");
 
   return (
@@ -103,5 +104,13 @@ async function ContenidoCarrusel({ searchParams }: { searchParams: PageProps<"/p
         </CardContent>
       </Card>
     </>
+  );
+}
+
+export default function PaginaCarrusel(props: Parameters<typeof PaginaCarruselContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaCarruselContenido {...props} />
+    </VisitaNueva>
   );
 }

@@ -9,10 +9,11 @@ import { listarColoresConUso, listarMacetasConUso } from "@/lib/datos-negocio/op
 import { FormularioDatos } from "./formulario-datos";
 import { ListaColores } from "./lista-colores";
 import { ListaMacetas } from "./lista-macetas";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("datos");
 
-export default function PaginaDatosYRedes() {
+function PaginaDatosYRedesContenido() {
   const t = useTranslations("panel.secciones.datos");
 
   return (
@@ -54,5 +55,13 @@ async function ContenidoDatosYRedes() {
         <ListaMacetas inicial={macetas} />
       </div>
     </div>
+  );
+}
+
+export default function PaginaDatosYRedes() {
+  return (
+    <VisitaNueva>
+      <PaginaDatosYRedesContenido />
+    </VisitaNueva>
   );
 }

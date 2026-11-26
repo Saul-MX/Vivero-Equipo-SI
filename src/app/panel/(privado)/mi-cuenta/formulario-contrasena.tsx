@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { CircleCheckIcon } from "lucide-react";
 import { CampoTexto } from "@/components/formularios/campo-texto";
 import { useTraductorErrores } from "@/components/formularios/use-traductor-errores";
+import { useVaciarAlOcultar } from "@/components/formularios/use-vaciar-al-ocultar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -28,6 +29,11 @@ export function FormularioContrasena({ usuario }: { usuario: string }) {
   } = useForm<DatosCambioContrasena>({
     resolver: zodResolver(esquemaCambioContrasena),
     defaultValues: { actual: "", nueva: "", repetir: "" },
+  });
+  // Al dejar de verse la pantalla (Next la conserva oculta) se vacían las contraseñas y el aviso.
+  useVaciarAlOcultar(() => {
+    reset();
+    setAviso(undefined);
   });
 
   const enviar = handleSubmit(async (datos) => {
@@ -51,7 +57,7 @@ export function FormularioContrasena({ usuario }: { usuario: string }) {
   });
 
   return (
-    <form onSubmit={enviar} noValidate>
+    <form method="post" onSubmit={enviar} noValidate>
       <FieldGroup>
         {aviso && (
           <Alert variant={aviso.tipo === "exito" ? "exito" : "destructive"}>

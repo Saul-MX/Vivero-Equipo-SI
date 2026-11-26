@@ -9,10 +9,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { contarMensajes, listarMensajes } from "@/lib/mensajes/mensajes";
 import { cn } from "@/lib/utils";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("mensajes");
 
-export default function PaginaMensajes({ searchParams }: PageProps<"/panel/mensajes">) {
+function PaginaMensajesContenido({ searchParams }: PageProps<"/panel/mensajes">) {
   const t = useTranslations("panel.secciones.mensajes");
 
   return (
@@ -93,5 +94,13 @@ async function Bandeja({ searchParams }: { searchParams: PageProps<"/panel/mensa
         </CardContent>
       </Card>
     </>
+  );
+}
+
+export default function PaginaMensajes(props: Parameters<typeof PaginaMensajesContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaMensajesContenido {...props} />
+    </VisitaNueva>
   );
 }

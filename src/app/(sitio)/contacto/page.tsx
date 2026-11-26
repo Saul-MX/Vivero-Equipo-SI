@@ -3,6 +3,7 @@ import { ChevronDownIcon, ClockIcon, MailIcon, MapPinIcon, PhoneIcon } from "luc
 import { CabeceraPagina } from "@/components/sitio/cabecera-pagina";
 import { CONTENEDOR } from "@/components/sitio/encabezado";
 import { enlaceTelefono } from "@/components/sitio/pie";
+import { MapaNegocio } from "@/components/sitio/mapa-negocio";
 import { IconoWhatsapp } from "@/components/sitio/whatsapp";
 import { crearEnlaceWhatsapp } from "@/lib/datos-negocio/normalizar";
 import { obtenerDatosNegocio } from "@/lib/datos-negocio/datos";
@@ -138,13 +139,9 @@ export default async function PaginaContacto() {
       {datos.mapaSrc && (
         <section aria-label={t("contacto.mapa")} className={cn(CONTENEDOR, "mt-6")}>
           {/* La dirección del mapa se guardó ya revisada (solo mapas de Google con https). */}
-          <iframe
+          <MapaNegocio
             src={datos.mapaSrc}
-            title={t("contacto.mapa")}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-            allowFullScreen
+            titulo={t("contacto.mapa")}
             className="aspect-4/3 w-full rounded-md border border-hilo bg-muted sm:aspect-21/9"
           />
         </section>

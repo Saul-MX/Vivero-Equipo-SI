@@ -1,4 +1,10 @@
-@import "tailwindcss";
+/*
+ * Tailwind busca clases SOLO en src/ (donde están todos los componentes). Sin esto revisa todo el
+ * proyecto, y un archivo ajeno (un reporte HTML, un registro o las trazas de una herramienta de
+ * pruebas guardados en la carpeta) puede aportarle una «clase» inválida que rompe el CSS en
+ * «npm run dev» con «Build Error: Parsing CSS source code failed».
+ */
+@import "tailwindcss" source("../");
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 

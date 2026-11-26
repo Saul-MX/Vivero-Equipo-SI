@@ -3,7 +3,14 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { type Carpeta, esClaveTemporal, PATRON_ARCHIVO_PUBLICO, sufijosDe, type TipoArchivo } from "./claves";
+import {
+  type Carpeta,
+  esClaveTemporal,
+  MARCAS_DE_IMAGEN,
+  PATRON_ARCHIVO_PUBLICO,
+  sufijosDe,
+  type TipoArchivo,
+} from "./claves";
 
 // Archivos subidos desde el panel (fotos y folletos PDF).
 //
@@ -94,7 +101,9 @@ export async function guardarImagenTemporal(
  */
 export async function guardarVideoTemporal(datos: Buffer): Promise<string | null> {
   const esWebm = datos.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3]));
-  const esMp4 = datos.subarray(4, 8).toString("latin1") === "ftyp";
+  const esMp4 =
+    datos.subarray(4, 8).toString("latin1") === "ftyp" &&
+    !MARCAS_DE_IMAGEN.includes(datos.subarray(8, 12).toString("latin1"));
   if (!esWebm && !esMp4) return null;
   const clave = `${await nuevaClaveTemporal()}${esWebm ? ".webm" : ".mp4"}`;
   await writeFile(rutaEnDisco(clave), datos);

@@ -10,13 +10,14 @@ import { SiHayGoogle } from "../google";
 import { RedirigirSiHaySesion } from "../redirigir-si-hay-sesion";
 import { BotonRegistroGoogle } from "./boton-registro-google";
 import { FormularioRegistro } from "./formulario-registro";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("acceso.registro");
   return { title: t("tituloPagina") };
 }
 
-export default function PaginaRegistro() {
+function PaginaRegistroContenido() {
   const t = useTranslations("acceso.registro");
 
   return (
@@ -53,5 +54,13 @@ export default function PaginaRegistro() {
         </Link>
       </p>
     </>
+  );
+}
+
+export default function PaginaRegistro() {
+  return (
+    <VisitaNueva>
+      <PaginaRegistroContenido />
+    </VisitaNueva>
   );
 }

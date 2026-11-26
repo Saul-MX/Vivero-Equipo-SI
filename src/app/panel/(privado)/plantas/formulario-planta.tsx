@@ -151,7 +151,7 @@ export function FormularioPlanta({ planta, opciones, valoresNueva = VALORES_PLAN
     opciones.fertilizantes.find((fertilizante) => String(fertilizante.id) === fertilizanteId)?.nombre ?? null;
 
   return (
-    <form onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
+    <form method="post" onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
       <EncabezadoPagina
         titulo={planta ? nombre || inicial.nombre : t("tituloNueva")}
         subtitulo={planta ? `/plantas/${planta.slug}` : undefined}

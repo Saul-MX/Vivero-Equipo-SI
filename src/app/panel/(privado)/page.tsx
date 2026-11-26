@@ -27,6 +27,7 @@ import { degradadoTemporada } from "@/lib/sitio/color";
 import { textoTemporadaActual } from "@/lib/temporadas/texto-actual";
 import { leerEstadoTemporadas } from "@/lib/temporadas/temporadas";
 import { cn } from "@/lib/utils";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("panel");
@@ -34,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Inicio del panel (sección 4.1): lo que se ve hoy en el sitio y lo que falta por hacer.
-export default function PaginaInicioPanel() {
+function PaginaInicioPanelContenido() {
   return (
     <Suspense
       fallback={
@@ -264,5 +265,13 @@ async function Inicio() {
         </Card>
       </div>
     </>
+  );
+}
+
+export default function PaginaInicioPanel() {
+  return (
+    <VisitaNueva>
+      <PaginaInicioPanelContenido />
+    </VisitaNueva>
   );
 }

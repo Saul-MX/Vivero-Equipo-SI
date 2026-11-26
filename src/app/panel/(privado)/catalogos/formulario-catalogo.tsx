@@ -113,7 +113,7 @@ export function FormularioCatalogo({ catalogo }: { catalogo: CatalogoEnFormulari
   );
 
   return (
-    <form onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
+    <form method="post" onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
       <EncabezadoPagina
         titulo={catalogo ? nombre || inicial.nombre : t("tituloNuevo")}
         subtitulo={catalogo ? `/${catalogo.slug}` : undefined}

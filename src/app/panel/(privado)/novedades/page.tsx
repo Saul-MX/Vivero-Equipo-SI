@@ -11,10 +11,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { listarNovedadesPanel } from "@/lib/apartados/novedades";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { ListaNovedades } from "./lista-novedades";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("novedades");
 
-export default function PaginaNovedades() {
+function PaginaNovedadesContenido() {
   const t = useTranslations("panel");
 
   return (
@@ -60,5 +61,13 @@ async function ContenidoNovedades() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+export default function PaginaNovedades() {
+  return (
+    <VisitaNueva>
+      <PaginaNovedadesContenido />
+    </VisitaNueva>
   );
 }

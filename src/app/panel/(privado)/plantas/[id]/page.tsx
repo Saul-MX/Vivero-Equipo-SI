@@ -6,10 +6,11 @@ import { requerirUsuario } from "@/lib/auth/sesion";
 import { obtenerPlanta, opcionesFormularioPlanta } from "@/lib/catalogo/plantas";
 import type { EntradaPlanta } from "@/lib/validacion/planta";
 import { FormularioPlanta } from "../formulario-planta";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("plantas");
 
-export default function PaginaEditarPlanta({ params }: PageProps<"/panel/plantas/[id]">) {
+function PaginaEditarPlantaContenido({ params }: PageProps<"/panel/plantas/[id]">) {
   return (
     <Suspense
       fallback={
@@ -57,5 +58,13 @@ async function EditarPlanta({ params }: { params: Promise<{ id: string }> }) {
         },
       }}
     />
+  );
+}
+
+export default function PaginaEditarPlanta(props: Parameters<typeof PaginaEditarPlantaContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaEditarPlantaContenido {...props} />
+    </VisitaNueva>
   );
 }

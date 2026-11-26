@@ -6,6 +6,7 @@ import { FilmIcon, Loader2Icon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { urlVideo } from "@/lib/archivos/claves";
 import { cn } from "@/lib/utils";
+import { useCampoArchivo } from "./use-campo-archivo";
 import { useTraductorErrores } from "./use-traductor-errores";
 import { ACEPTA_VIDEO, subirArchivo } from "./subir-archivo";
 
@@ -34,6 +35,7 @@ export function SubirVideo({ etiqueta, valor, alCambiar }: Props) {
     if (resultado.ok) alCambiar(resultado.clave);
     else setError(traducir(resultado.error));
   };
+  const campo = useCampoArchivo((archivos) => void subir(archivos[0]));
 
   const soltar = (evento: DragEvent) => {
     evento.preventDefault();
@@ -91,6 +93,7 @@ export function SubirVideo({ etiqueta, valor, alCambiar }: Props) {
             )}
           </div>
           <input
+            ref={campo}
             id={id}
             type="file"
             accept={ACEPTA_VIDEO}

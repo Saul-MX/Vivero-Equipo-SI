@@ -21,7 +21,8 @@ export async function generateMetadata() {
 type Foto = { archivo: string; ancho: number; alto: number };
 
 /** Mosaico de fotos (columnas que respetan la forma de cada foto). */
-function Galeria({ fotos, titulo }: { fotos: Foto[]; titulo: string }) {
+/** `primera`: es la galería de la primera sección; sus primeras fotos se ven al abrir la página. */
+function Galeria({ fotos, titulo, primera = false }: { fotos: Foto[]; titulo: string; primera?: boolean }) {
   if (fotos.length === 0) return null;
   return (
     <ul aria-label={titulo} className="mt-8 columns-2 gap-3 sm:columns-3 [&>li]:mb-3">
@@ -33,6 +34,7 @@ function Galeria({ fotos, titulo }: { fotos: Foto[]; titulo: string }) {
             width={foto.ancho}
             height={foto.alto}
             unoptimized
+            loading={primera && indice < 2 ? "eager" : "lazy"}
             className="h-auto w-full rounded-2xl bg-muted"
           />
         </li>
@@ -45,11 +47,14 @@ function Seccion({
   id,
   titulo,
   fotoSuperior,
+  primera = false,
   children,
 }: {
   id: string;
   titulo: string;
   fotoSuperior: string | null;
+  /** La primera sección de la página: su foto de arriba se ve al abrirla y se carga sin esperar. */
+  primera?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -65,6 +70,7 @@ function Seccion({
           width={1600}
           height={900}
           unoptimized
+          loading={primera ? "eager" : "lazy"}
           className="mt-6 aspect-video h-auto w-full rounded-md object-cover"
         />
       )}
@@ -94,6 +100,8 @@ export default async function PaginaNosotros() {
     { id: "vision", titulo: t("vision"), hay: vision.parrafos.length + vision.galeria.length > 0 || !!vision.fotoSuperior },
     { id: "valores", titulo: t("valores"), hay: valores.lista.length + valores.galeria.length > 0 || !!valores.fotoSuperior },
   ].filter((seccion) => seccion.hay);
+  // Lo primero que se ve al abrir la página se carga sin esperar (mejora el LCP).
+  const primera = secciones[0]?.id;
 
   return (
     <>
@@ -122,7 +130,7 @@ export default async function PaginaNosotros() {
       )}
 
       {secciones.some((seccion) => seccion.id === "historia") && (
-        <Seccion id="historia" titulo={t("historia")} fotoSuperior={historia.fotoSuperior}>
+        <Seccion id="historia" titulo={t("historia")} fotoSuperior={historia.fotoSuperior} primera={primera === "historia"}>
           <Parrafos parrafos={historia.parrafos} />
           {momentos.length > 0 && (
             <div className="mt-12">
@@ -148,26 +156,26 @@ export default async function PaginaNosotros() {
               </ol>
             </div>
           )}
-          <Galeria fotos={historia.galeria} titulo={t("galeriaDe", { seccion: t("historia") })} />
+          <Galeria fotos={historia.galeria} titulo={t("galeriaDe", { seccion: t("historia") })} primera={primera === "historia"} />
         </Seccion>
       )}
 
       {secciones.some((seccion) => seccion.id === "mision") && (
-        <Seccion id="mision" titulo={t("mision")} fotoSuperior={mision.fotoSuperior}>
+        <Seccion id="mision" titulo={t("mision")} fotoSuperior={mision.fotoSuperior} primera={primera === "mision"}>
           <Parrafos parrafos={mision.parrafos} />
-          <Galeria fotos={mision.galeria} titulo={t("galeriaDe", { seccion: t("mision") })} />
+          <Galeria fotos={mision.galeria} titulo={t("galeriaDe", { seccion: t("mision") })} primera={primera === "mision"} />
         </Seccion>
       )}
 
       {secciones.some((seccion) => seccion.id === "vision") && (
-        <Seccion id="vision" titulo={t("vision")} fotoSuperior={vision.fotoSuperior}>
+        <Seccion id="vision" titulo={t("vision")} fotoSuperior={vision.fotoSuperior} primera={primera === "vision"}>
           <Parrafos parrafos={vision.parrafos} />
-          <Galeria fotos={vision.galeria} titulo={t("galeriaDe", { seccion: t("vision") })} />
+          <Galeria fotos={vision.galeria} titulo={t("galeriaDe", { seccion: t("vision") })} primera={primera === "vision"} />
         </Seccion>
       )}
 
       {secciones.some((seccion) => seccion.id === "valores") && (
-        <Seccion id="valores" titulo={t("valores")} fotoSuperior={valores.fotoSuperior}>
+        <Seccion id="valores" titulo={t("valores")} fotoSuperior={valores.fotoSuperior} primera={primera === "valores"}>
           {valores.lista.length > 0 && (
             <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {valores.lista.map((valor) => (
@@ -178,7 +186,7 @@ export default async function PaginaNosotros() {
               ))}
             </ul>
           )}
-          <Galeria fotos={valores.galeria} titulo={t("galeriaDe", { seccion: t("valores") })} />
+          <Galeria fotos={valores.galeria} titulo={t("galeriaDe", { seccion: t("valores") })} primera={primera === "valores"} />
         </Seccion>
       )}
     </>

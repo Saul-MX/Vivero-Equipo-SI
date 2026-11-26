@@ -6,6 +6,7 @@ import { createContext, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { CampoTexto } from "@/components/formularios/campo-texto";
 import { useTraductorErrores } from "@/components/formularios/use-traductor-errores";
+import { useVaciarAlOcultar } from "@/components/formularios/use-vaciar-al-ocultar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -30,11 +31,14 @@ export function FormularioRegistro({ opcionGoogle }: { opcionGoogle?: ReactNode 
     setError,
     trigger,
     getValues,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<DatosRegistro>({
     resolver: zodResolver(esquemaRegistro),
     defaultValues: { codigo: "", usuario: "", contrasena: "", repetirContrasena: "" },
   });
+  // Al dejar de verse la pantalla (Next la conserva oculta) se vacían el código y las contraseñas.
+  useVaciarAlOcultar(reset);
 
   const mostrarResultado = (resultado: ResultadoAccion<keyof DatosRegistro>) => {
     if (resultado.ok) return;
@@ -63,7 +67,7 @@ export function FormularioRegistro({ opcionGoogle }: { opcionGoogle?: ReactNode 
   });
 
   return (
-    <form onSubmit={enviar} noValidate>
+    <form method="post" onSubmit={enviar} noValidate>
       <FieldGroup>
         {errorGeneral && (
           <Alert variant="destructive">

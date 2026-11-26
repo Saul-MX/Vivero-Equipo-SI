@@ -48,3 +48,9 @@ export function urlPdf(clave: string): string {
 export function urlVideo(clave: string): string {
   return `/archivos/${clave}`;
 }
+
+/**
+ * Las fotos HEIC/AVIF del celular empiezan igual que un MP4 (bytes 4 a 8 = «ftyp»); se distinguen
+ * por la «marca» de los bytes 8 a 12. Con estas marcas no es un video.
+ */
+export const MARCAS_DE_IMAGEN = ["heic", "heix", "hevc", "hevx", "heim", "heis", "mif1", "msf1", "avif", "avis"];

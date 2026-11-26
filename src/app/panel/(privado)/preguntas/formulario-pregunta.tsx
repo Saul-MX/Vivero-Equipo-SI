@@ -56,7 +56,7 @@ export function FormularioPregunta({
   );
 
   return (
-    <form
+    <form method="post"
       onSubmit={guardar}
       noValidate
       aria-label={pregunta ? t("tituloEditar") : t("tituloNueva")}

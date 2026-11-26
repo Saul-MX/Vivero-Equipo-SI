@@ -11,10 +11,11 @@ import { leerEstadoTemporadas } from "@/lib/temporadas/temporadas";
 import { textoTemporadaActual } from "@/lib/temporadas/texto-actual";
 import { FormularioModo } from "./formulario-modo";
 import { TarjetaTemporada } from "./tarjeta-temporada";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("temporadas");
 
-export default function PaginaTemporadas() {
+function PaginaTemporadasContenido() {
   const t = useTranslations("panel.secciones.temporadas");
 
   return (
@@ -59,5 +60,13 @@ async function ContenidoTemporadas() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PaginaTemporadas() {
+  return (
+    <VisitaNueva>
+      <PaginaTemporadasContenido />
+    </VisitaNueva>
   );
 }

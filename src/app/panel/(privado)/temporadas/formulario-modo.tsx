@@ -66,7 +66,7 @@ export function FormularioModo({
 
   return (
     <Card>
-      <form onSubmit={guardar} noValidate>
+      <form method="post" onSubmit={guardar} noValidate>
         <CardHeader>
           <CardTitle>
             <h2>{t("titulo")}</h2>

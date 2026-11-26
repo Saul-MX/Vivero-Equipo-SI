@@ -7,6 +7,7 @@ import { ImageUpIcon, Loader2Icon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { urlImagen } from "@/lib/archivos/claves";
 import { cn } from "@/lib/utils";
+import { useCampoArchivo } from "./use-campo-archivo";
 import { useTraductorErrores } from "./use-traductor-errores";
 import { ACEPTA_IMAGEN, ACEPTA_IMAGEN_ANUNCIO, subirArchivo } from "./subir-archivo";
 
@@ -41,6 +42,7 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar, redonda = false
     if (resultado.ok) alCambiar(resultado.clave);
     else setError(traducir(resultado.error));
   };
+  const campo = useCampoArchivo((archivos) => void subir(archivos[0]));
 
   const soltar = (evento: DragEvent) => {
     evento.preventDefault();
@@ -96,6 +98,7 @@ export function SubirImagen({ etiqueta, ayuda, valor, alCambiar, redonda = false
             )}
           </div>
           <input
+            ref={campo}
             id={id}
             type="file"
             accept={tipo === "imagenAnuncio" ? ACEPTA_IMAGEN_ANUNCIO : ACEPTA_IMAGEN}

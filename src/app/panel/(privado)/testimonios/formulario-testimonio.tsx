@@ -65,7 +65,7 @@ export function FormularioTestimonio({
   );
 
   return (
-    <form
+    <form method="post"
       onSubmit={guardar}
       noValidate
       aria-label={testimonio ? t("tituloEditar") : t("tituloNuevo")}

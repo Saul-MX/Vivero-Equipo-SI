@@ -80,7 +80,7 @@ export function TarjetaTemporada({ temporada, activa }: { temporada: TemporadaCo
       className={cn("border-t-[6px]", activa && "ring-2 ring-hoja")}
       style={{ borderTopColor: catalogo.color }}
     >
-      <form onSubmit={guardar} noValidate className="flex flex-1 flex-col">
+      <form method="post" onSubmit={guardar} noValidate className="flex flex-1 flex-col">
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">
             <CardTitle>

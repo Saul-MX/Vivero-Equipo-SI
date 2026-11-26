@@ -5,6 +5,7 @@ import { useId, useState, type DragEvent } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowLeftIcon, ArrowRightIcon, ImagePlusIcon, Loader2Icon, StarIcon, Trash2Icon } from "lucide-react";
 import { ACEPTA_IMAGEN, subirArchivo } from "@/components/formularios/subir-archivo";
+import { useCampoArchivo } from "@/components/formularios/use-campo-archivo";
 import { useTraductorErrores } from "@/components/formularios/use-traductor-errores";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ export function GaleriaFotos({
     setProgreso(null);
     setErrores(nuevosErrores);
   };
+  const campo = useCampoArchivo((archivos) => void subir(archivos));
 
   const usarPortada = (indice: number) =>
     alCambiar(valor.map((foto, i) => ({ ...foto, esPortada: i === indice })));
@@ -174,6 +176,7 @@ export function GaleriaFotos({
             </label>
           </Button>
           <input
+            ref={campo}
             id={id}
             type="file"
             multiple

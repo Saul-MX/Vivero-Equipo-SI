@@ -5,10 +5,11 @@ import { metadatosDeSeccion } from "@/components/panel/metadatos-seccion";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { obtenerCatalogo } from "@/lib/catalogo/catalogos";
 import { FormularioCatalogo } from "../formulario-catalogo";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("catalogos");
 
-export default function PaginaFichaCatalogo({ params }: PageProps<"/panel/catalogos/[id]">) {
+function PaginaFichaCatalogoContenido({ params }: PageProps<"/panel/catalogos/[id]">) {
   return (
     <Suspense
       fallback={
@@ -53,5 +54,13 @@ async function FichaCatalogo({ params }: { params: Promise<{ id: string }> }) {
         },
       }}
     />
+  );
+}
+
+export default function PaginaFichaCatalogo(props: Parameters<typeof PaginaFichaCatalogoContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaFichaCatalogoContenido {...props} />
+    </VisitaNueva>
   );
 }

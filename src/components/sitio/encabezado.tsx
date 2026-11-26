@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { Logo } from "@/components/marca/logo";
-import { MenuSitio, NavegacionSitio, type ItemCatalogo, type TextosMenu } from "./menu-sitio";
+import { NavegacionSitio, type ItemCatalogo, type TextosMenu } from "./menu-sitio";
 
 /** Ancho y márgenes comunes del contenido del sitio (16 px a los lados en celular). */
 export const CONTENEDOR = "mx-auto w-full max-w-6xl px-4 sm:px-6";
@@ -33,9 +32,7 @@ export function EncabezadoSitio({ catalogos }: { catalogos: ItemCatalogo[] }) {
           <span className="sr-only">{t("irInicio")}</span>
         </Link>
         {/* La ruta actual solo se conoce en el navegador: mientras tanto se ve el menú sin marcar. */}
-        <Suspense fallback={<MenuSitio catalogos={catalogos} textos={textos} rutaActual={null} />}>
-          <NavegacionSitio catalogos={catalogos} textos={textos} />
-        </Suspense>
+        <NavegacionSitio catalogos={catalogos} textos={textos} />
       </div>
     </header>
   );

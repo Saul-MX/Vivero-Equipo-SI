@@ -7,10 +7,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { listarTestimonios } from "@/lib/apartados/testimonios";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { ListaTestimonios } from "./lista-testimonios";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("testimonios");
 
-export default function PaginaTestimonios() {
+function PaginaTestimoniosContenido() {
   const t = useTranslations("panel.secciones.testimonios");
 
   return (
@@ -33,5 +34,13 @@ async function ContenidoTestimonios() {
         <ListaTestimonios testimonios={testimonios} />
       </CardContent>
     </Card>
+  );
+}
+
+export default function PaginaTestimonios() {
+  return (
+    <VisitaNueva>
+      <PaginaTestimoniosContenido />
+    </VisitaNueva>
   );
 }

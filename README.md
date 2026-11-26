@@ -13,7 +13,7 @@ para las pruebas.
 | --- | --- | --- |
 | [Manual de usuario](docs/Manual-de-Usuario-Vivero-El-Encanto.docx) | Personal del vivero y QA | Cómo usar el sitio y cada módulo del panel, con capturas de pantalla. |
 | [Manual técnico](docs/Manual-Tecnico-Vivero-El-Encanto.docx) | Desarrollo y QA | Tecnologías, arquitectura, base de datos (diccionario de datos), estructura del código, seguridad, instalación, pruebas y despliegue. |
-| [Matriz de pruebas QA](docs/Matriz-de-Pruebas-QA-Vivero-El-Encanto.xlsx) | Equipo de QA | 84 casos de prueba con pasos y resultado esperado, reporte de errores, correcciones y resumen automático. |
+| [Matriz de pruebas QA](docs/Matriz-de-Pruebas-QA-Vivero-El-Encanto.xlsx) | Equipo de QA | 89 casos de prueba con pasos y resultado esperado, reporte de errores, correcciones y resumen automático. |
 | [ESPECIFICACION.md](ESPECIFICACION.md) | Todos | Requisitos funcionales acordados con el cliente. |
 
 ### Para el equipo de QA
@@ -170,7 +170,10 @@ vinculada:
 | No aparece «Continuar con Google» | Faltan `GOOGLE_CLIENT_ID` o `GOOGLE_CLIENT_SECRET`, o no reiniciaste `npm run dev` después de llenarlos. |
 | Google dice `redirect_uri_mismatch` | La URI de redireccionamiento en Google Cloud no es exactamente `http://localhost:3000/api/auth/callback/google`. |
 | `Port 3000 is in use` | Ya tienes el sitio abierto en otra terminal. Ciérralo, o usa la dirección que Next te propone. |
-| «Demasiados intentos» al entrar | Te equivocaste de contraseña 5 veces: espera 15 minutos. |
+| «Demasiados intentos» o «Ya recibimos varios mensajes…» | Son los límites contra ataques (por ejemplo, 5 contraseñas equivocadas o 5 mensajes de Contacto por hora). Espera el tiempo que indica el aviso o, en tu computadora, corre `npm run db:limpiar-intentos`. |
+| Contacto dice «¡Gracias!» pero el mensaje no llega al panel | El formulario se envió en menos de 3 segundos (protección contra programas de spam). Escribe con calma y vuelve a enviarlo. |
+| En la terminal de `npm run dev` sale `⨯ Error: aborted` con `ECONNRESET` | No es un error del sitio: el navegador canceló una carga porque cambiaste de página muy rápido (pasa mucho con herramientas automáticas). Se puede ignorar. |
+| La primera vez que abres una pantalla tarda unos segundos | En modo desarrollo, Next prepara cada pantalla la primera vez que se visita. Las siguientes veces carga rápido; en producción (`npm run build`) no pasa. |
 
 ## Comandos útiles
 
@@ -183,6 +186,7 @@ vinculada:
 | `npm run db:migrar` | Aplica cambios del modelo de datos a tu base local. |
 | `npm run db:semilla` | Carga los datos iniciales (solo si la base está recién creada). |
 | `npm run db:semilla:completar` | Vuelve a crear los datos iniciales que falten, sin tocar lo editado. |
+| `npm run db:limpiar-intentos` | Borra los contadores de intentos (para seguir probando sin esperar los bloqueos temporales). |
 | `npm run lint` / `npm run typecheck` | Revisan el estilo y los tipos del código. |
 | `npm run build` y `npm run start` | Arman y arrancan el sitio como en producción. |
 

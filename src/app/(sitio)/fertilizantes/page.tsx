@@ -34,7 +34,7 @@ export default async function PaginaFertilizantes() {
           <p className="rounded-md border border-dashed border-hilo p-10 text-center text-texto-suave">{t("vacio")}</p>
         ) : (
           <ul className="flex flex-col gap-6">
-            {fertilizantes.map((fertilizante) => (
+            {fertilizantes.map((fertilizante, indice) => (
               <li key={fertilizante.id} id={`fertilizante-${fertilizante.id}`} className="scroll-mt-24">
                 <article className="grid overflow-hidden rounded-md border border-hilo bg-white md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
                   {fertilizante.foto ? (
@@ -44,6 +44,7 @@ export default async function PaginaFertilizantes() {
                       width={800}
                       height={800}
                       unoptimized
+                      loading={indice === 0 ? "eager" : "lazy"}
                       className="aspect-square h-auto w-full bg-muted object-cover md:h-full"
                     />
                   ) : (

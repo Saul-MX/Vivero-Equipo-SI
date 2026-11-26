@@ -7,10 +7,11 @@ import { requerirUsuario } from "@/lib/auth/sesion";
 import { obtenerMensaje } from "@/lib/mensajes/mensajes";
 import { formasDeResponder } from "@/lib/mensajes/respuesta";
 import { DetalleMensaje } from "../detalle-mensaje";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("mensajes");
 
-export default function PaginaMensaje({ params }: PageProps<"/panel/mensajes/[id]">) {
+function PaginaMensajeContenido({ params }: PageProps<"/panel/mensajes/[id]">) {
   return (
     <Suspense
       fallback={
@@ -44,5 +45,13 @@ async function Mensaje({ params }: { params: Promise<{ id: string }> }) {
       }}
       formas={formasDeResponder(mensaje.contacto)}
     />
+  );
+}
+
+export default function PaginaMensaje(props: Parameters<typeof PaginaMensajeContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaMensajeContenido {...props} />
+    </VisitaNueva>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -34,7 +34,9 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
   const t = useTranslations("panel.datos");
   const traducir = useTraductorErrores();
   const [usos, setUsos] = useState(() => aUsos(inicial));
-  const [nuevoNombre, setNuevoNombre] = useState("");
+  // El nombre nuevo se lee del campo al agregar (campo «no controlado»): así funciona con cualquier
+  // forma de escribir, también con herramientas automáticas que llenan el campo de golpe.
+  const campoNuevo = useRef<HTMLInputElement>(null);
   const [nuevoTono, setNuevoTono] = useState(TONO_NUEVO);
   const [errorNuevo, setErrorNuevo] = useState<string>();
   const [porEliminar, setPorEliminar] = useState<PorEliminar | null>(null);
@@ -55,13 +57,13 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
   const filas = useWatch({ control, name: "colores" }) ?? [];
 
   const agregar = () => {
-    const validacion = esquemaNombreColor.safeParse(nuevoNombre);
+    const validacion = esquemaNombreColor.safeParse(campoNuevo.current?.value ?? "");
     if (!validacion.success) return setErrorNuevo(traducir(validacion.error.issues[0]?.message));
     if (filas.some((fila) => claveNombre(fila.nombre) === claveNombre(validacion.data))) {
       return setErrorNuevo(traducir("nombreRepetido"));
     }
     append({ colorId: null, nombre: validacion.data, hex: nuevoTono.toUpperCase() });
-    setNuevoNombre("");
+    if (campoNuevo.current) campoNuevo.current.value = "";
     setNuevoTono(TONO_NUEVO);
     setErrorNuevo(undefined);
   };
@@ -118,7 +120,7 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
         </CardTitle>
         <CardDescription className="text-base">{t("colores.descripcion")}</CardDescription>
       </CardHeader>
-      <form onSubmit={guardar} noValidate>
+      <form method="post" onSubmit={guardar} noValidate>
         <CardContent className="flex flex-col gap-4">
           {fields.length === 0 ? (
             <p className="text-sm text-texto-suave">{t("colores.vacio")}</p>
@@ -204,10 +206,10 @@ export function ListaColores({ inicial }: { inicial: ColorConUso[] }) {
                 <Input
                   aria-label={t("colores.nuevoNombre")}
                   placeholder={t("colores.nuevoNombre")}
-                  value={nuevoNombre}
+                  ref={campoNuevo}
+                  defaultValue=""
                   aria-invalid={errorNuevo ? true : undefined}
                   aria-describedby={errorNuevo ? `${idLista}-nuevo-error` : undefined}
-                  onChange={(evento) => setNuevoNombre(evento.target.value)}
                   onKeyDown={(evento) => {
                     if (evento.key === "Enter") {
                       evento.preventDefault();

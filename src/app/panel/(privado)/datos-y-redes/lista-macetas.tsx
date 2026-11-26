@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,7 +31,9 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
   const t = useTranslations("panel.datos");
   const traducir = useTraductorErrores();
   const [usos, setUsos] = useState(() => aUsos(inicial));
-  const [nuevoNombre, setNuevoNombre] = useState("");
+  // El nombre nuevo se lee del campo al agregar (campo «no controlado»): así funciona con cualquier
+  // forma de escribir, también con herramientas automáticas que llenan el campo de golpe.
+  const campoNuevo = useRef<HTMLInputElement>(null);
   const [errorNuevo, setErrorNuevo] = useState<string>();
   const [porEliminar, setPorEliminar] = useState<PorEliminar | null>(null);
   const idLista = useId();
@@ -51,13 +53,13 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
   const filas = useWatch({ control, name: "macetas" }) ?? [];
 
   const agregar = () => {
-    const validacion = esquemaNombreMaceta.safeParse(nuevoNombre);
+    const validacion = esquemaNombreMaceta.safeParse(campoNuevo.current?.value ?? "");
     if (!validacion.success) return setErrorNuevo(traducir(validacion.error.issues[0]?.message));
     if (filas.some((fila) => claveNombre(fila.nombre) === claveNombre(validacion.data))) {
       return setErrorNuevo(traducir("nombreRepetido"));
     }
     append({ macetaId: null, nombre: validacion.data });
-    setNuevoNombre("");
+    if (campoNuevo.current) campoNuevo.current.value = "";
     setErrorNuevo(undefined);
   };
 
@@ -112,7 +114,7 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
         </CardTitle>
         <CardDescription className="text-base">{t("macetas.descripcion")}</CardDescription>
       </CardHeader>
-      <form onSubmit={guardar} noValidate>
+      <form method="post" onSubmit={guardar} noValidate>
         <CardContent className="flex flex-col gap-4">
           {fields.length === 0 ? (
             <p className="text-sm text-texto-suave">{t("macetas.vacio")}</p>
@@ -195,10 +197,10 @@ export function ListaMacetas({ inicial }: { inicial: MacetaConUso[] }) {
                 <Input
                   aria-label={t("macetas.nuevoNombre")}
                   placeholder={t("macetas.nuevoNombre")}
-                  value={nuevoNombre}
+                  ref={campoNuevo}
+                  defaultValue=""
                   aria-invalid={errorNuevo ? true : undefined}
                   aria-describedby={errorNuevo ? `${idLista}-nuevo-error` : undefined}
-                  onChange={(evento) => setNuevoNombre(evento.target.value)}
                   onKeyDown={(evento) => {
                     if (evento.key === "Enter") {
                       evento.preventDefault();

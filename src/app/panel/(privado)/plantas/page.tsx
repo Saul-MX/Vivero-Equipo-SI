@@ -19,10 +19,11 @@ import { esquemaFiltrosPlantas } from "@/lib/validacion/planta";
 import { FiltrosPlantas } from "./filtros-plantas";
 import { InterruptorDisponibilidad } from "./interruptor-disponibilidad";
 import { TablaPlantas } from "./tabla-plantas";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("plantas");
 
-export default function PaginaPlantas({ searchParams }: PageProps<"/panel/plantas">) {
+function PaginaPlantasContenido({ searchParams }: PageProps<"/panel/plantas">) {
   const t = useTranslations("panel");
 
   return (
@@ -95,5 +96,13 @@ async function ContenidoPlantas({ searchParams }: { searchParams: Promise<Record
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PaginaPlantas(props: Parameters<typeof PaginaPlantasContenido>[0]) {
+  return (
+    <VisitaNueva>
+      <PaginaPlantasContenido {...props} />
+    </VisitaNueva>
   );
 }

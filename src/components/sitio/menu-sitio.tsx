@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { Suspense, useEffect, useId, useRef, useState } from "react";
 import { ChevronDownIcon, MenuIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -57,9 +57,11 @@ function enlacesCatalogos(catalogos: ItemCatalogo[], textos: TextosMenu) {
   ];
 }
 
+// Sin transición de color: la marca del apartado actual se pone justo después de cargar la página y,
+// animada, pasaba unos instantes por colores sin el contraste mínimo (WCAG 1.4.3).
 function estiloEnlace(activo: boolean) {
   return cn(
-    "rounded-full px-3 py-2 text-[0.95rem] font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
+    "rounded-full px-3 py-2 text-[0.95rem] font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
     activo ? "bg-acento-fondo text-acento-texto" : "text-foreground hover:bg-muted",
   );
 }
@@ -95,7 +97,11 @@ function DesplegableCatalogos({ catalogos, textos, activo }: { catalogos: ItemCa
       ref={contenedor}
       className="relative"
       onBlur={(evento) => {
-        if (!contenedor.current?.contains(evento.relatedTarget as Node | null)) setAbierto(false);
+        // Solo cuando el foco pasa a OTRO elemento (por ejemplo, con Tab). En Safari, hacer clic en
+        // un enlace no le da el foco: el menú perdía el foco «hacia ningún lado» y se cerraba antes
+        // de que el clic llegara al enlace. Los clics afuera los cierra el efecto de arriba.
+        const destino = evento.relatedTarget as Node | null;
+        if (destino && !contenedor.current?.contains(destino)) setAbierto(false);
       }}
     >
       <button
@@ -230,7 +236,29 @@ export function MenuSitio({ catalogos, textos, rutaActual }: Props) {
   );
 }
 
-/** Igual que MenuSitio, marcando el apartado de la página actual. */
+/**
+ * El menú del sitio, marcando el apartado de la página actual.
+ *
+ * La ruta actual solo se conoce en el navegador (por eso va en un Suspense). Antes, el Suspense
+ * envolvía TODO el menú: primero se veía una copia provisional y luego se reemplazaba por la
+ * definitiva; si alguien abría el menú en ese momento (en un celular lento dura más), se cerraba
+ * solo. Ahora el menú se dibuja una sola vez y solo la lectura de la ruta queda en el Suspense.
+ */
 export function NavegacionSitio(props: Omit<Props, "rutaActual">) {
-  return <MenuSitio {...props} rutaActual={usePathname()} />;
+  const [rutaActual, setRutaActual] = useState<string | null>(null);
+  return (
+    <>
+      <MenuSitio {...props} rutaActual={rutaActual} />
+      <Suspense fallback={null}>
+        <SeguirRuta alCambiar={setRutaActual} />
+      </Suspense>
+    </>
+  );
+}
+
+/** Avisa la ruta actual (y cada vez que cambia) sin dibujar nada. */
+function SeguirRuta({ alCambiar }: { alCambiar: (ruta: string) => void }) {
+  const ruta = usePathname();
+  useEffect(() => alCambiar(ruta), [ruta, alCambiar]);
+  return null;
 }

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { FileTextIcon, Loader2Icon, Trash2Icon, UploadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { urlPdf } from "@/lib/archivos/claves";
+import { useCampoArchivo } from "./use-campo-archivo";
 import { useTraductorErrores } from "./use-traductor-errores";
 import { subirArchivo } from "./subir-archivo";
 
@@ -31,6 +32,7 @@ export function SubirPdf({ etiqueta, valor, alCambiar }: Props) {
     if (resultado.ok) alCambiar(resultado.clave);
     else setError(traducir(resultado.error));
   };
+  const campo = useCampoArchivo((archivos) => void subir(archivos[0]));
 
   return (
     <div className="flex flex-col gap-2">
@@ -66,6 +68,7 @@ export function SubirPdf({ etiqueta, valor, alCambiar }: Props) {
           )}
         </div>
         <input
+          ref={campo}
           id={id}
           type="file"
           accept="application/pdf"

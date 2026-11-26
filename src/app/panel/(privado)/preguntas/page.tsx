@@ -7,10 +7,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { listarPreguntas } from "@/lib/apartados/preguntas";
 import { requerirUsuario } from "@/lib/auth/sesion";
 import { ListaPreguntas } from "./lista-preguntas";
+import { VisitaNueva } from "@/components/panel/visita-nueva";
 
 export const generateMetadata = metadatosDeSeccion("preguntas");
 
-export default function PaginaPreguntas() {
+function PaginaPreguntasContenido() {
   const t = useTranslations("panel.secciones.preguntas");
 
   return (
@@ -33,5 +34,13 @@ async function ContenidoPreguntas() {
         <ListaPreguntas preguntas={preguntas} />
       </CardContent>
     </Card>
+  );
+}
+
+export default function PaginaPreguntas() {
+  return (
+    <VisitaNueva>
+      <PaginaPreguntasContenido />
+    </VisitaNueva>
   );
 }

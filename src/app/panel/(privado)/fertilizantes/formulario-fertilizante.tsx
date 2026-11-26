@@ -132,7 +132,7 @@ export function FormularioFertilizante({ fertilizante, catalogos }: Props) {
   );
 
   return (
-    <form onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
+    <form method="post" onSubmit={guardar(false)} noValidate className="flex flex-col gap-6">
       <EncabezadoPagina
         titulo={fertilizante ? nombre || inicial.nombre : t("tituloNuevo")}
         acciones={

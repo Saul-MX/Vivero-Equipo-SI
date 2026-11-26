@@ -131,7 +131,7 @@ export function FormularioNosotros({ inicial }: { inicial: EntradaNosotros }) {
   );
 
   return (
-    <form onSubmit={guardar} noValidate className="flex flex-col gap-6">
+    <form method="post" onSubmit={guardar} noValidate className="flex flex-col gap-6">
       <EncabezadoPagina titulo={tSecciones("titulo")} subtitulo={tSecciones("subtitulo")} acciones={botonGuardar} />
 
       <Seccion titulo={t("historia")}>
