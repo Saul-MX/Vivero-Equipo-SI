@@ -7,6 +7,26 @@ La especificación completa está en [ESPECIFICACION.md](ESPECIFICACION.md).
 better-auth (usuario y contraseña con argon2, y Google), React Hook Form + Zod, next-intl (español de México, listo para inglés) y Playwright
 para las pruebas.
 
+## Documentación
+
+| Documento | Para quién | Contenido |
+| --- | --- | --- |
+| [Manual de usuario](docs/Manual-de-Usuario-Vivero-El-Encanto.docx) | Personal del vivero y QA | Cómo usar el sitio y cada módulo del panel, con capturas de pantalla. |
+| [Manual técnico](docs/Manual-Tecnico-Vivero-El-Encanto.docx) | Desarrollo y QA | Tecnologías, arquitectura, base de datos (diccionario de datos), estructura del código, seguridad, instalación, pruebas y despliegue. |
+| [Matriz de pruebas QA](docs/Matriz-de-Pruebas-QA-Vivero-El-Encanto.xlsx) | Equipo de QA | 84 casos de prueba con pasos y resultado esperado, reporte de errores, correcciones y resumen automático. |
+| [ESPECIFICACION.md](ESPECIFICACION.md) | Todos | Requisitos funcionales acordados con el cliente. |
+
+### Para el equipo de QA
+
+1. Instala el sistema con la guía de [Instalación en tu computadora](#instalación-en-tu-computadora) (casos INS-01 a INS-03 de la matriz).
+2. Abre la [matriz de pruebas](docs/Matriz-de-Pruebas-QA-Vivero-El-Encanto.xlsx) y lee la hoja **Instrucciones**.
+3. Ejecuta los casos en orden y llena solo las celdas amarillas. Registra cada falla en **Reporte de errores** con su
+   evidencia (captura o video).
+4. Entrega la matriz llena al equipo de desarrollo; las correcciones se documentan en la hoja **Correcciones**.
+
+Los casos que usan Google son opcionales: requieren credenciales propias (ver
+[Activar el inicio con Google](#activar-el-inicio-con-google-opcional)). Si no las configuras, márcalos como «No aplica».
+
 ## Estado
 
 | Fase | Contenido | Estado |
